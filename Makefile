@@ -1,3 +1,16 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
+#    Updated: 2024/08/29 15:51:19 by akulikov         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+
 # set a compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
@@ -5,11 +18,11 @@ CFLAGS = -Wall -Wextra -Werror
 # path to source and object files, source and object files
 SRC_PATH = src/
 OBJ_PATH = obj/
-SRC = minishell.c
+SRC = main.c
 OBJ = $(SRC:.c=.o)
 SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJS = $(addprefix $(OBJ_PATH), $(OBJ))
-INCLUDE = -I ./includes/
+INCLUDE = -I ./include/ -I $(LIBFT_DIR)/include/
 
 # set the name
 NAME = minishell
@@ -22,13 +35,12 @@ all: $(OBJ_PATH) $(NAME)
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c includes/minishell.h | $(OBJ_PATH)
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c include/minishell.h | $(OBJ_PATH)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 
 $(NAME): $(OBJS)
 	@make -C $(LIBFT_DIR)
-	@cp $(LIBFT_DIR)/libft.a .
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBNAME)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)  -L$(LIBFT_DIR) -lft -lreadline
 	@echo "\n$(GREEN)$(NAME) is created!$(NC)"
 
 clean:
