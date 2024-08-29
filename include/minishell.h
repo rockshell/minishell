@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/29 15:52:54 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/08/29 16:40:00 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,19 @@
 
 # define ALLOC_ERROR_MSG "Error! The program failed to allocate memory!\n"
 
+
+typedef struct s_token
+{
+	int		argc;
+	char	*original;
+	char	*cmd;
+	char	**argv;
+}	t_token;
+
+
 typedef struct s_appdata
 {
-	
+	char	**env;	
 }	t_appdata;
 
 #endif
