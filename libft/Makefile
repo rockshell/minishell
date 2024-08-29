@@ -42,7 +42,7 @@ ft_toupper.c
 OBJ = $(SRC:.c=.o)
 SRCS = $(addprefix $(SRC_PATH), $(SRC))
 OBJS = $(addprefix $(OBJ_PATH), $(OBJ))
-INCLUDE = -I ./includes/
+INCLUDE = -I ./include/
 
 # set library name
 NAME = libft.a
@@ -53,7 +53,7 @@ all: $(NAME)
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c includes/libft.h | $(OBJ_PATH)
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c include/libft.h | $(OBJ_PATH)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 
 $(NAME): $(OBJS)
