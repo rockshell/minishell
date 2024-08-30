@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/30 15:17:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/08/30 15:17:29 by vitakinsfat      ###   ########.fr       */ 
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,20 @@ typedef struct s_env
 typedef struct s_appdata
 {
 	t_env	*env;
+
+
+typedef struct s_token
+{
+	int		argc;
+	char	*original;
+	char	*cmd;
+	char	**argv;
+}	t_token;
+
+
+typedef struct s_appdata
+{
+	char	**env;	
 }	t_appdata;
 
 int	create_node(t_env **env, char *current_env);
