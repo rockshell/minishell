@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/30 15:06:34 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/08/30 16:11:30 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@
 // 	}
 // }
 
-int	main(int ac, char **av, char **envp)
-{
-	int	i;
-	t_appdata *appdata;
+// int	main(int ac, char **av, char **envp)
+// {
+// 	int	i;
+// 	t_appdata *appdata;
 
-	(void)ac;
-	(void)av;
-	appdata = malloc(sizeof(t_appdata));
-	if (!appdata)
-		return (ft_putstr_fd(ALLOC_ERROR_MSG, 2), 1);
-	appdata->env = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		create_node(&(appdata->env), envp[i]);
-		i++;
-	}
-	// print_nodes(appdata->env);
-	return (0);
-}
+// 	(void)ac;
+// 	(void)av;
+// 	appdata = malloc(sizeof(t_appdata));
+// 	if (!appdata)
+// 		return (ft_putstr_fd(ALLOC_ERROR_MSG, 2), 1);
+// 	appdata->env = NULL;
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		create_node(&(appdata->env), envp[i]);
+// 		i++;
+// 	}
+// 	// print_nodes(appdata->env);
+// 	return (0);
+// }

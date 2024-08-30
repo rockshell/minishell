@@ -42,10 +42,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_appdata
-{
-	t_env	*env;
-
 
 typedef struct s_token
 {
@@ -55,10 +51,9 @@ typedef struct s_token
 	char	**argv;
 }	t_token;
 
-
 typedef struct s_appdata
 {
-	char	**env;	
+	t_env	*env;
 }	t_appdata;
 
 int	create_node(t_env **env, char *current_env);
