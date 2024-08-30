@@ -6,17 +6,20 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/08/29 18:24:33 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/08/30 15:16:10 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_env(t_appdata *appdata)
+void	ft_env(t_env *env)
 {
-    int i;
+	t_env	*temp;
 
-    i = -1;
-    while (appdata->env[++i])
-        printf("%s\n", env[i]);
+	temp = env;
+	while (temp)
+	{
+		printf("%s%s\n", temp->key, temp->value);
+		temp = temp->next;
+	}
 }

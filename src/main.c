@@ -3,19 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/29 15:54:36 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/08/30 15:06:34 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main()
+// void	print_nodes(t_env *env)
+// {
+// 	t_env	*temp;
+
+// 	temp = env;
+// 	while (temp)
+// 	{
+// 		printf("Key: %s", temp->key);
+// 		printf("   Value: %s\n", temp->value);
+// 		temp = temp->next;
+// 	}
+// }
+
+int	main(int ac, char **av, char **envp)
 {
-	char	*line;
-	line = readline("minishell > ");
-	printf("%s\n", line);
+	int	i;
+	t_appdata *appdata;
+
+	(void)ac;
+	(void)av;
+	appdata = malloc(sizeof(t_appdata));
+	if (!appdata)
+		return (ft_putstr_fd(ALLOC_ERROR_MSG, 2), 1);
+	appdata->env = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		create_node(&(appdata->env), envp[i]);
+		i++;
+	}
+	// print_nodes(appdata->env);
 	return (0);
 }
