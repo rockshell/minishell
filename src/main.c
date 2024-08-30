@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/30 16:11:30 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/08/30 16:22:39 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,3 +45,16 @@
 // 	// print_nodes(appdata->env);
 // 	return (0);
 // }
+
+int	main()
+{
+	char		*input;
+	t_appdata	appdata;
+
+	while (1)
+	{
+		input = readline("minishell: ");
+		initial_parsing(input, &appdata);
+	}
+	return (0);
+}
