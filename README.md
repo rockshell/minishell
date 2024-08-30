@@ -4,7 +4,7 @@ To-do list:
 1) Divide on logical groups/tokens (lexer thing);
 2) Check for errors in logical groups (for example syntax error, ”/’/) missing);
 3) Check tokens and word expansion (“...”, $VAR) (parser thing);
-4) Run command (execution thing):
+4) Run command (execution thing):  
 	4.1) If not a built-in command, we run the child process and execute command;  
 	4.2) If it is a built-in command, we don’t run the child process but execute it in the parent one.  
 5) ???
