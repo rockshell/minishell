@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/08/30 14:56:16 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/09/02 18:07:44 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ built-in/ft_exit.c \
 built-in/ft_export.c \
 built-in/ft_pwd.c \
 built-in/ft_unset.c \
+parsing/lexer_utils.c \
+parsing/lexer.c \
 env_init.c \
 main.c
 OBJ = $(SRC:.c=.o)

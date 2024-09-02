@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/30 15:17:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/02 15:46:03 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,10 @@ typedef struct s_appdata
 }	t_appdata;
 
 int	create_node(t_env **env, char *current_env);
+int	initial_parsing(char *input, t_appdata *appdata);
+
+//utils 
+int ft_isspace(char c);
+int is_space_str(char *input);
 
 #endif
