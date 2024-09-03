@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/08/30 15:00:16 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/03 14:44:08 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*get_key(char *current_env)
 	key = malloc(sizeof(char) * i + 1);
 	if (!key)
 	{
-		ft_putstr_fd(ALLOC_ERROR_MSG, 2);
+		ft_putstr_fd(ALLOC_ERROR, 2);
 		return (NULL);
 	}
 	ft_strlcpy(key, current_env, i + 1);
@@ -50,7 +50,7 @@ int	create_node(t_env **env, char *current_env)
 	last = *env;
 	node = malloc(sizeof(t_env));
 	if (!node)
-		return (ft_putstr_fd(ALLOC_ERROR_MSG, 2), 1);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
 	node->key = get_key(current_env);
 	if (!node->key)
 		return (1);

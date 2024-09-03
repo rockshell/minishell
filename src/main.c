@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/30 16:22:39 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:44:19 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 // 	(void)av;
 // 	appdata = malloc(sizeof(t_appdata));
 // 	if (!appdata)
-// 		return (ft_putstr_fd(ALLOC_ERROR_MSG, 2), 1);
+// 		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
 // 	appdata->env = NULL;
 // 	i = 0;
 // 	while (envp[i])
