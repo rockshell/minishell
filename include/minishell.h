@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/02 15:46:03 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/03 14:43:47 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # include <unistd.h>
 # include "libft.h"
 
-# define ALLOC_ERROR_MSG "Error! The program failed to allocate memory!\n"
+# define ALLOC_ERROR "Error! The program failed to allocate memory!\n"
 
 typedef struct s_env
 {
@@ -45,6 +45,7 @@ typedef struct s_env
 typedef struct s_appdata
 {
 	t_env	*env;
+	char **tokens;
 }	t_appdata;
 
 int	create_node(t_env **env, char *current_env);
@@ -52,6 +53,8 @@ int	initial_parsing(char *input, t_appdata *appdata);
 
 //utils 
 int ft_isspace(char c);
-int is_space_str(char *input);
+size_t	handle_len_quotes(char *input, size_t i);
+char	*handle_num_quotes(char *input);
+void	free_tokens(char **tokens);
 
 #endif
