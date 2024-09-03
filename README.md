@@ -4,9 +4,9 @@ To-do list:
 1) Divide on logical groups/tokens (lexer thing);
 2) Check for errors in logical groups (for example syntax error, ”/’/) missing);
 3) Check tokens and word expansion (“...”, $VAR) (parser thing);
-4) Run command (execution thing):
-	4.1) If not a built-in command, we run the child process and execute command;
-	4.2) If it is a built-in command, we don’t run the child process but execute it in the parent one.
+4) Run command (execution thing):  
+	4.1) If not a built-in command, we run the child process and execute command;  
+	4.2) If it is a built-in command, we don’t run the child process but execute it in the parent one.  
 5) ???
 6) Profit. 
 
@@ -15,11 +15,11 @@ Types of tokens:
 2) word/command (for example ls, cat e.t.c. “” counts as an empty string);
 3) field (‘...’);
 4) expandable field (“...”);
-5) redirection:
-	5.1) < should redirect input;
-	5.2) > should redirect output;
-	5.3) << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history;
-	5.4) >> should redirect output in append mode.
+5) redirection:  
+	5.1) < should redirect input;  
+	5.2) > should redirect output;  
+	5.3) << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history;  
+	5.4) >> should redirect output in append mode.  
 6) pipe (|);
 7) braces ((, ));
 8) dollar sign (to handle env variables ($VAR) and $? for expanding the exit status of the most recently executed foreground pipeline);

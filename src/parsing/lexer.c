@@ -102,3 +102,4 @@ int	initial_parsing(char *input, t_appdata *appdata)
 	// 	printf("Token %d is \"%s\"\n", i, appdata->tokens[i]);
 	// 	i++;
 	// }
+

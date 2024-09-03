@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
+#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
 #    Updated: 2024/09/02 18:07:44 by vitakinsfat      ###   ########.fr        #

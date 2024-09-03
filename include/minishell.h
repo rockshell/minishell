@@ -42,12 +42,22 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_token
+{
+	int		argc;
+	char	*original;
+	char	*cmd;
+	char	**argv;
+}	t_token;
+
 typedef struct s_appdata
 {
+	t_token	*tokens;
 	t_env	*env;
 	char **tokens;
 }	t_appdata;
 
+//enviromentals
 int	create_node(t_env **env, char *current_env);
 int	initial_parsing(char *input, t_appdata *appdata);
 
@@ -56,5 +66,8 @@ int ft_isspace(char c);
 size_t	handle_len_quotes(char *input, size_t i);
 char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
+
+//parsing
+void	initial_parsing(char *input, t_appdata *appdata);
 
 #endif
