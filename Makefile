@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
+#    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/09/13 20:08:26 by akulikov         ###   ########.fr        #
+#    Updated: 2024/09/19 17:38:02 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,8 @@ parsing/pre_parser_utils.c \
 parsing/pre_parser.c \
 parsing/lexer.c \
 parsing/lexer_utils.c \
+exec/children.c \
+exec/execution_utils.c \
 exec/execution.c \
 env_init.c \
 main.c

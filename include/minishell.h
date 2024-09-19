@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/19 16:52:52 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/19 17:43:17 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ typedef	struct s_exec_data
 	int		outfile;
 	int		status;
 	int		pipe_counter;
-	int     redirect_counter;
+	int     redirect_in_counter;
+	int		redirect_out_counter;
 	int		**fd;
 	pid_t	*processes;
 }	t_exec_data;
@@ -87,6 +88,9 @@ typedef struct s_appdata
 int	create_node(t_env **env, char *current_env);
 
 //utils 
+void free_memory(t_appdata *appdata);
+void error_rising(t_appdata *appdata);
+
 
 //parsing - utils
 int 	ft_isspace(char c);
@@ -96,4 +100,10 @@ size_t	handle_len_quotes(char *input, size_t i);
 void	initial_parsing(char *input, t_appdata *appdata);
 int		get_type_of_token(char *command);
 
+//execution utils
+
+//children
+void	first_child(t_appdata *appdata);
+void	last_child(t_appdata *appdata, int i);
+void	mid_child(t_appdata *appdata, int i);
 #endif
