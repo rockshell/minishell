@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/23 16:13:42 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:08:24 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	start_execution(t_appdata *appdata)
 	t_exec_data *exec_data;
 
 	exec_data = appdata->exec_data;
-	count_service_tokens(appdata);
+	get_number_of_pipe_and_redirection(appdata);
 	if (exec_data->input_redirection_num > 0)
 	{
 		exec_data->infile = open_files(appdata, 1);
-		if (appdata->srv_tokens[0].type = 4)
+		if (appdata->srv_tokens[0].type == 4)
 			rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
 	}
 	if (exec_data->output_redirection_num > 0)
@@ -75,8 +75,8 @@ void	start_execution(t_appdata *appdata)
 		prepare_pipes(appdata);
 		create_processes(appdata);
 	}
-	if (exec_data->pipe_counter == 0 
-		&& exec_data->input_redirection_num == 0 
-		&& exec_data->output_redirection_num == 0)
-		execute_single(appdata);
+	// if (exec_data->pipe_counter == 0 
+	// 	&& exec_data->input_redirection_num == 0 
+	// 	&& exec_data->output_redirection_num == 0)
+	// 	execute_single(appdata);
 }

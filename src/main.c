@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/23 16:28:55 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:58:47 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell: ");
 		initial_parsing(input, &appdata);
 		run_lexer(&appdata);
+		start_execution(&appdata);
 	}
 	return (0);
 }

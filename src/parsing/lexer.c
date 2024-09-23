@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/23 18:47:11 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 19:06:26 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void fill_argv(t_appdata *appdata, int i, int k)
 		pos++;
 		i++;
 	}
-	appdata->cmd_tokens[k].argv[pos] = '\0';
+	appdata->cmd_tokens[k].argv[pos] = NULL;
 }
 
 void fill_tokens(t_appdata *appdata)
@@ -103,9 +103,6 @@ void fill_tokens(t_appdata *appdata)
 
 void run_lexer(t_appdata *appdata)
 {
-	int	i;
-
-	i = -1;
 	appdata->srv_tokens_num = count_service_tokens(appdata, appdata->input_strings);
 	appdata->cmd_tokens_num = count_command_tokens(appdata, appdata->input_strings);
 	appdata->cmd_tokens = malloc(sizeof(t_cmd_token) * appdata->cmd_tokens_num);

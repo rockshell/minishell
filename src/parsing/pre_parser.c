@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/19 16:14:27 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/23 19:10:19 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ size_t	len_of_input_string(char *input)
 	return (i);
 }
 
-char	**fill_tokens(char *input, char **input_strings)
+char	**fill_input_strings(char *input, char **input_strings)
 {
 	int		i;
 	size_t	len;
@@ -91,7 +91,7 @@ int	initial_parsing(char *input, t_appdata *appdata)
 	appdata->input_strings = malloc(sizeof(char *) * (token_num + 1));
 	if (!appdata->input_strings)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
-	appdata->input_strings = fill_tokens(input, appdata->input_strings);
+	appdata->input_strings = fill_input_strings(input, appdata->input_strings);
 	if (!appdata->input_strings)
 		return (1);
 	appdata->exec_data = malloc(sizeof(t_exec_data));

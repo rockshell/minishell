@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/23 16:28:43 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:08:51 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,10 @@ int 	ft_isspace(char c);
 char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
 size_t	handle_len_quotes(char *input, size_t i);
-void	initial_parsing(char *input, t_appdata *appdata);
+int	initial_parsing(char *input, t_appdata *appdata);
 int		get_type_of_token(char *command);
+int count_service_tokens(t_appdata *appdata, char **input_strings);
+int count_command_tokens(t_appdata *appdata, char **input_strings);
 
 //execution utils
 int	open_files(t_appdata *appdata, int is_in);
@@ -110,7 +112,12 @@ void	rwr_heredoc(t_appdata *appdata, char *delim);
 char	*get_next_line(int fd);
 char	*gnl_strjoin(char const *s1, char const *s2);
 size_t	gnl_strlen(const char *str);
-void	count_service_tokens(t_appdata *appdata);
+void	get_number_of_pipe_and_redirection(t_appdata *appdata);
+char	*make_path(t_cmd_token token);
+
+//execution
+void	start_execution(t_appdata *appdata);
+void run_lexer(t_appdata *appdata);
 
 //children
 void	first_child(t_appdata *appdata);

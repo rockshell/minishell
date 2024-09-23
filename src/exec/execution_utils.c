@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 16:55:44 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:07:37 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	error_rising(t_appdata *appdata)
 	exit(1);
 }
 
-void	count_service_tokens(t_appdata *appdata)
+void	get_number_of_pipe_and_redirection(t_appdata *appdata)
 {
 	int			i;
 	t_srv_token	*srv_tokens;
@@ -63,16 +63,18 @@ void	count_service_tokens(t_appdata *appdata)
 	}
 }
 
-char	*make_path(t_cmd_token *token)
+char	*make_path(t_cmd_token token)
 {
 	int		i;
 	char	**paths;
 	char	*current_path;
 	char	*cmd_with_slash;
 	
+	if (token.argv[0][0] == '/')
+		return (token.argv[0]);
 	i = 0;	
 	paths = ft_split(getenv("PATH"), ':');
-	cmd_with_slash = ft_strjoin("/", token->argv[0]);
+	cmd_with_slash = ft_strjoin("/", token.argv[0]);
 	while (paths[i])
 	{
 		current_path = ft_strjoin(paths[i], cmd_with_slash);
