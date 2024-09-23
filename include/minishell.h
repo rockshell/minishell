@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/23 15:52:59 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 16:28:43 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ typedef	struct s_exec_data
 	int		outfile;
 	int		status;
 	int		pipe_counter;
-	int     redirect_in_counter;
-	int		redirect_out_counter;
+	int     input_redirection_num;
+	int		output_redirection_num;
 	int		**fd;
 	pid_t	*processes;
 }	t_exec_data;
@@ -81,6 +81,7 @@ typedef struct s_appdata
 	int     cmd_tokens_num;
 	int		srv_tokens_num;
 	char 	**input_strings;
+	char 	**envp;
 	t_exec_data	*exec_data;
 	t_cmd_token	*cmd_tokens;
 	t_srv_token *srv_tokens;

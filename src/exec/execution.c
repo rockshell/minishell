@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/23 16:02:06 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 16:13:42 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,25 @@ void	prepare_pipes(t_appdata *appdata)
 
 void	start_execution(t_appdata *appdata)
 {
+	t_exec_data *exec_data;
+
+	exec_data = appdata->exec_data;
 	count_service_tokens(appdata);
-	if (appdata->exec_data->redirect_in_counter > 0)
+	if (exec_data->input_redirection_num > 0)
 	{
-		appdata->exec_data->infile = open_files(appdata, 1);
+		exec_data->infile = open_files(appdata, 1);
 		if (appdata->srv_tokens[0].type = 4)
 			rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
 	}
-	if (appdata->exec_data->redirect_out_counter > 0)
-		appdata->exec_data->outfile = open_files(appdata, 0);
-	if (appdata->exec_data->pipe_counter > 0)
+	if (exec_data->output_redirection_num > 0)
+		exec_data->outfile = open_files(appdata, 0);
+	if (exec_data->pipe_counter > 0)
 	{
 		prepare_pipes(appdata);
 		create_processes(appdata);
 	}
-	if (appdata->exec_data->pipe_counter == 0 
-		&& appdata->exec_data->redirect_in_counter == 0 
-		&& appdata->exec_data->redirect_out_counter == 0)
+	if (exec_data->pipe_counter == 0 
+		&& exec_data->input_redirection_num == 0 
+		&& exec_data->output_redirection_num == 0)
 		execute_single(appdata);
 }

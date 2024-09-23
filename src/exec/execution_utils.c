@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 16:01:33 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 16:55:44 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,30 @@ void	count_service_tokens(t_appdata *appdata)
 		if (srv_tokens[i].type == 1)
 			appdata->exec_data->pipe_counter++;
 		else if (srv_tokens[i].type == 2 || srv_tokens[i].type == 4)
-			appdata->exec_data->redirect_in_counter++;
+			appdata->exec_data->input_redirection_num++;
 		else if (srv_tokens[i].type == 3 || srv_tokens[i].type == 5)
-			appdata->exec_data->redirect_out_counter++;
+			appdata->exec_data->output_redirection_num++;
 	}
+}
+
+char	*make_path(t_cmd_token *token)
+{
+	int		i;
+	char	**paths;
+	char	*current_path;
+	char	*cmd_with_slash;
+	
+	i = 0;	
+	paths = ft_split(getenv("PATH"), ':');
+	cmd_with_slash = ft_strjoin("/", token->argv[0]);
+	while (paths[i])
+	{
+		current_path = ft_strjoin(paths[i], cmd_with_slash);
+		if (access(current_path, F_OK | X_OK))
+			break;
+		free(current_path);
+		i++;
+	}
+	free(cmd_with_slash);
+	return(current_path);
 }

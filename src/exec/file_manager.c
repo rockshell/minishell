@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   file_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 16:01:08 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 16:15:12 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_files(t_appdata *appdata, int is_in)
+int	open_files(t_appdata *appdata, int is_input)
 {
 	int	res;
 
 	res = 0;
-	if (is_in == 1 && appdata->srv_tokens[0].type == 2)
+	if (is_input == 1 && appdata->srv_tokens[0].type == 2)
 		res = open(appdata->cmd_tokens[0].filename, O_RDONLY);
-	else if (is_in == 1 && appdata->srv_tokens[0].type == 4)
+	else if (is_input == 1 && appdata->srv_tokens[0].type == 4)
 		res = open("here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (is_in == 0
+	else if (is_input == 0
 		&& appdata->srv_tokens[appdata->srv_tokens_num - 1].type == 3)
 		res = open(appdata->cmd_tokens[appdata->cmd_tokens_num - 1].filename,
 				O_RDWR | O_CREAT | O_TRUNC, 0644);
-	else if (is_in == 0
+	else if (is_input == 0
 		&& appdata->srv_tokens[appdata->srv_tokens_num - 1].type == 5)
 		res = open(appdata->cmd_tokens[appdata->cmd_tokens_num - 1].filename,
 				O_RDWR | O_CREAT | O_APPEND, 0644);
