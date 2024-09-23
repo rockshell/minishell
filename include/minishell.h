@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/19 17:43:17 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 15:52:59 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include "libft.h"
 
 # define ALLOC_ERROR "Error! The program failed to allocate memory!\n"
+# define BUFFER_SIZE 42
 
 typedef struct s_env
 {
@@ -57,6 +58,8 @@ typedef struct s_cmd_token
 	char	*original;
 	char	*cmd;
 	char	**argv;
+	char	*filename;
+	char	*delim;
 }	t_cmd_token;
 
 typedef	struct s_exec_data
@@ -101,6 +104,12 @@ void	initial_parsing(char *input, t_appdata *appdata);
 int		get_type_of_token(char *command);
 
 //execution utils
+int	open_files(t_appdata *appdata, int is_in);
+void	rwr_heredoc(t_appdata *appdata, char *delim);
+char	*get_next_line(int fd);
+char	*gnl_strjoin(char const *s1, char const *s2);
+size_t	gnl_strlen(const char *str);
+void	count_service_tokens(t_appdata *appdata);
 
 //children
 void	first_child(t_appdata *appdata);

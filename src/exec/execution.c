@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/19 17:40:33 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/23 16:02:06 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void create_processes(t_appdata *appdata)
+void	create_processes(t_appdata *appdata)
 {
 	int	i;
 
@@ -56,34 +56,24 @@ void	prepare_pipes(t_appdata *appdata)
 	}
 }
 
-void	parse_service_tokens(t_appdata *appdata)
+void	start_execution(t_appdata *appdata)
 {
-	int	i;
-	t_srv_token *srv_tokens;
-
-	srv_tokens = appdata->srv_tokens;
-	i = -1;
-	while (++i < appdata->srv_tokens_num)
+	count_service_tokens(appdata);
+	if (appdata->exec_data->redirect_in_counter > 0)
 	{
-		if (srv_tokens[i].type == 1)
-			appdata->exec_data->pipe_counter++;
-		else if (srv_tokens[i].type == 2 || srv_tokens[i].type == 4)
-			appdata->exec_data->redirect_in_counter++;
-		else if (srv_tokens[i].type == 3 || srv_tokens[i].type == 5)
-			appdata->exec_data->redirect_out_counter++;
+		appdata->exec_data->infile = open_files(appdata, 1);
+		if (appdata->srv_tokens[0].type = 4)
+			rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
 	}
-}
-
-void start_execution(t_appdata *appdata)
-{
-	parse_service_tokens(appdata);
+	if (appdata->exec_data->redirect_out_counter > 0)
+		appdata->exec_data->outfile = open_files(appdata, 0);
 	if (appdata->exec_data->pipe_counter > 0)
 	{
 		prepare_pipes(appdata);
 		create_processes(appdata);
 	}
-	// if (appdata->exec_data->redirect_in_counter > 0)
-	// {
-		
-	// }
+	if (appdata->exec_data->pipe_counter == 0 
+		&& appdata->exec_data->redirect_in_counter == 0 
+		&& appdata->exec_data->redirect_out_counter == 0)
+		execute_single(appdata);
 }

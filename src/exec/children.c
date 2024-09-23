@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   children.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
+/*   Updated: 2024/09/23 16:01:17 by vitakinsfat      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	close_fds(t_exec_data *exec_data, int current_pipe)
@@ -18,19 +30,32 @@ static void	close_fds(t_exec_data *exec_data, int current_pipe)
 		close(exec_data->outfile);
 }
 
-void	first_child(t_appdata *appdata)
+void io_redirection(t_appdata *appdata, int is_infile)
 {
-	char	*path;
-	char 	**env;
-
-	if (appdata->exec_data->redirect_in_counter > 0)
+	if (is_infile == 1)
 	{
 		if (appdata->exec_data->infile == -1)
 			error_rising(appdata);
 		if (dup2(appdata->exec_data->infile, 0) == -1)
 			error_rising(appdata);
 	}
+	if (is_infile == 0)
+	{
+		if (appdata->exec_data->outfile == -1)
+			error_rising(appdata);
+		if (dup2(appdata->exec_data->outfile, 1) == -1)
+			error_rising(appdata);
+	}
+}
+
+void	first_child(t_appdata *appdata)
+{
+	char	*path;
+	char 	**env;
+
 	env = getenv(env);
+	if (appdata->exec_data->redirect_in_counter > 0)
+		io_redirection(appdata, 1);
 	if (dup2(appdata->exec_data->fd[0][1], 1) == -1)
 		error_rising(appdata);
 	close_fds(appdata->exec_data, 0);
@@ -55,14 +80,9 @@ void	last_child(t_appdata *appdata, int i)
 	char	*path;
 	char	*env;
 
-	if (appdata->exec_data->redirect_out_counter > 0)
-	{
-		if (appdata->exec_data->outfile == -1)
-			error_rising(appdata);
-		if (dup2(appdata->exec_data->outfile, 1) == -1)
-			error_rising(appdata);
-	}
 	env = getenv(env);
+	if (appdata->exec_data->redirect_out_counter > 0)
+		io_redirection(appdata, 0);
 	if (dup2(appdata->exec_data->fd[i - 1][0], 0) == -1)
 		error_rising(appdata);
 	close_fds(appdata->exec_data, appdata->exec_data->pipe_counter);

@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/09/19 17:38:02 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/09/23 15:52:11 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,9 @@ parsing/lexer_utils.c \
 exec/children.c \
 exec/execution_utils.c \
 exec/execution.c \
+exec/file_manager.c \
+exec/get_next_line_utils.c \
+exec/get_next_line.c \
 env_init.c \
 main.c
 OBJ = $(SRC:.c=.o)
