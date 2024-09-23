@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/13 20:14:44 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:47:11 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,29 @@ int count_command_tokens(t_appdata *appdata, char **input_strings)
 	return (counter);
 }
 
+void fill_argv(t_appdata *appdata, int i, int k)
+{
+	int len;
+	int pos;
+
+	len = 0;
+	pos = 0; 
+	while (get_type_of_token(appdata->input_strings[i]) == 0)
+	{
+		len++;
+		i++;
+	}
+	appdata->cmd_tokens[k].argv = malloc(sizeof(char *) * (len + 1));
+	i -= len;
+	while (get_type_of_token(appdata->input_strings[i]) == 0)
+	{
+		appdata->cmd_tokens[k].argv[pos] = ft_strdup(appdata->input_strings[i]);
+		pos++;
+		i++;
+	}
+	appdata->cmd_tokens[k].argv[pos] = '\0';
+}
+
 void fill_tokens(t_appdata *appdata)
 {
 	int i;
@@ -70,10 +93,9 @@ void fill_tokens(t_appdata *appdata)
 		}
 		else
 		{
-			appdata->cmd_tokens[k].cmd = ft_strdup(appdata->input_strings[i]);
-			appdata->cmd_tokens[k].argv[0] = ft_strdup(appdata->input_strings[i + 1]);
+			fill_argv(appdata, i, k);
 			appdata->cmd_tokens[k].id = k;
-			k += 2;
+			k++;
 		}
 		i++;
 	}
