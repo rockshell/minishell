@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/23 19:06:26 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 20:13:46 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int count_service_tokens(t_appdata *appdata, char **input_strings)
 	{
 		if (get_type_of_token(input_strings[i]))
 			counter++;
-		i++;
+		// i++;
 	}
 	return (counter);
 }
@@ -43,29 +43,29 @@ int count_command_tokens(t_appdata *appdata, char **input_strings)
 			while (!get_type_of_token(input_strings[i]))
 				i++;
 		}
-		else 
-			i++;
+		// else 
+		// 	i++;
 	}
 	return (counter);
 }
 
-void fill_argv(t_appdata *appdata, int i, int k)
+void fill_argv(t_appdata *appdata, int *i, int k)
 {
 	int len;
 	int pos;
 
 	len = 0;
 	pos = 0; 
-	while (get_type_of_token(appdata->input_strings[i]) == 0)
+	while (get_type_of_token(appdata->input_strings[*i]) == 0)
 	{
 		len++;
 		i++;
 	}
 	appdata->cmd_tokens[k].argv = malloc(sizeof(char *) * (len + 1));
 	i -= len;
-	while (get_type_of_token(appdata->input_strings[i]) == 0)
+	while (get_type_of_token(appdata->input_strings[*i]) == 0)
 	{
-		appdata->cmd_tokens[k].argv[pos] = ft_strdup(appdata->input_strings[i]);
+		appdata->cmd_tokens[k].argv[pos] = ft_strdup(appdata->input_strings[*i]);
 		pos++;
 		i++;
 	}
@@ -93,11 +93,11 @@ void fill_tokens(t_appdata *appdata)
 		}
 		else
 		{
-			fill_argv(appdata, i, k);
+			fill_argv(appdata, &i, k);
 			appdata->cmd_tokens[k].id = k;
 			k++;
 		}
-		i++;
+		// i++;
 	}
 }
 

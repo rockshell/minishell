@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 19:10:19 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:46:46 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ int	count_tokens(char *input)
 	while (*input)
 	{
 		while (ft_isspace(*input) && *input)
+		{
 			input++;
+			// sleep(1);
+			// printf("whitespace\n");
+		}
 		if (*input == '\0')
 			break ;
 		if (!ft_isspace(*input))
@@ -35,6 +39,7 @@ int	count_tokens(char *input)
 			}
 		}
 	}
+	// printf("Iterator is at %i\n", i);
 	return (i);
 }
 
@@ -99,11 +104,3 @@ int	initial_parsing(char *input, t_appdata *appdata)
 		return (1);
 	return (0);
 }
-
-	// int i = 0;
-	// while (appdata->tokens[i])
-	// {
-	// 	printf("Token %d is \"%s\"\n", i, appdata->tokens[i]);
-	// 	i++;
-	// }
-

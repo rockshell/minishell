@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
+#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/09/23 15:52:11 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/09/23 20:13:48 by akulikov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 # set a compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 # path to source and object files, source and object files
 SRC_PATH = src/
