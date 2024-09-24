@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/23 19:08:24 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/24 16:52:19 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	create_processes(t_appdata *appdata)
 		if (appdata->exec_data->processes[i] == 0)
 		{
 			if (i == 0)
+			{
 				first_child(appdata);
+				// close(appdata->exec_data->fd[0][1]);
+			}
 			else if (i == appdata->cmd_tokens_num - 1)
 				last_child(appdata, i);
 			else
