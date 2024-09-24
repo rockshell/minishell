@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/23 19:08:51 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/24 17:22:23 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	initial_parsing(char *input, t_appdata *appdata);
 int		get_type_of_token(char *command);
 int count_service_tokens(t_appdata *appdata, char **input_strings);
 int count_command_tokens(t_appdata *appdata, char **input_strings);
+void fill_service_tokens(t_appdata *appdata);
+void fill_command_tokens(t_appdata *appdata);
 
 //execution utils
 int	open_files(t_appdata *appdata, int is_in);
