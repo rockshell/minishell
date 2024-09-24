@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/24 16:52:19 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:02:54 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	create_processes(t_appdata *appdata)
 	int	i;
 
 	i = -1;
-	appdata->exec_data->processes = malloc(sizeof(pid_t) * appdata->cmd_tokens_num);
+	appdata->exec_data->processes = malloc(sizeof(pid_t) * (appdata->exec_data->pipe_counter + 1));
 	if (!appdata->exec_data->processes)
 		error_rising(appdata);
-	while (++i < appdata->cmd_tokens_num)
+	while (++i < (appdata->exec_data->pipe_counter + 1))
 	{
 		appdata->exec_data->processes[i] = fork();
 		if (appdata->exec_data->processes[i] == 0)
@@ -30,15 +30,16 @@ void	create_processes(t_appdata *appdata)
 				first_child(appdata);
 				// close(appdata->exec_data->fd[0][1]);
 			}
-			else if (i == appdata->cmd_tokens_num - 1)
+			else if (i == appdata->exec_data->pipe_counter)
 				last_child(appdata, i);
 			else
 				mid_child(appdata, i);
 		}
 	}
 	i = -1;
-	while (++i < appdata->cmd_tokens_num)
+	while (++i < (appdata->exec_data->pipe_counter + 1))
 		waitpid(appdata->exec_data->processes[i], &appdata->exec_data->status, 0);
+		//TODO - make a status array and make all po krasote vasche
 }
 
 void	prepare_pipes(t_appdata *appdata)

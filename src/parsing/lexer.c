@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/24 19:11:11 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/24 19:35:32 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int count_service_tokens(t_appdata *appdata, char **input_strings)
 	{
 		if (get_type_of_token(input_strings[i]))
 			counter++;
-		// i++;
 	}
 	return (counter);
 }
@@ -43,8 +42,6 @@ int count_command_tokens(t_appdata *appdata, char **input_strings)
 			while (!get_type_of_token(input_strings[i]))
 				i++;
 		}
-		// else 
-		// 	i++;
 	}
 	return (counter);
 }
@@ -66,34 +63,32 @@ void fill_command_tokens(t_appdata *appdata)
 {
 	int i;
 	int j;
-	int len;
 	int pos;
 
 	i = 0;
 	j = 0;
-	while (i < appdata->num_of_input_strings)
+	while (i < appdata->num_of_input_strings && get_type_of_token(appdata->input_strings[i]) == 0)
 	{
 		pos = 0;
-		len = count_len_of_command_token(appdata, i);
-		if (len > 0)
+		appdata->cmd_tokens[j].argc = count_len_of_command_token(appdata, i);
+		if (appdata->cmd_tokens[j].argc > 0)
 		{
-			appdata->cmd_tokens[j].argv = malloc(sizeof(char *) * (len + 1));
+			appdata->cmd_tokens[j].argv = malloc(sizeof(char *) * (appdata->cmd_tokens[j].argc));
 			if (!appdata->cmd_tokens[j].argv)
 				error_rising(appdata);
-			while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
+			//while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
+			while (pos < appdata->cmd_tokens[j].argc)
 			{
 				appdata->cmd_tokens[j].argv[pos] = ft_strdup(appdata->input_strings[i]);
 				if (!appdata->cmd_tokens[j].argv[pos])
 					error_rising(appdata);
-				ft_putstr_fd(appdata->cmd_tokens[j].original, 2);
-				ft_putstr_fd("\n", 2);
 				i++;
+				pos++;
 			}
-			appdata->cmd_tokens[j].argv[pos] = NULL;
 			appdata->cmd_tokens[j].id = j;
 			j++;
 		}
-		while (get_type_of_token(appdata->input_strings[i]) != 0)
+		while (get_type_of_token(appdata->input_strings[i]) != 0 && i < appdata->num_of_input_strings)
 			i++;
 	}
 }

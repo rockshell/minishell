@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 19:07:37 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:34:07 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ char	*make_path(t_cmd_token token)
 	while (paths[i])
 	{
 		current_path = ft_strjoin(paths[i], cmd_with_slash);
-		if (access(current_path, F_OK | X_OK))
+		if (access(current_path, F_OK) == 0)
 			break;
 		free(current_path);
 		i++;

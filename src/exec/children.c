@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 16:38:54 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:24:03 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void io_redirection(t_appdata *appdata, int is_infile)
 void	first_child(t_appdata *appdata)
 {
 	char	*path;
-	// char 	**env;
-
-	// env = getenv(env);
+	
 	if (appdata->exec_data->input_redirection_num > 0)
 		io_redirection(appdata, 1);
 	if (dup2(appdata->exec_data->fd[0][1], 1) == -1)
@@ -67,10 +65,16 @@ void	first_child(t_appdata *appdata)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[0].argv, appdata->envp) == -1)
+	ft_putstr_fd(path, 2);
+	ft_putchar_fd('\n', 2);
+	ft_putstr_fd(appdata->cmd_tokens[0].argv[0], 2);
+	ft_putchar_fd('\n', 2);
+	ft_putstr_fd(appdata->cmd_tokens[0].argv[1], 2);
+	ft_putchar_fd('\n', 2);
+	if (execve(path, appdata->cmd_tokens[0].argv, NULL) == -1)
 	{
+		ft_putstr_fd("hey error\n", 2);
 		free(path);
-		// free(env);
 		error_rising(appdata);
 	}
 }
@@ -94,7 +98,7 @@ void	last_child(t_appdata *appdata, int i)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[i].argv, appdata->envp) == -1)
+	if (execve(path, appdata->cmd_tokens[i].argv, NULL) == -1)
 	{
 		free(path);
 		// free(env);
@@ -121,7 +125,7 @@ void	mid_child(t_appdata *appdata, int i)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[i].argv, appdata->envp) == -1)
+	if (execve(path, appdata->cmd_tokens[i].argv, NULL) == -1)
 	{
 		free(path);
 		// free(env);
