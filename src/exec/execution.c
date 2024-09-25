@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/25 16:36:59 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/25 17:10:58 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,48 +25,33 @@ void	create_processes(t_appdata *appdata)
 		appdata->exec_data->processes[i] = fork();
 		if (appdata->exec_data->processes[i] == 0)
 		{
-			ft_putstr_fd("Child process forked with PID: ", 2);
-			ft_putnbr_fd(getpid(), 2);
-			ft_putstr_fd("\n", 2);
 			if (i == 0)
-			{
 				first_child(appdata);
-				close_pipes_in_parent(appdata);
-			}
 			else if (i == appdata->exec_data->pipe_counter)
-			{
 				last_child(appdata, i);
-				close_pipes_in_parent(appdata);
-			}
 			else
-			{
 				mid_child(appdata, i);
-				close_pipes_in_parent(appdata);
-			}
-		}
-		else
-		{
-			ft_putstr_fd("Parent created child with PID: ", 2);
-			ft_putnbr_fd(appdata->exec_data->processes[i], 2);
-			ft_putstr_fd("\n", 2);
+			exit(0);
 		}
 	}
-	ft_putstr_fd("Pipe counter: ", 2);
-	ft_putnbr_fd(appdata->exec_data->pipe_counter, 2);
-	ft_putstr_fd("\n", 2);
-	i = -1;
-	i = -1;
-	while (++i < (appdata->exec_data->pipe_counter + 1))
+	close_pipes_in_parent(appdata);
+	i = 0;
+	int status;
+	pid_t pid;
+	while (i < (appdata->exec_data->pipe_counter + 1))
 	{
-		ft_putstr_fd("Waiting for process: ", 2);
-		ft_putnbr_fd(appdata->exec_data->processes[i], 2);
-		ft_putstr_fd("\n", 2);
-		
+		status = 0;
+		pid = waitpid(appdata->exec_data->processes[i], &status, 0);
+		if (pid == -1)
+			error_rising(appdata);
+		fprintf(stderr, "Child process %d exited with status %d\n", pid, WEXITSTATUS(status));
+		fflush(stderr);
 		// waitpid(appdata->exec_data->processes[i], &appdata->exec_data->status, 0);
-		waitpid(-1, NULL, 0);
+		//waitpid(-1, NULL, 0);
+		ft_putstr_fd("After waitpid\n", 2);
+		i++;
 	}
 		//TODO - make a status array and make all po krasote vasche
-	// ft_putstr_fd("After waitpid\n", 2);
 }
 
 void	prepare_pipes(t_appdata *appdata)
