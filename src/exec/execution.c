@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/25 17:10:58 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/25 17:19:26 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	create_processes(t_appdata *appdata)
 {
 	int	i;
+	int status;
+	pid_t pid;
 
 	i = -1;
 	appdata->exec_data->processes = malloc(sizeof(pid_t) * (appdata->exec_data->pipe_counter + 1));
@@ -36,22 +38,15 @@ void	create_processes(t_appdata *appdata)
 	}
 	close_pipes_in_parent(appdata);
 	i = 0;
-	int status;
-	pid_t pid;
 	while (i < (appdata->exec_data->pipe_counter + 1))
 	{
 		status = 0;
 		pid = waitpid(appdata->exec_data->processes[i], &status, 0);
 		if (pid == -1)
 			error_rising(appdata);
-		fprintf(stderr, "Child process %d exited with status %d\n", pid, WEXITSTATUS(status));
-		fflush(stderr);
-		// waitpid(appdata->exec_data->processes[i], &appdata->exec_data->status, 0);
-		//waitpid(-1, NULL, 0);
-		ft_putstr_fd("After waitpid\n", 2);
 		i++;
 	}
-		//TODO - make a status array and make all po krasote vasche
+	//TODO - make a status array and make all po krasote vasche
 }
 
 void	prepare_pipes(t_appdata *appdata)
