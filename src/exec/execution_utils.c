@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/24 20:34:07 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:29:44 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	free_memory(t_appdata *appdata)
 		close(appdata->exec_data->infile);
 	if (appdata->exec_data->outfile != -1)
 		close(appdata->exec_data->outfile);
-	free(appdata);
 }
 	// if (pipex->is_heredoc)
 	// 	unlink("here_doc.txt");
@@ -71,7 +70,10 @@ char	*make_path(t_cmd_token token)
 	char	*cmd_with_slash;
 	
 	if (token.argv[0][0] == '/')
-		return (token.argv[0]);
+	{
+		current_path = ft_strdup(token.argv[0]);
+		return (current_path);
+	}
 	i = 0;	
 	paths = ft_split(getenv("PATH"), ':');
 	cmd_with_slash = ft_strjoin("/", token.argv[0]);
@@ -85,4 +87,15 @@ char	*make_path(t_cmd_token token)
 	}
 	free(cmd_with_slash);
 	return(current_path);
+}
+
+void close_pipes_in_parent(t_appdata *appdata)
+{
+    int i = 0;
+    while (i < appdata->exec_data->pipe_counter)
+    {
+        close(appdata->exec_data->fd[i][0]);  // Close the read end
+        close(appdata->exec_data->fd[i][1]);  // Close the write end
+        i++;
+    }
 }

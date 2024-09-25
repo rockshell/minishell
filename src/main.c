@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/24 19:50:18 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/25 15:57:33 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ int	main(void)
 		initial_parsing(input, &appdata);
 		run_lexer(&appdata);
 		start_execution(&appdata);
+		// ft_putstr_fd("We're in main\n", 2);
+		free_memory(&appdata);
+		free(input);
 	}
 	return (0);
 }

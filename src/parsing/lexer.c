@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/24 19:35:32 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:10:13 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void fill_command_tokens(t_appdata *appdata)
 		appdata->cmd_tokens[j].argc = count_len_of_command_token(appdata, i);
 		if (appdata->cmd_tokens[j].argc > 0)
 		{
-			appdata->cmd_tokens[j].argv = malloc(sizeof(char *) * (appdata->cmd_tokens[j].argc));
+			appdata->cmd_tokens[j].argv = malloc(sizeof(char *) * (appdata->cmd_tokens[j].argc + 1));
 			if (!appdata->cmd_tokens[j].argv)
 				error_rising(appdata);
 			//while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
@@ -86,6 +86,7 @@ void fill_command_tokens(t_appdata *appdata)
 				pos++;
 			}
 			appdata->cmd_tokens[j].id = j;
+			appdata->cmd_tokens[j].argv[pos] = NULL;
 			j++;
 		}
 		while (get_type_of_token(appdata->input_strings[i]) != 0 && i < appdata->num_of_input_strings)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/24 20:24:03 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:38:13 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,19 @@ void	first_child(t_appdata *appdata)
 		error_rising(appdata);
 		exit(127);
 	}
-	ft_putstr_fd(path, 2);
-	ft_putchar_fd('\n', 2);
-	ft_putstr_fd(appdata->cmd_tokens[0].argv[0], 2);
-	ft_putchar_fd('\n', 2);
-	ft_putstr_fd(appdata->cmd_tokens[0].argv[1], 2);
-	ft_putchar_fd('\n', 2);
 	if (execve(path, appdata->cmd_tokens[0].argv, NULL) == -1)
 	{
 		ft_putstr_fd("hey error\n", 2);
 		free(path);
 		error_rising(appdata);
 	}
+	exit(0);
 }
 
 void	last_child(t_appdata *appdata, int i)
 {
 	char	*path;
-	// char	*env;
-
-	// env = getenv(env);
+	
 	if (appdata->exec_data->output_redirection_num > 0)
 		io_redirection(appdata, 0);
 	if (dup2(appdata->exec_data->fd[i - 1][0], 0) == -1)
@@ -100,22 +93,21 @@ void	last_child(t_appdata *appdata, int i)
 	}
 	if (execve(path, appdata->cmd_tokens[i].argv, NULL) == -1)
 	{
+		ft_putstr_fd("hey error (last)\n", 2);
 		free(path);
-		// free(env);
 		error_rising(appdata);
 	}
+	exit(0);
 }
 
 void	mid_child(t_appdata *appdata, int i)
 {
 	char	*path;
-	// char 	**env;
 	
 	if (dup2(appdata->exec_data->fd[i - 1][0], 0) == -1)
 		error_rising(appdata);
 	if (dup2(appdata->exec_data->fd[i][1], 1) == -1)
 		error_rising(appdata);
-	// env = getenv(env);
 	close_fds(appdata->exec_data, i);
 	path = make_path(appdata->cmd_tokens[i]);
 	if (!path)
@@ -127,8 +119,9 @@ void	mid_child(t_appdata *appdata, int i)
 	}
 	if (execve(path, appdata->cmd_tokens[i].argv, NULL) == -1)
 	{
+		ft_putstr_fd("hey error(mid)\n", 2);
 		free(path);
-		// free(env);
 		error_rising(appdata);
 	}
+	exit(0);
 }

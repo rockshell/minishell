@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/24 17:22:23 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/25 16:29:03 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ char	*gnl_strjoin(char const *s1, char const *s2);
 size_t	gnl_strlen(const char *str);
 void	get_number_of_pipe_and_redirection(t_appdata *appdata);
 char	*make_path(t_cmd_token token);
+void close_pipes_in_parent(t_appdata *appdata);
 
 //execution
 void	start_execution(t_appdata *appdata);
