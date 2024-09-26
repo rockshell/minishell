@@ -3,55 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/25 16:10:13 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/26 20:29:13 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int count_service_tokens(t_appdata *appdata, char **input_strings)
+int count_tokens(t_appdata *appdata, char **input_strings)
 {
 	int i;
 	int counter;
 
 	i = -1;
 	counter = 0;
+	if (input_strings[0][0] != '\0')
+		counter++;
 	while (++i < appdata->num_of_input_strings)
 	{
-		if (get_type_of_token(input_strings[i]))
+		if (get_type_of_string(input_strings[i]) == PIPE)
 			counter++;
 	}
 	return (counter);
 }
 
-int count_command_tokens(t_appdata *appdata, char **input_strings)
-{
-	int i;
-	int counter;
 
-	i = -1;
-	counter = 0;
-	while (++i < appdata->num_of_input_strings)
-	{
-		if (!get_type_of_token(input_strings[i]))
-		{
-			counter++;
-			while (!get_type_of_token(input_strings[i]))
-				i++;
-		}
-	}
-	return (counter);
-}
-
-int count_len_of_command_token(t_appdata *appdata, int i)
+int count_argv_length(t_appdata *appdata, int i)
 {
 	int len;
 
 	len = 0;
-	while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
+	while (get_type_of_string(appdata->input_strings[i]) == WORD
+			&& i < appdata->num_of_input_strings)
 	{
 		len++;
 		i++;
@@ -59,75 +44,119 @@ int count_len_of_command_token(t_appdata *appdata, int i)
 	return (len);
 }
 
-void fill_command_tokens(t_appdata *appdata)
+void fill_argv(t_appdata *appdata, int i, int j)
 {
-	int i;
-	int j;
-	int pos;
+	int k;
 
-	i = 0;
-	j = 0;
-	while (i < appdata->num_of_input_strings && get_type_of_token(appdata->input_strings[i]) == 0)
+	k = 0;
+	if (appdata->tokens[j].argc > 0)
 	{
-		pos = 0;
-		appdata->cmd_tokens[j].argc = count_len_of_command_token(appdata, i);
-		if (appdata->cmd_tokens[j].argc > 0)
+		appdata->tokens[j].argv = malloc(sizeof(char *) * (appdata->tokens[j].argc + 1));
+		if (!appdata->tokens[j].argv)
+			error_rising(appdata);
+		while (k < appdata->tokens[j].argc)
 		{
-			appdata->cmd_tokens[j].argv = malloc(sizeof(char *) * (appdata->cmd_tokens[j].argc + 1));
-			if (!appdata->cmd_tokens[j].argv)
+			appdata->tokens[j].argv[k] = ft_strdup(appdata->input_strings[i]);
+			if (!appdata->tokens[j].argv[k])
 				error_rising(appdata);
-			//while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
-			while (pos < appdata->cmd_tokens[j].argc)
-			{
-				appdata->cmd_tokens[j].argv[pos] = ft_strdup(appdata->input_strings[i]);
-				if (!appdata->cmd_tokens[j].argv[pos])
-					error_rising(appdata);
-				i++;
-				pos++;
-			}
-			appdata->cmd_tokens[j].id = j;
-			appdata->cmd_tokens[j].argv[pos] = NULL;
-			j++;
-		}
-		while (get_type_of_token(appdata->input_strings[i]) != 0 && i < appdata->num_of_input_strings)
 			i++;
+			k++;
+		}
+		appdata->tokens[j].argv[k] = NULL;
 	}
 }
 
-void fill_service_tokens(t_appdata *appdata)
+void fill_tokens(t_appdata *appdata, char **input_strings, int num_of_input_strings)
 {
 	int i;
 	int j;
-	int type;
 
-	i = -1;
+	i = 0;
 	j = 0;
-	type = 0;
-	while (++i < appdata->num_of_input_strings)
+	while (i < num_of_input_strings)
 	{
-		type = get_type_of_token(appdata->input_strings[i]);
-		if (type != 0)
+		if (get_type_of_string(input_strings[i]) == WORD)
 		{
-			appdata->srv_tokens[j].original = ft_strdup(appdata->input_strings[i]);
-			appdata->srv_tokens[j].type = type;
-			j++;
+			appdata->tokens[j].argc = count_argv_length(appdata, i);
+			fill_argv(appdata, i, j);
+			i += appdata->tokens[j].argc;
 		}
+		else if (get_type_of_string(input_strings[i]) == IN_REDIR)
+		{
+			fill_in_redirection(appdata, i);
+			i += 2;
+		}	
+		else if (get_type_of_string(input_strings[i]) == OUT_REDIR)
+		{
+			fill_out_redirection(appdata, i);
+			i += 2;
+		}
+		else if (get_type_of_string(input_strings[i]) == HERE_DOC_REDIR)
+		{
+			fill_here_doc_redirection(appdata, i);
+			i += 2;
+		}
+		else if (get_type_of_string(input_strings[i]) == APPEND_REDIR)
+		{
+			fill_append_redirection(appdata, i);
+			i += 2;
+		}
+		else if (get_type_of_string(input_strings[i]) == PIPE)
+		{
+			appdata->tokens[j].is_pipe_after = 1;
+			if (j < appdata->tokens_num)
+				appdata->tokens[j + 1].is_pipe_before = 1;
+			i++;
+		}
+		j++;
 	}
 }
 
 void run_lexer(t_appdata *appdata)
 {
-	appdata->srv_tokens_num = count_service_tokens(appdata, appdata->input_strings);
-	appdata->cmd_tokens_num = count_command_tokens(appdata, appdata->input_strings);
-	appdata->cmd_tokens = malloc(sizeof(t_cmd_token) * appdata->cmd_tokens_num);
-	if (!appdata->cmd_tokens)
-		return ;
-	appdata->srv_tokens = malloc(sizeof(t_srv_token) * appdata->srv_tokens_num);
-	if (!appdata->srv_tokens)
-	{
-		free(appdata->cmd_tokens);
-		return ;
-	}
-	fill_service_tokens(appdata);
-	fill_command_tokens(appdata);
+	appdata->tokens_num = count_tokens(appdata, appdata->input_strings);
+	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
+	if (!appdata->tokens)
+		error_rising(appdata);
+	fill_tokens(appdata, appdata->input_strings, appdata->num_of_input_strings);
 }
+
+// void fill_service_tokens(t_appdata *appdata)
+// {
+// 	int i;
+// 	int j;
+// 	int type;
+
+// 	i = -1;
+// 	j = 0;
+// 	type = 0;
+// 	while (++i < appdata->num_of_input_strings)
+// 	{
+// 		type = get_type_of_token(appdata->input_strings[i]);
+// 		if (type != 0)
+// 		{
+// 			appdata->srv_tokens[j].original = ft_strdup(appdata->input_strings[i]);
+// 			appdata->srv_tokens[j].type = type;
+// 			j++;
+// 		}
+// 	}
+// }
+
+// int count_command_tokens(t_appdata *appdata, char **input_strings)
+// {
+// 	int i;
+// 	int counter;
+
+// 	i = -1;
+// 	counter = 0;
+// 	while (++i < appdata->num_of_input_strings)
+// 	{
+// 		if (!get_type_of_token(input_strings[i]))
+// 		{
+// 			counter++;
+// 			while (!get_type_of_token(input_strings[i]))
+// 				i++;
+// 		}
+// 	}
+// 	return (counter);
+// }

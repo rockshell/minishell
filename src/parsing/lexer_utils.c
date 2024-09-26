@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/24 16:28:03 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:42:17 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	get_type_of_token(char *command)
+int	get_type_of_string(char *string)
 {
-	if (ft_strncmp(command, "|", ft_strlen(command)) == 0)
-		return (1);
-	else if (ft_strncmp(command, "<", ft_strlen(command)) == 0)
-		return (2);
-	else if (ft_strncmp(command, ">", ft_strlen(command)) == 0)
-		return (3);
-	else if (ft_strncmp(command, "<<", ft_strlen(command)) == 0)
-		return (4);
-	else if (ft_strncmp(command, ">>", ft_strlen(command)) == 0)
-		return (5);
-	return(0);
+	if (ft_strncmp(string, "|", ft_strlen(string)) == 0)
+		return (PIPE);
+	else if (ft_strncmp(string, "<", ft_strlen(string)) == 0)
+		return (IN_REDIR);
+	else if (ft_strncmp(string, ">", ft_strlen(string)) == 0)
+		return (OUT_REDIR);
+	else if (ft_strncmp(string, "<<", ft_strlen(string)) == 0)
+		return (HERE_DOC_REDIR);
+	else if (ft_strncmp(string, ">>", ft_strlen(string)) == 0)
+		return (APPEND_REDIR);
+	return(WORD);
 }

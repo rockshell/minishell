@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/25 16:29:03 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/26 19:41:39 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@
 # define ALLOC_ERROR "Error! The program failed to allocate memory!\n"
 # define BUFFER_SIZE 42
 
+# define WORD 0
+# define PIPE 1
+# define IN_REDIR 2
+# define OUT_REDIR 3
+# define HERE_DOC_REDIR 4
+# define APPEND_REDIR 5
+
 typedef struct s_env
 {
 	char			*key;
@@ -43,24 +50,20 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_srv_token
+typedef struct s_token
 {
-	int		input_id;
-	int		output_id;
-	char	*original;
-	int		type;
-}	t_srv_token;
-
-typedef struct s_cmd_token
-{
-	int		id;
 	int		argc;
-	char	*original;
-	char	*cmd;
 	char	**argv;
-	char	*filename;
+	char	*infile_name;
+	char	*outfile_name;
 	char	*delim;
-}	t_cmd_token;
+	int		is_builtin;
+	int		input_redir_type;
+	int		output_redir_type;
+	int		is_pipe_after;
+	int		is_pipe_before;
+	int		pipe;
+}	t_token;
 
 typedef	struct s_exec_data
 {
@@ -78,13 +81,11 @@ typedef	struct s_exec_data
 typedef struct s_appdata
 {
 	int		num_of_input_strings;
-	int     cmd_tokens_num;
-	int		srv_tokens_num;
+	int     tokens_num;
 	char 	**input_strings;
 	char 	**envp;
 	t_exec_data	*exec_data;
-	t_cmd_token	*cmd_tokens;
-	t_srv_token *srv_tokens;
+	t_token	*tokens;
 	t_env	*env;
 }	t_appdata;
 
@@ -102,7 +103,7 @@ char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
 size_t	handle_len_quotes(char *input, size_t i);
 int	initial_parsing(char *input, t_appdata *appdata);
-int		get_type_of_token(char *command);
+int		get_type_of_string(char *command);
 int count_service_tokens(t_appdata *appdata, char **input_strings);
 int count_command_tokens(t_appdata *appdata, char **input_strings);
 void fill_service_tokens(t_appdata *appdata);
@@ -115,7 +116,7 @@ char	*get_next_line(int fd);
 char	*gnl_strjoin(char const *s1, char const *s2);
 size_t	gnl_strlen(const char *str);
 void	get_number_of_pipe_and_redirection(t_appdata *appdata);
-char	*make_path(t_cmd_token token);
+char	*make_path(t_token token);
 void close_pipes_in_parent(t_appdata *appdata);
 
 //execution
