@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/25 18:03:35 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/27 16:56:01 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,15 @@ void only_child(t_appdata *appdata)
 		dup2(appdata->exec_data->outfile, 1);
 		close(appdata->exec_data->outfile);
 	}
-	path = make_path(appdata->cmd_tokens[0]);
+	path = make_path(appdata->tokens[0]);
 	if (!path)
 	{
-		ft_putstr_fd(appdata->cmd_tokens[0].argv[0], 2);
+		ft_putstr_fd(appdata->tokens[0].argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[0].argv, NULL) == -1)
+	if (execve(path, appdata->tokens[0].argv, NULL) == -1)
 	{
 		ft_putstr_fd("hey error\n", 2);
 		free(path);
@@ -118,19 +118,19 @@ void	start_execution(t_appdata *appdata)
 
 	exec_data = appdata->exec_data;
 	get_number_of_pipe_and_redirection(appdata);
-	if (exec_data->input_redirection_num > 0)
-	{
-		exec_data->infile = open_files(appdata, 1);
-		if (appdata->srv_tokens[0].type == 4)
-			rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
-	}
-	if (exec_data->output_redirection_num > 0)
-		exec_data->outfile = open_files(appdata, 0);
+	// if (exec_data->input_redirection_num > 0)
+	// {
+	// 	exec_data->infile = open_files(appdata, 1);
+	// 	if (appdata->srv_tokens[0].type == 4)
+	// 		rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
+	// }
+	// if (exec_data->output_redirection_num > 0)
+	// 	exec_data->outfile = open_files(appdata, 0);
 	if (exec_data->pipe_counter > 0)
 	{
 		prepare_pipes(appdata);
 		create_processes(appdata);
 	}
-	if (exec_data->pipe_counter == 0)
+	else if (exec_data->pipe_counter == 0)
 		execute_single(appdata);
 }

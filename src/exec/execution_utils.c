@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/25 16:29:44 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/27 16:56:21 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,25 @@ void	error_rising(t_appdata *appdata)
 	exit(1);
 }
 
-void	get_number_of_pipe_and_redirection(t_appdata *appdata)
+void	get_number_of_pipes(t_appdata *appdata)
 {
-	int			i;
-	t_srv_token	*srv_tokens;
+	int	i;
 
-	srv_tokens = appdata->srv_tokens;
 	i = -1;
-	while (++i < appdata->srv_tokens_num)
+	while (++i < appdata->tokens_num)
 	{
-		if (srv_tokens[i].type == 1)
+		if (appdata->tokens[i].is_pipe_after == TRUE)
 			appdata->exec_data->pipe_counter++;
-		else if (srv_tokens[i].type == 2 || srv_tokens[i].type == 4)
-			appdata->exec_data->input_redirection_num++;
-		else if (srv_tokens[i].type == 3 || srv_tokens[i].type == 5)
-			appdata->exec_data->output_redirection_num++;
+		// else if (appdata->tokens[i].input_redir_type == IN_REDIR 
+		// 	|| appdata->tokens[i].input_redir_type == HERE_DOC_REDIR)
+		// 	appdata->exec_data->input_redirection_num++;
+		// else if (appdata->tokens[i].input_redir_type  == OUT_REDIR
+		// 	|| appdata->tokens[i].input_redir_type  == APPEND_REDIR)
+		// 	appdata->exec_data->output_redirection_num++;
 	}
 }
 
-char	*make_path(t_cmd_token token)
+char	*make_path(t_token token)
 {
 	int		i;
 	char	**paths;

@@ -3,31 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   file_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 16:15:12 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/27 17:04:28 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_files(t_appdata *appdata, int is_input)
+int	open_files(t_appdata *appdata, int is_input, int i)
 {
 	int	res;
 
 	res = 0;
-	if (is_input == 1 && appdata->srv_tokens[0].type == 2)
-		res = open(appdata->cmd_tokens[0].filename, O_RDONLY);
-	else if (is_input == 1 && appdata->srv_tokens[0].type == 4)
+	if (is_input == 1
+		&& appdata->tokens[i].input_redir_type == IN_REDIR)
+		res = open(appdata->tokens[i].infile_name, O_RDONLY);
+	else if (is_input == 1
+		&& appdata->tokens[i].input_redir_type == HERE_DOC_REDIR)
 		res = open("here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (is_input == 0
-		&& appdata->srv_tokens[appdata->srv_tokens_num - 1].type == 3)
-		res = open(appdata->cmd_tokens[appdata->cmd_tokens_num - 1].filename,
+		&& appdata->tokens[i].output_redir_type == OUT_REDIR)
+		res = open(appdata->tokens[i].outfile_name,
 				O_RDWR | O_CREAT | O_TRUNC, 0644);
 	else if (is_input == 0
-		&& appdata->srv_tokens[appdata->srv_tokens_num - 1].type == 5)
-		res = open(appdata->cmd_tokens[appdata->cmd_tokens_num - 1].filename,
+		&& appdata->tokens[i].output_redir_type == APPEND_REDIR)
+		res = open(appdata->tokens[i].outfile_name,
 				O_RDWR | O_CREAT | O_APPEND, 0644);
 	return (res);
 }

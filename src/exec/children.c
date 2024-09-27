@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/25 16:38:13 by arch             ###   ########.fr       */
+/*   Updated: 2024/09/27 16:57:48 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,15 @@ void	first_child(t_appdata *appdata)
 	if (dup2(appdata->exec_data->fd[0][1], 1) == -1)
 		error_rising(appdata);
 	close_fds(appdata->exec_data, 0);
-	path = make_path(appdata->cmd_tokens[0]);
+	path = make_path(appdata->tokens[0]);
 	if (!path)
 	{
-		ft_putstr_fd(appdata->cmd_tokens[0].argv[0], 2);
+		ft_putstr_fd(appdata->tokens[0].argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[0].argv, NULL) == -1)
+	if (execve(path, appdata->tokens[0].argv, NULL) == -1)
 	{
 		ft_putstr_fd("hey error\n", 2);
 		free(path);
@@ -83,15 +83,15 @@ void	last_child(t_appdata *appdata, int i)
 	if (dup2(appdata->exec_data->fd[i - 1][0], 0) == -1)
 		error_rising(appdata);
 	close_fds(appdata->exec_data, appdata->exec_data->pipe_counter);
-	path = make_path(appdata->cmd_tokens[i]);
+	path = make_path(appdata->tokens[i]);
 	if (!path)
 	{
-		ft_putstr_fd(appdata->cmd_tokens[i].argv[0], 2);
+		ft_putstr_fd(appdata->tokens[i].argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[i].argv, NULL) == -1)
+	if (execve(path, appdata->tokens[i].argv, NULL) == -1)
 	{
 		ft_putstr_fd("hey error (last)\n", 2);
 		free(path);
@@ -109,15 +109,15 @@ void	mid_child(t_appdata *appdata, int i)
 	if (dup2(appdata->exec_data->fd[i][1], 1) == -1)
 		error_rising(appdata);
 	close_fds(appdata->exec_data, i);
-	path = make_path(appdata->cmd_tokens[i]);
+	path = make_path(appdata->tokens[i]);
 	if (!path)
 	{
-		ft_putstr_fd(appdata->cmd_tokens[i].argv[0], 2);
+		ft_putstr_fd(appdata->tokens[i].argv[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		error_rising(appdata);
 		exit(127);
 	}
-	if (execve(path, appdata->cmd_tokens[i].argv, NULL) == -1)
+	if (execve(path, appdata->tokens[i].argv, NULL) == -1)
 	{
 		ft_putstr_fd("hey error(mid)\n", 2);
 		free(path);
