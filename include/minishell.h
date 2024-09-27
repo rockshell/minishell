@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/26 19:41:39 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/26 16:47:50 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef	struct s_exec_data
 	pid_t	*processes;
 }	t_exec_data;
 
-
 typedef struct s_appdata
 {
 	int		num_of_input_strings;
@@ -127,4 +126,5 @@ void run_lexer(t_appdata *appdata);
 void	first_child(t_appdata *appdata);
 void	last_child(t_appdata *appdata, int i);
 void	mid_child(t_appdata *appdata, int i);
+
 #endif

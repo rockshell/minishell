@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/27 16:57:48 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/26 18:04:28 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
