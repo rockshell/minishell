@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/26 20:29:13 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/26 21:00:40 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ void fill_argv(t_appdata *appdata, int i, int j)
 	}
 }
 
+// void	fill_input_redirection(t_appdata *appdata, int i)
+// {
+// 	appdata->tokens->infile_name = ft_strdup(appdata->input_strings[i + 1]);
+// }
+
 void fill_tokens(t_appdata *appdata, char **input_strings, int num_of_input_strings)
 {
 	int i;
@@ -83,12 +88,14 @@ void fill_tokens(t_appdata *appdata, char **input_strings, int num_of_input_stri
 		}
 		else if (get_type_of_string(input_strings[i]) == IN_REDIR)
 		{
-			fill_in_redirection(appdata, i);
+			appdata->tokens->infile_name = ft_strdup(appdata->input_strings[i + 1]);
+			// fill_input_redirection(appdata, i);
 			i += 2;
 		}	
 		else if (get_type_of_string(input_strings[i]) == OUT_REDIR)
 		{
-			fill_out_redirection(appdata, i);
+			// fill_out_redirection(appdata, i);
+			appdata->tokens->outfile_name = ft_strdup(appdata->input_strings[i + 1]);
 			i += 2;
 		}
 		else if (get_type_of_string(input_strings[i]) == HERE_DOC_REDIR)
