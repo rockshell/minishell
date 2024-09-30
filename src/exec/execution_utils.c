@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/27 16:56:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/09/30 15:01:16 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,21 +62,21 @@ void	get_number_of_pipes(t_appdata *appdata)
 	}
 }
 
-char	*make_path(t_token token)
+char	*make_path(t_cmd cmd)
 {
 	int		i;
 	char	**paths;
 	char	*current_path;
 	char	*cmd_with_slash;
 	
-	if (token.argv[0][0] == '/')
+	if (cmd.argv[0][0] == '/')
 	{
-		current_path = ft_strdup(token.argv[0]);
+		current_path = ft_strdup(cmd.argv[0]);
 		return (current_path);
 	}
 	i = 0;	
 	paths = ft_split(getenv("PATH"), ':');
-	cmd_with_slash = ft_strjoin("/", token.argv[0]);
+	cmd_with_slash = ft_strjoin("/", cmd.argv[0]);
 	while (paths[i])
 	{
 		current_path = ft_strjoin(paths[i], cmd_with_slash);

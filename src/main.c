@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/26 18:01:42 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/27 18:50:02 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(void)
 		if (!input)
 			break;
 		save_history(input);
-		initial_parsing(input, &appdata);
+		run_parsing(input, &appdata);
 		run_lexer(&appdata);
 		start_execution(&appdata);
 		// free_memory(&appdata);
