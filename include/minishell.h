@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/30 18:51:09 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/01 16:44:53 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@
 # define APPEND 6
 # define LOGICAL_AND 7
 # define LOGICAL_OR 8
+# define SINGLE_QUOTE 9
+# define DOUBLE_QUOTE 10
 
 typedef struct s_env
 {
@@ -55,6 +57,7 @@ typedef struct s_env
 }	t_env;
 
 
+typedef struct s_token t_token;
 /**
  *
  * This structure stores the necessary information for each token parsed
@@ -124,6 +127,7 @@ typedef struct s_appdata
 	t_token	*first_token;
 	t_list *lists;
 	t_env  *env;
+	t_exec_data *exec_data;
 }  t_appdata;
 
 //enviromentals
