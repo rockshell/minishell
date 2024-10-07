@@ -6,21 +6,32 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:13:45 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/08/30 15:07:27 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/07 17:00:54 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(char **arguments)
+int	ft_echo(t_cmd_token *token)
 {
-	int	argc;
+	int	i;
+	int	is_new_line;
 
-	argc = 0;
-	while (arguments[argc])
-		argc++;
-	if (argc == 2)
-		printf("%s\n", arguments[1]);
-	else if (argc == 3 && ft_strncmp(arguments[1], "-n", 2) == 0)
-		printf("%s", arguments[2]);
+	i = 1;
+	is_new_line = 1;
+	if (ft_strncmp(token->argv[i], "-n", ft_strlen(token->argv[i])) == 0)
+	{
+		is_new_line = 0;
+		i++;
+	}
+	while (i < token->argc)
+	{
+		printf("%s", token->argv[i]);
+		if (i < token->argc - 1)
+			printf(" ");
+		i++;
+	}
+	if (is_new_line == 1)
+		printf("\n");
+	return (0);
 }

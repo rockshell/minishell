@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/09/26 13:12:31 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/03 14:57:51 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	main(int argc, char **argv, char **envp)
-int	main(void)
+// int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_appdata	appdata;
 
-	// (void) argc;
-	// (void) argv;
-	// appdata.envp = envp;
+	(void) argc;
+	(void) argv;
+	initialize_env_var(&appdata, envp);
 	while (1)
 	{
 		input = readline("minishell: ");

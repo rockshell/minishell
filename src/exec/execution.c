@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/25 18:03:35 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/07 18:55:35 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,37 +67,6 @@ void	prepare_pipes(t_appdata *appdata)
 	}
 }
 
-void only_child(t_appdata *appdata)
-{
-	char *path;
-	
-	if (appdata->exec_data->input_redirection_num > 0)
-	{
-		dup2(appdata->exec_data->infile, 0);
-		close(appdata->exec_data->infile);
-	}
-	if (appdata->exec_data->output_redirection_num > 0)
-	{
-		dup2(appdata->exec_data->outfile, 1);
-		close(appdata->exec_data->outfile);
-	}
-	path = make_path(appdata->cmd_tokens[0]);
-	if (!path)
-	{
-		ft_putstr_fd(appdata->cmd_tokens[0].argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		error_rising(appdata);
-		exit(127);
-	}
-	if (execve(path, appdata->cmd_tokens[0].argv, NULL) == -1)
-	{
-		ft_putstr_fd("hey error\n", 2);
-		free(path);
-		error_rising(appdata);
-	}
-	exit(0);
-}
-
 void execute_single(t_appdata *appdata)
 {
 	pid_t pid;
@@ -112,25 +81,52 @@ void execute_single(t_appdata *appdata)
 	waitpid(pid, &status, 0);
 }
 
+void execute_single_builtin(t_appdata *appdata)
+{
+	if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "cd", 2) == 0)
+		ft_cd(&appdata->cmd_tokens[0], appdata->env_var);
+	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "echo", 4) == 0)
+		ft_echo(&appdata->cmd_tokens[0]);
+	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "env", 3) == 0)
+		ft_env(appdata->env_var);
+	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "exit", 4) == 0)
+		ft_exit(appdata, &appdata->cmd_tokens[0]);
+	// else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "export", 7) == 0)
+	// 	ft_export(appdata)
+	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "pwd", 3) == 0)
+		ft_pwd();
+	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "unset", 6) == 0)
+		ft_unset(appdata, &appdata->cmd_tokens[0], appdata->env_var);
+}
+
 void	start_execution(t_appdata *appdata)
 {
 	t_exec_data *exec_data;
+	int i;
 
+	i = -1;
 	exec_data = appdata->exec_data;
 	get_number_of_pipe_and_redirection(appdata);
-	if (exec_data->input_redirection_num > 0)
+	while (++i < appdata->cmd_tokens_num);
+		appdata->cmd_tokens[i].is_builtin = check_if_builtin(&appdata->cmd_tokens[i]);
+	if (appdata->cmd_tokens_num == 1 && appdata->cmd_tokens[0].is_builtin == 1)
+		execute_single_builtin(appdata);
+	else
 	{
-		exec_data->infile = open_files(appdata, 1);
-		if (appdata->srv_tokens[0].type == 4)
-			rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
+		if (exec_data->input_redirection_num > 0)
+		{
+			exec_data->infile = open_files(appdata, 1);
+			if (appdata->srv_tokens[0].type == 4)
+				rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
+		}
+		if (exec_data->output_redirection_num > 0)
+			exec_data->outfile = open_files(appdata, 0);
+		if (exec_data->pipe_counter > 0)
+		{
+			prepare_pipes(appdata);
+			create_processes(appdata);
+		}
+		else //if (exec_data->pipe_counter == 0)
+			execute_single(appdata);
 	}
-	if (exec_data->output_redirection_num > 0)
-		exec_data->outfile = open_files(appdata, 0);
-	if (exec_data->pipe_counter > 0)
-	{
-		prepare_pipes(appdata);
-		create_processes(appdata);
-	}
-	if (exec_data->pipe_counter == 0)
-		execute_single(appdata);
 }
