@@ -6,15 +6,15 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:51 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 15:52:01 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/08 18:20:48 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void run_exit(t_appdata *appdata, t_cmd_token *token)
+void	run_exit(t_appdata *appdata, t_cmd_token *token)
 {
-	long long exit;
+	long long	exit;
 
 	exit = 0;
 	if (is_valid_digit(token->argv[1]) == 0)
@@ -29,12 +29,12 @@ void run_exit(t_appdata *appdata, t_cmd_token *token)
 		exit = ft_atoll(token->argv[1]);
 		if (exit < 0 || exit > 255)
 			appdata->exit_code = (int)(exit % 256);
-		else 
+		else
 			appdata->exit_code = exit;
 	}
 }
 
-int ft_exit(t_appdata *appdata, t_cmd_token *token)
+int	ft_exit(t_appdata *appdata, t_cmd_token *token)
 {
 	ft_putstr_fd("exit\n", 1);
 	if (token->argc == 1)

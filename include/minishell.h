@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 16:52:48 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 18:54:34 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/08 18:27:13 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,59 +92,68 @@ typedef struct s_appdata
 }	t_appdata;
 
 //enviromentals
-int		initialize_env_var(t_appdata *appdata, char **envp);
-int		create_env_var_node(t_env **env, char *current_env);
-char	*ft_get_env(t_env *env, char *key);
-void	free_and_renew_env_value(t_env *env, char *key, char *new_value);
-void	print_env(t_env *env, char *key);
+int			initialize_env_var(t_appdata *appdata, char **envp);
+int			create_env_var_node(t_env **env, char *current_env);
+char		*ft_get_env(t_env *env, char *key);
+void		free_and_renew_env_value(t_env *env, char *key, char *new_value);
+void		print_env(t_env *env, char *key);
+char		*get_key(char *current_env);
+char		*get_value(char *current_env);
 
 //utils 
-void	free_memory(t_appdata *appdata);
-void	error_rising(t_appdata *appdata);
+void		free_memory(t_appdata *appdata);
+void		error_rising(t_appdata *appdata);
 
 //built-in
-int		ft_cd(t_cmd_token *token, t_env *env);
-int		ft_echo(t_cmd_token *token);
-int		ft_env(t_env *env);
-int		ft_exit(t_appdata *appdata, t_cmd_token *token);
-int		ft_pwd(void);
-int		ft_unset(t_appdata *appdata, t_cmd_token *token, t_env *env);
+int			ft_cd(t_cmd_token *token, t_env *env);
+int			ft_echo(t_cmd_token *token);
+int			ft_env(t_env *env);
+int			ft_exit(t_appdata *appdata, t_cmd_token *token);
+int			ft_export(t_cmd_token *token, t_env *env);
+int			ft_pwd(void);
+int			ft_unset(t_appdata *appdata, t_cmd_token *token, t_env *env);
 
 //built-in utils
-int 		is_valid_digit(char *str);
+int			is_valid_digit(char *str);
 long long	ft_atoll(char *str);
+int			ft_strcmp(char *first_str, char *second_str);
+int			is_valid_var(char *argument);
+int			is_in_var(t_env *env, char *argument);
+char		**sort_an_array(char **array, int len);
+char		**get_an_array_of_keys(t_env *env, int len);
+int			get_length_of_env(t_env *env);
 
 //parsing - utils
-int		ft_isspace(char c);
-char	*handle_num_quotes(char *input);
-void	free_tokens(char **tokens);
-size_t	handle_len_quotes(char *input, size_t i);
-int		initial_parsing(char *input, t_appdata *appdata);
-int		get_type_of_token(char *command);
-int		count_service_tokens(t_appdata *appdata, char **input_strings);
-int		count_command_tokens(t_appdata *appdata, char **input_strings);
-void	fill_service_tokens(t_appdata *appdata);
-void	fill_command_tokens(t_appdata *appdata);
+int			ft_isspace(char c);
+char		*handle_num_quotes(char *input);
+void		free_tokens(char **tokens);
+size_t		handle_len_quotes(char *input, size_t i);
+int			initial_parsing(char *input, t_appdata *appdata);
+int			get_type_of_token(char *command);
+int			count_service_tokens(t_appdata *appdata, char **input_strings);
+int			count_command_tokens(t_appdata *appdata, char **input_strings);
+void		fill_service_tokens(t_appdata *appdata);
+void		fill_command_tokens(t_appdata *appdata);
 
 //execution utils
-int		open_files(t_appdata *appdata, int is_in);
-void	rwr_heredoc(t_appdata *appdata, char *delim);
-char	*get_next_line(int fd);
-char	*gnl_strjoin(char const *s1, char const *s2);
-size_t	gnl_strlen(const char *str);
-void	get_number_of_pipe_and_redirection(t_appdata *appdata);
-char	*make_path(t_cmd_token token);
-void	close_pipes_in_parent(t_appdata *appdata);
-void	io_redirection(t_appdata *appdata, int is_infile);
-void	close_fds(t_exec_data *exec_data, int current_pipe);
+int			open_files(t_appdata *appdata, int is_in);
+void		rwr_heredoc(t_appdata *appdata, char *delim);
+char		*get_next_line(int fd);
+char		*gnl_strjoin(char const *s1, char const *s2);
+size_t		gnl_strlen(const char *str);
+void		get_number_of_pipe_and_redirection(t_appdata *appdata);
+char		*make_path(t_cmd_token token);
+void		close_pipes_in_parent(t_appdata *appdata);
+void		io_redirection(t_appdata *appdata, int is_infile);
+void		close_fds(t_exec_data *exec_data, int current_pipe);
 
 //execution
-void	start_execution(t_appdata *appdata);
-void	run_lexer(t_appdata *appdata);
+void		start_execution(t_appdata *appdata);
+void		run_lexer(t_appdata *appdata);
 
 //children
-void	first_child(t_appdata *appdata);
-void	last_child(t_appdata *appdata, int i);
-void	mid_child(t_appdata *appdata, int i);
-void	only_child(t_appdata *appdata);
+void		first_child(t_appdata *appdata);
+void		last_child(t_appdata *appdata, int i);
+void		mid_child(t_appdata *appdata, int i);
+void		only_child(t_appdata *appdata);
 #endif

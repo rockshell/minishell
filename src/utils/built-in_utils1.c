@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   built-in_serv.c                                    :+:      :+:    :+:   */
+/*   built-in_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:37:40 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 17:50:03 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/08 18:23:55 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int is_valid_digit(char *str)
+int	is_valid_digit(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str || str[0] == '\0')
@@ -32,7 +32,7 @@ int is_valid_digit(char *str)
 
 long long	ft_atoll(char *str)
 {
-	int		i;
+	int			i;
 	long long	one;
 	long long	result;
 
@@ -55,4 +55,18 @@ long long	ft_atoll(char *str)
 	return (result * one);
 }
 
+int	ft_strcmp(char *first_str, char *second_str)
+{
+	int	i;
 
+	i = 0;
+	if (!first_str && !second_str)
+		return (0);
+	while (first_str[i] != '\0' && second_str[i] != '\0')
+	{
+		if (first_str[i] != second_str[i])
+			return (first_str[i] - second_str[i]);
+		i++;
+	}
+	return (first_str[i] - second_str[i]);
+}

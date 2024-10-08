@@ -6,29 +6,34 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:19 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 18:34:12 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/08 18:20:15 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	unset_command(t_env *env, char *key)
+void	free_node(t_env *node)
+{
+	free(node->key);
+	free(node->value);
+	free(node);
+}
+
+void	unset_command(t_env **env, char *key)
 {
 	t_env	*temp;
 	t_env	*prev;
 
 	if (!env || !key)
 		return ;
-	temp = env;
-	if (temp && ft_strncmp(temp->key, key, ft_strlen(temp->key)) == 0)
+	temp = *env;
+	if (temp && ft_strcmp(temp->key, key) == 0)
 	{
-		env = temp->next;
-		free(temp->key);
-		free(temp->value);
-		free(temp);
+		*env = temp->next;
+		free_node(temp);
 		return ;
 	}
-	while (temp && ft_strncmp(temp->key, key, ft_strlen(temp->key)) != 0)
+	while (temp && ft_strcmp(temp->key, key) != 0)
 	{
 		prev = temp;
 		temp = temp->next;
@@ -36,19 +41,19 @@ void	unset_command(t_env *env, char *key)
 	if (temp == NULL)
 		return ;
 	prev->next = temp->next;
-	free(temp);
+	free_node(temp);
 }
 
-int ft_unset(t_appdata *appdata, t_cmd_token *token, t_env *env)
+int	ft_unset(t_appdata *appdata, t_cmd_token *token, t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (token->argc == 1)
 		return (0);
 	while (token->argv[i])
 	{
-		unset_command(env, token->argv[i]);
+		unset_command(&env, token->argv[i]);
 		i++;
 	}
 	return (0);

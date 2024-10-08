@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/03 15:08:19 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/08 16:42:20 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_key(char *current_env)
+char	*get_key(char *current_env)
 {
 	char	*key;
 	size_t	i;
@@ -28,7 +28,7 @@ static char	*get_key(char *current_env)
 	return (key);
 }
 
-static char	*get_value(char *current_env)
+char	*get_value(char *current_env)
 {
 	int	i;
 	char *value;
