@@ -6,11 +6,78 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/01 16:48:33 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:36:45 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "minishell.h"
+#include "minishell.h"
+
+
+
+void	make_a_list(t_appdata *appdata, int start, int end, int i)
+{
+	t_list	list;
+	t_token	*cmd_start;
+	t_token	*cmd_end;
+	t_cmd	*cmd;
+	
+	list = appdata->lists[i];
+	cmd = malloc(sizeof(t_cmd) * (end - start + 1));
+	cmd_start = appdata->first_token;
+	while (cmd_start->pos < start)
+		cmd_start = cmd_start->next;
+	cmd_end = cmd_start;
+	while (is_cmd_end(cmd_end) == 0)
+		cmd_end = cmd_end->next;
+	
+	
+	
+	
+}
+
+void  fill_the_lists(t_appdata *appdata, int num_of_lists)
+{
+	int	i;
+	int	start_pos;
+	int	end_pos;
+	t_list	*lists;
+	t_token	*current;
+	
+	i = 0;
+	start_pos = 1;
+	current = appdata->first_token;
+	lists = appdata->lists;
+	while (++i <= num_of_lists)
+	{
+		while (current && (current->type != 7 || current->type != 8))
+		{
+			end_pos = current->pos;
+			current = current->next;
+		}
+		make_a_list(appdata, start_pos, end_pos, i);
+	}
+	
+}
+
+
+
+void run_lexer(t_appdata *appdata)
+{
+	int		num_of_lists;
+	t_list	*lists;
+	
+	num_of_lists = count_lists(appdata);
+	lists = malloc(sizeof(t_list) * num_of_lists);
+	appdata->lists = lists;
+	fill_the_lists(appdata, num_of_lists);
+}
+
+
+
+
+
+
+
 
 // int count_tokens(t_appdata *appdata, char **input_strings)
 // {

@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/01 20:07:23 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:56:57 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,12 +184,14 @@ void	fill_tokens(char *input, t_appdata *appdata)
 	i = 0;
 	pos = 1;
 	quotes_flag = 0;
+	appdata->tokens_num = 0;
 	prev = NULL;
 	while (input[i] != '\0')
 	{
 		current = malloc(sizeof(t_token));
 		current->pos = pos;
 		current->next = NULL;
+		appdata->tokens_num += 1;
 
 		op_type = is_operator(input, i);
 		if (op_type == WORD || (quotes_flag == 1 && op_type < 9))
@@ -239,6 +241,18 @@ void	fill_tokens(char *input, t_appdata *appdata)
 
 int run_parsing(char *input, t_appdata *appdata)
 {
+	t_token	*current;
+	int	i;
+
+	i = -1;
 	fill_tokens(input, appdata);
+	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
+	current = appdata->first_token;
+	while (++i < appdata->tokens_num)
+	{
+		appdata->tokens[i] = *current;
+		current = current->next;
+	}
+	
 	return (0);
 }

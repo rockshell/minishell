@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/01 16:44:53 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/08 19:36:26 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,16 @@ typedef struct s_token
 typedef struct s_cmd
 {
 	int		argc;
-	char	**argv;
-	char	*infile_name;
-	char	*outfile_name;
-	char	*delim;
-	int		is_builtin;
+	int		is_builtin; //TODO
 	int		input_redir_type;
 	int		output_redir_type;
 	int		is_pipe_after;
 	int		is_pipe_before;
 	int		pipe;
+	char	**argv;
+	char	*infile_name;
+	char	*outfile_name;
+	char	*delim; //for HEREDOC use ONLY
 }	t_cmd;
 
 typedef	struct s_exec_data
@@ -108,14 +108,14 @@ typedef	struct s_exec_data
 
 typedef struct s_list
 {
-	char *group_of_tokens;
-	char **splitted_string;
-	int num_of_strings;
 	int and_after;
 	int or_after;
 	int end_after;
-	t_exec_data	*exec_data;
-	t_cmd  *tokens;
+	t_cmd  *cmd;
+	t_exec_data	*exec_data; //for Vita's use
+	// char *group_of_tokens;
+	// char **splitted_string;
+	// int num_of_strings;
 }  t_list;
 
 typedef struct s_appdata
@@ -124,8 +124,9 @@ typedef struct s_appdata
 	int	 	tokens_num;
 	char	 **input_strings;
 	char	 **envp;
+	t_token	*tokens;
 	t_token	*first_token;
-	t_list *lists;
+	t_list 	*lists;
 	t_env  *env;
 	t_exec_data *exec_data;
 }  t_appdata;
@@ -149,6 +150,8 @@ int count_service_tokens(t_appdata *appdata, char **input_strings);
 int count_command_tokens(t_appdata *appdata, char **input_strings);
 void fill_service_tokens(t_appdata *appdata);
 void fill_command_tokens(t_appdata *appdata);
+int	count_lists(t_appdata *appdata);
+int	is_cmd_end(t_token *token);
 
 //execution utils
 int	open_files(t_appdata *appdata, int is_in);
