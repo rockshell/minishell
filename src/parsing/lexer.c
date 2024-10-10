@@ -3,32 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/08 19:36:45 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:10:49 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	make_cmd(t_appdata *appdata, int first, int last, t_list *list)
+{
+	t_cmd	*cmd;
 
+	cmd = malloc(sizeof(t_cmd) * (last - first + 1));
+	set_pipes_in_cmd(appdata, &cmd, first, last);
+	
+}
 
 void	make_a_list(t_appdata *appdata, int start, int end, int i)
 {
 	t_list	list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
-	t_cmd	*cmd;
 	
 	list = appdata->lists[i];
-	cmd = malloc(sizeof(t_cmd) * (end - start + 1));
+	list.size = 0;
 	cmd_start = appdata->first_token;
-	while (cmd_start->pos < start)
-		cmd_start = cmd_start->next;
 	cmd_end = cmd_start;
-	while (is_cmd_end(cmd_end) == 0)
-		cmd_end = cmd_end->next;
+	while (cmd_end->pos < end)
+	{
+		while (cmd_start->pos < start)
+			cmd_start = cmd_start->next;
+		while (is_cmd_end(cmd_end) == 0)
+			cmd_end = cmd_end->next;
+		make_cmd(appdata, cmd_start->pos, cmd_end->pos, &list);
+	}
+	
+	
 	
 	
 	
@@ -49,7 +61,7 @@ void  fill_the_lists(t_appdata *appdata, int num_of_lists)
 	lists = appdata->lists;
 	while (++i <= num_of_lists)
 	{
-		while (current && (current->type != 7 || current->type != 8))
+		while (is_list_end(current) == 0)
 		{
 			end_pos = current->pos;
 			current = current->next;
@@ -58,8 +70,6 @@ void  fill_the_lists(t_appdata *appdata, int num_of_lists)
 	}
 	
 }
-
-
 
 void run_lexer(t_appdata *appdata)
 {

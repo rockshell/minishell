@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 15:56:57 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/08 23:07:08 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void	fill_tokens(char *input, t_appdata *appdata)
 	t_token *current;
 
 	i = 0;
-	pos = 1;
+	pos = 0;
 	quotes_flag = 0;
 	appdata->tokens_num = 0;
 	prev = NULL;

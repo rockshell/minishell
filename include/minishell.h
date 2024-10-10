@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/08 19:36:26 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:14:20 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ typedef struct s_token
 
 typedef struct s_cmd
 {
-	int		argc;
+	int		argc; //num of things in argv
 	int		is_builtin; //TODO
 	int		input_redir_type;
 	int		output_redir_type;
 	int		is_pipe_after;
 	int		is_pipe_before;
-	int		pipe;
-	char	**argv;
+	// int		pipe;
+	char	**argv; //no redirects, command + args
 	char	*infile_name;
 	char	*outfile_name;
 	char	*delim; //for HEREDOC use ONLY
@@ -111,6 +111,7 @@ typedef struct s_list
 	int and_after;
 	int or_after;
 	int end_after;
+	int	size;
 	t_cmd  *cmd;
 	t_exec_data	*exec_data; //for Vita's use
 	// char *group_of_tokens;
@@ -152,6 +153,7 @@ void fill_service_tokens(t_appdata *appdata);
 void fill_command_tokens(t_appdata *appdata);
 int	count_lists(t_appdata *appdata);
 int	is_cmd_end(t_token *token);
+int	is_list_end(t_token *token);
 
 //execution utils
 int	open_files(t_appdata *appdata, int is_in);
