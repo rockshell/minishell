@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 23:07:08 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/10 16:06:27 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ void	fill_tokens(char *input, t_appdata *appdata)
 		current = malloc(sizeof(t_token));
 		current->pos = pos;
 		current->next = NULL;
+		current->is_parsed = 0;
 		appdata->tokens_num += 1;
 
 		op_type = is_operator(input, i);
@@ -203,10 +204,11 @@ void	fill_tokens(char *input, t_appdata *appdata)
 				j++;
 			}
 			current->value = ft_strtrim(ft_substr(input, i, j - i), " ");
-			if (current->value[0] == '-')
-				current->type = ARGUMENT;
-			else
-				current->type = WORD;
+			// if (current->value[0] == '-')
+			// 	current->type = ARGUMENT;
+			// else
+			// 	current->type = WORD;
+			current->type = WORD;
 			i = j;
 		}
 		else if (op_type >= 2 && op_type <= 8)

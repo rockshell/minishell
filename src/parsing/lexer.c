@@ -3,48 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/09 17:10:49 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/10 19:58:32 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	make_cmd(t_appdata *appdata, int first, int last, t_list *list)
+t_cmd	*make_cmd(t_appdata *appdata, int first, int last)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_cmd) * (last - first + 1));
-	set_pipes_in_cmd(appdata, &cmd, first, last);
-	
+	cmd = malloc(sizeof(t_cmd));
+	cmd->argc = 0;
+	cmd->input_redir_type = 0;
+	cmd->output_redir_type = 0;
+	cmd->is_pipe_before = 0;
+	cmd->is_pipe_after = 0;
+	cmd->argv = NULL;
+	cmd->infile_name = NULL;
+	cmd->outfile_name = NULL;
+	cmd->delim = NULL;
+	set_pipes_in_cmd(appdata, cmd, first, last);
+	set_redirections_in_cmd(appdata, cmd, first);
+	set_the_command_itself(appdata, cmd, first);
+	return(cmd);
 }
 
 void	make_a_list(t_appdata *appdata, int start, int end, int i)
 {
-	t_list	list;
+	int	j;
+	t_list	*list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
+	t_cmd	*cmd;
 	
-	list = appdata->lists[i];
-	list.size = 0;
+	list = malloc(sizeof(t_list));
+	list->size = 0;
+	list->and_after = 0;
+	list->or_after = 0;
+	list->end_after = 0;
+	list->cmd = NULL;
+	appdata->lists[i] = *list;
 	cmd_start = appdata->first_token;
 	cmd_end = cmd_start;
+	j = 0;
 	while (cmd_end->pos < end)
 	{
 		while (cmd_start->pos < start)
 			cmd_start = cmd_start->next;
 		while (is_cmd_end(cmd_end) == 0)
 			cmd_end = cmd_end->next;
-		make_cmd(appdata, cmd_start->pos, cmd_end->pos, &list);
+		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos);
+		list->cmd[j] = *cmd;
+		cmd_start = cmd_end->next;
+		cmd_end = cmd_start;
+		list->size++;
+		j++;
+		// printf("hey\n");
 	}
-	
-	
-	
-	
-	
-	
+	if (appdata->tokens[end].type == 7)
+		list->and_after = 1;
+	else if(appdata->tokens[end].type == 8)
+		list->or_after = 1;
+	else
+		list->end_after = 1;
 }
 
 void  fill_the_lists(t_appdata *appdata, int num_of_lists)
@@ -52,13 +77,13 @@ void  fill_the_lists(t_appdata *appdata, int num_of_lists)
 	int	i;
 	int	start_pos;
 	int	end_pos;
-	t_list	*lists;
+	// t_list	*lists;
 	t_token	*current;
 	
 	i = 0;
 	start_pos = 1;
+	appdata->lists_num = 0;
 	current = appdata->first_token;
-	lists = appdata->lists;
 	while (++i <= num_of_lists)
 	{
 		while (is_list_end(current) == 0)
@@ -67,8 +92,9 @@ void  fill_the_lists(t_appdata *appdata, int num_of_lists)
 			current = current->next;
 		}
 		make_a_list(appdata, start_pos, end_pos, i);
+		appdata->lists_num++;
+		start_pos = end_pos + 1;
 	}
-	
 }
 
 void run_lexer(t_appdata *appdata)

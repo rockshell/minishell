@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/09 17:14:20 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/10 18:15:52 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_token
 {
 	int		pos;
 	int		type;
+	int		is_parsed;
 	char	*value;
 	t_token *prev;
 	t_token *next;
@@ -123,6 +124,7 @@ typedef struct s_appdata
 {
 	int		num_of_input_strings;
 	int	 	tokens_num;
+	int		lists_num;
 	char	 **input_strings;
 	char	 **envp;
 	t_token	*tokens;
@@ -142,18 +144,21 @@ void error_rising(t_appdata *appdata);
 
 //parsing - utils
 int 	ft_isspace(char c);
+int		run_parsing(char *input, t_appdata *appdata);
+int		count_lists(t_appdata *appdata);
+int		is_cmd_end(t_token *token);
+int		is_list_end(t_token *token);
 char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
+void	set_pipes_in_cmd(t_appdata *appdata, t_cmd *cmd, int first, int last);
+void 	set_redirections_in_cmd(t_appdata *appdata, t_cmd *cmd, int first);
+void	set_the_command_itself(t_appdata *appdata, t_cmd *cmd, int first);
 size_t	handle_len_quotes(char *input, size_t i);
-int	run_parsing(char *input, t_appdata *appdata);
-int		get_type_of_string(char *command);
-int count_service_tokens(t_appdata *appdata, char **input_strings);
-int count_command_tokens(t_appdata *appdata, char **input_strings);
-void fill_service_tokens(t_appdata *appdata);
-void fill_command_tokens(t_appdata *appdata);
-int	count_lists(t_appdata *appdata);
-int	is_cmd_end(t_token *token);
-int	is_list_end(t_token *token);
+// int		get_type_of_string(char *command);
+// int 	count_service_tokens(t_appdata *appdata, char **input_strings);
+// int 	count_command_tokens(t_appdata *appdata, char **input_strings);
+// void 	fill_service_tokens(t_appdata *appdata);
+// void 	fill_command_tokens(t_appdata *appdata);
 
 //execution utils
 int	open_files(t_appdata *appdata, int is_in);
