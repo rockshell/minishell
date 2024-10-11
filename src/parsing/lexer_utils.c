@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/10 18:06:27 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/11 19:12:08 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	count_lists(t_appdata *appdata)
 	int	res;
 	t_token *current;
 	
-	res = 1;
+	res = 0;
 	current = appdata->first_token;
 	while (current)
 	{
@@ -104,6 +104,8 @@ int	count_lists(t_appdata *appdata)
 			res++;
 		current = current->next;
 	}
+	if (res < 1)
+		res = 1;
 	return (res);
 }
 

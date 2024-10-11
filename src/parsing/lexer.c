@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/10 19:58:32 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/11 19:09:44 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ t_cmd	*make_cmd(t_appdata *appdata, int first, int last)
 	return(cmd);
 }
 
+t_list	*init_the_list(int start, int end)
+{
+	t_list	*list;
+		
+	list = malloc(sizeof(t_list));
+	list->size = 0;
+	list->and_after = 0;
+	list->or_after = 0;
+	list->end_after = 0;
+	list->cmd = malloc(sizeof(t_cmd) * (end - start + 1));
+	return (list);
+}
+
 void	make_a_list(t_appdata *appdata, int start, int end, int i)
 {
 	int	j;
@@ -40,12 +53,7 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 	t_token	*cmd_end;
 	t_cmd	*cmd;
 	
-	list = malloc(sizeof(t_list));
-	list->size = 0;
-	list->and_after = 0;
-	list->or_after = 0;
-	list->end_after = 0;
-	list->cmd = NULL;
+	list = init_the_list(start, end);
 	appdata->lists[i] = *list;
 	cmd_start = appdata->first_token;
 	cmd_end = cmd_start;
@@ -54,15 +62,15 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 	{
 		while (cmd_start->pos < start)
 			cmd_start = cmd_start->next;
+		cmd_end = cmd_start;
 		while (is_cmd_end(cmd_end) == 0)
 			cmd_end = cmd_end->next;
 		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos);
 		list->cmd[j] = *cmd;
 		cmd_start = cmd_end->next;
-		cmd_end = cmd_start;
 		list->size++;
+		printf("Current list #: %i\nCurrent list size: %i\n", i, list->size);
 		j++;
-		// printf("hey\n");
 	}
 	if (appdata->tokens[end].type == 7)
 		list->and_after = 1;
@@ -72,19 +80,17 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 		list->end_after = 1;
 }
 
-void  fill_the_lists(t_appdata *appdata, int num_of_lists)
+void  fill_the_lists(t_appdata *appdata)
 {
 	int	i;
 	int	start_pos;
 	int	end_pos;
-	// t_list	*lists;
 	t_token	*current;
 	
-	i = 0;
-	start_pos = 1;
-	appdata->lists_num = 0;
+	i = -1;
+	start_pos = 0;
 	current = appdata->first_token;
-	while (++i <= num_of_lists)
+	while (++i <= appdata->lists_num)
 	{
 		while (is_list_end(current) == 0)
 		{
@@ -92,7 +98,6 @@ void  fill_the_lists(t_appdata *appdata, int num_of_lists)
 			current = current->next;
 		}
 		make_a_list(appdata, start_pos, end_pos, i);
-		appdata->lists_num++;
 		start_pos = end_pos + 1;
 	}
 }
@@ -104,8 +109,9 @@ void run_lexer(t_appdata *appdata)
 	
 	num_of_lists = count_lists(appdata);
 	lists = malloc(sizeof(t_list) * num_of_lists);
+	appdata->lists_num = num_of_lists;
 	appdata->lists = lists;
-	fill_the_lists(appdata, num_of_lists);
+	fill_the_lists(appdata);
 }
 
 

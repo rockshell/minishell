@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/10 19:52:40 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/11 19:13:54 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,8 @@ int	main(void)
 		
 		// printf("Lists num: %i\n", appdata.lists_num);
 		// printf("First list's size: %i\n", appdata.lists[0].size);
-		// print_lists(&appdata);
+		// printf("Second list's size: %i\n", appdata.lists[1].size);
+		print_lists(&appdata);
 		// start_execution(&appdata);
 		// free_memory(&appdata);
 		// current = appdata.first_token;
