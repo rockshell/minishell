@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 18:54:18 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/11 14:44:01 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	first_child(t_appdata *appdata)
 {
 	char	*path;
-	
+
 	if (appdata->exec_data->input_redirection_num > 0)
 		io_redirection(appdata, 1);
 	if (dup2(appdata->exec_data->fd[0][1], 1) == -1)
@@ -41,7 +41,7 @@ void	first_child(t_appdata *appdata)
 void	last_child(t_appdata *appdata, int i)
 {
 	char	*path;
-	
+
 	if (appdata->exec_data->output_redirection_num > 0)
 		io_redirection(appdata, 0);
 	if (dup2(appdata->exec_data->fd[i - 1][0], 0) == -1)
@@ -67,7 +67,7 @@ void	last_child(t_appdata *appdata, int i)
 void	mid_child(t_appdata *appdata, int i)
 {
 	char	*path;
-	
+
 	if (dup2(appdata->exec_data->fd[i - 1][0], 0) == -1)
 		error_rising(appdata);
 	if (dup2(appdata->exec_data->fd[i][1], 1) == -1)
@@ -90,10 +90,10 @@ void	mid_child(t_appdata *appdata, int i)
 	exit(0);
 }
 
-void only_child(t_appdata *appdata)
+void	only_child(t_appdata *appdata)
 {
-	char *path;
-	
+	char	*path;
+
 	if (appdata->exec_data->input_redirection_num > 0)
 	{
 		dup2(appdata->exec_data->infile, 0);

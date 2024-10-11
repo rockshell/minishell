@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 17:00:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/10 15:05:10 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_env(t_env *env)
 	while (temp)
 	{
 		if (temp->key && temp->value)
-			printf("%s%s\n", temp->key, temp->value);
+			printf("%s=%s\n", temp->key, temp->value);
 		temp = temp->next;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 16:52:48 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 18:27:13 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/10 14:48:55 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_cmd_token
 {
 	int		id;
 	int		argc;
+	int		is_builtin;
 	char	*original;
 	char	*cmd;
 	char	**argv;
@@ -111,7 +112,7 @@ int			ft_env(t_env *env);
 int			ft_exit(t_appdata *appdata, t_cmd_token *token);
 int			ft_export(t_cmd_token *token, t_env *env);
 int			ft_pwd(void);
-int			ft_unset(t_appdata *appdata, t_cmd_token *token, t_env *env);
+int			ft_unset(t_cmd_token *token, t_env *env);
 
 //built-in utils
 int			is_valid_digit(char *str);
@@ -146,6 +147,7 @@ char		*make_path(t_cmd_token token);
 void		close_pipes_in_parent(t_appdata *appdata);
 void		io_redirection(t_appdata *appdata, int is_infile);
 void		close_fds(t_exec_data *exec_data, int current_pipe);
+int			check_if_builtin(t_cmd_token *token);
 
 //execution
 void		start_execution(t_appdata *appdata);

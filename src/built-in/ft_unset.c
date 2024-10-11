@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:19 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 18:20:15 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/10 14:44:53 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	unset_command(t_env **env, char *key)
 	free_node(temp);
 }
 
-int	ft_unset(t_appdata *appdata, t_cmd_token *token, t_env *env)
+int	ft_unset(t_cmd_token *token, t_env *env)
 {
 	int	i;
 

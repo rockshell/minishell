@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 16:42:20 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/11 14:51:18 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,31 @@
 char	*get_key(char *current_env)
 {
 	char	*key;
-	size_t	i;
+	size_t	len;
 
-	i = 0;
-	while (current_env[i] != '=')
-		i++;
-	i++;
-	key = malloc(sizeof(char) * (i + 1));
+	len = 0;
+	if (ft_strchr(current_env, '=') == NULL)
+		len = ft_strlen(current_env);
+	else
+	{
+		while (current_env[len] != '=')
+			len++;
+	}
+	key = malloc(sizeof(char) * (len + 1));
 	if (!key)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-	ft_strlcpy(key, current_env, i + 1);
+	ft_strlcpy(key, current_env, len + 1);
 	return (key);
 }
 
 char	*get_value(char *current_env)
 {
-	int	i;
-	char *value;
+	char	*value;
 
-	i = 0;
-	while (current_env[i] != '=')
-		i++;
-	i++;
-	value = ft_strdup(current_env + i);
+	value = ft_strchr(current_env, '=');
 	if (!value)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-	return (value);
+		return (NULL);
+	return (ft_strdup(value + 1));
 }
 
 int	create_env_var_node(t_env **env, char *current_env)
@@ -48,31 +47,31 @@ int	create_env_var_node(t_env **env, char *current_env)
 	t_env	*node;
 	t_env	*last;
 
-	last = *env;
+	if (!env || !current_env)
+		return (1);
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
 	node->key = get_key(current_env);
 	if (!node->key)
-		return (1);
+		return (free(node), 1);
 	node->value = get_value(current_env);
-	if (!node->value)
-		return (free(node->key), 1);
 	node->next = NULL;
 	if (!*env)
 	{
 		*env = node;
 		return (0);
 	}
+	last = *env;
 	while (last->next != NULL)
 		last = last->next;
 	last->next = node;
 	return (0);
 }
 
-int initialize_env_var(t_appdata *appdata, char **envp)
+int	initialize_env_var(t_appdata *appdata, char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	appdata->env_var = NULL;

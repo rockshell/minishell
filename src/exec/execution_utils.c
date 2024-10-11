@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/07 18:54:52 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/11 14:47:52 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,34 +68,36 @@ char	*make_path(t_cmd_token token)
 	char	**paths;
 	char	*current_path;
 	char	*cmd_with_slash;
-	
+
 	if (token.argv[0][0] == '/')
 	{
 		current_path = ft_strdup(token.argv[0]);
 		return (current_path);
 	}
-	i = 0;	
+	i = 0;
 	paths = ft_split(getenv("PATH"), ':');
 	cmd_with_slash = ft_strjoin("/", token.argv[0]);
 	while (paths[i])
 	{
 		current_path = ft_strjoin(paths[i], cmd_with_slash);
 		if (access(current_path, F_OK) == 0)
-			break;
+			break ;
 		free(current_path);
 		i++;
 	}
 	free(cmd_with_slash);
-	return(current_path);
+	return (current_path);
 }
 
-void close_pipes_in_parent(t_appdata *appdata)
+void	close_pipes_in_parent(t_appdata *appdata)
 {
-    int i = 0;
-    while (i < appdata->exec_data->pipe_counter)
-    {
-        close(appdata->exec_data->fd[i][0]);  // Close the read end
-        close(appdata->exec_data->fd[i][1]);  // Close the write end
-        i++;
-    }
+	int	i;
+
+	i = 0;
+	while (i < appdata->exec_data->pipe_counter)
+	{
+		close(appdata->exec_data->fd[i][0]);
+		close(appdata->exec_data->fd[i][1]);
+		i++;
+	}
 }

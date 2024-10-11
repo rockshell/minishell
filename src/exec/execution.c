@@ -6,17 +6,18 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/07 18:55:35 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/11 14:46:21 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//TODO - make a status array and make all po krasote vasche
 void	create_processes(t_appdata *appdata)
 {
-	int	i;
-	int status;
-	pid_t pid;
+	int		i;
+	int		status;
+	pid_t	pid;
 
 	i = -1;
 	appdata->exec_data->processes = malloc(sizeof(pid_t) * (appdata->exec_data->pipe_counter + 1));
@@ -46,7 +47,6 @@ void	create_processes(t_appdata *appdata)
 			error_rising(appdata);
 		i++;
 	}
-	//TODO - make a status array and make all po krasote vasche
 }
 
 void	prepare_pipes(t_appdata *appdata)
@@ -67,10 +67,10 @@ void	prepare_pipes(t_appdata *appdata)
 	}
 }
 
-void execute_single(t_appdata *appdata)
+void	execute_single(t_appdata *appdata)
 {
-	pid_t pid;
-	int status;
+	pid_t	pid;
+	int		status;
 
 	status = 0;
 	pid = fork();
@@ -81,7 +81,7 @@ void execute_single(t_appdata *appdata)
 	waitpid(pid, &status, 0);
 }
 
-void execute_single_builtin(t_appdata *appdata)
+void	execute_single_builtin(t_appdata *appdata)
 {
 	if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "cd", 2) == 0)
 		ft_cd(&appdata->cmd_tokens[0], appdata->env_var);
@@ -91,23 +91,23 @@ void execute_single_builtin(t_appdata *appdata)
 		ft_env(appdata->env_var);
 	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "exit", 4) == 0)
 		ft_exit(appdata, &appdata->cmd_tokens[0]);
-	// else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "export", 7) == 0)
-	// 	ft_export(appdata)
+	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "export", 7) == 0)
+		ft_export(&appdata->cmd_tokens[0], appdata->env_var);
 	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "pwd", 3) == 0)
 		ft_pwd();
 	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "unset", 6) == 0)
-		ft_unset(appdata, &appdata->cmd_tokens[0], appdata->env_var);
+		ft_unset(&appdata->cmd_tokens[0], appdata->env_var);
 }
 
 void	start_execution(t_appdata *appdata)
 {
-	t_exec_data *exec_data;
-	int i;
+	t_exec_data	*exec_data;
+	int			i;
 
 	i = -1;
 	exec_data = appdata->exec_data;
 	get_number_of_pipe_and_redirection(appdata);
-	while (++i < appdata->cmd_tokens_num);
+	while (++i < appdata->cmd_tokens_num)
 		appdata->cmd_tokens[i].is_builtin = check_if_builtin(&appdata->cmd_tokens[i]);
 	if (appdata->cmd_tokens_num == 1 && appdata->cmd_tokens[0].is_builtin == 1)
 		execute_single_builtin(appdata);
@@ -126,7 +126,7 @@ void	start_execution(t_appdata *appdata)
 			prepare_pipes(appdata);
 			create_processes(appdata);
 		}
-		else //if (exec_data->pipe_counter == 0)
+		else
 			execute_single(appdata);
 	}
 }

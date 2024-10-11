@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:31:12 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 18:23:38 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/11 14:52:33 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,21 @@ char	**get_an_array_of_keys(t_env *env, int len)
 	char	**result;
 	int		i;
 
-	result = malloc(sizeof(char) * (len + 1));
+	result = malloc(sizeof(char *) * (len + 1));
 	if (!result)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
 	temp = env;
 	i = 0;
 	while (temp)
 	{
 		result[i] = ft_strdup(temp->key);
+		if (!result[i])
+		{
+			while (--i >= 0)
+				free(result[i]);
+			free(result);
+			return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
+		}
 		i++;
 		temp = temp->next;
 	}
@@ -58,12 +65,9 @@ char	**sort_an_array(char **array, int len)
 	{
 		if (ft_strcmp(array[i], array[i + 1]) > 0)
 		{
-			temp = ft_strdup(array[i]);
-			free(array[i]);
-			array[i] = ft_strdup(array[i + 1]);
-			free(array[i + 1]);
-			array[i + 1] = ft_strdup(temp);
-			free(temp);
+			temp = array[i];
+			array[i] = array[i + 1];
+			array[i + 1] = temp;
 			i = 0;
 		}
 		else
@@ -74,14 +78,18 @@ char	**sort_an_array(char **array, int len)
 
 int	is_valid_var(char *argument)
 {
-	int	i;
+	int		i;
+	char	*key;
 
 	i = 1;
-	if (ft_isalpha(argument[0]) != 1 && argument[0] != '_')
+	key = get_key(argument);
+	if (!key)
+		return (-1);
+	if (ft_isalpha(key[0]) != 1 && key[0] != '_')
 		return (0);
-	while (argument[i] != '\0')
+	while (key[i] != '\0')
 	{
-		if (ft_isalnum(argument[i]) == 1 || argument[i] == '_')
+		if (ft_isalnum(key[i]) == 1 || key[i] == '_')
 			i++;
 		else
 			return (0);
