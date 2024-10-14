@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:58 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/11 14:40:58 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/14 14:40:49 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	export_no_args(t_env *env)
+static int	export_no_args(t_env *env)
 {
 	char	**array_of_keys;
 	char	*value;
@@ -40,7 +40,7 @@ int	export_no_args(t_env *env)
 	return (0);
 }
 
-int	change_value(t_env *env, char *argument)
+static int	change_value(t_env *env, char *argument)
 {
 	t_env	*temp;
 	char	*key;
@@ -64,42 +64,42 @@ int	change_value(t_env *env, char *argument)
 	return (0);
 }
 
-int	export_with_args(t_cmd_token *token, t_env *env)
+static int	export_with_args(t_cmd *cmd, t_env *env)
 {
 	int	i;
 	int	exit;
 
 	i = 1;
 	exit = 0;
-	while (i < token->argc)
+	while (i < cmd->argc)
 	{
-		if (is_valid_var(token->argv[i]) == 0)
+		if (is_valid_var(cmd->argv[i]) == 0)
 		{
 			ft_putstr_fd("minishell: export: '", 2);
-			ft_putstr_fd(token->argv[i], 2);
+			ft_putstr_fd(cmd->argv[i], 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			exit = 1;
 		}
 		else
 		{
-			if (is_in_var(env, token->argv[i]) == 0)
-				create_env_var_node(&env, token->argv[i]);
+			if (is_in_var(env, cmd->argv[i]) == 0)
+				create_env_node(&env, cmd->argv[i]);
 			else
-				change_value(env, token->argv[i]);
+				change_value(env, cmd->argv[i]);
 		}
 		i++;
 	}
 	return (exit);
 }
 
-int	ft_export(t_cmd_token *token, t_env *env)
+int	ft_export(t_cmd *cmd, t_env *env)
 {
 	int	exit;
 
 	exit = 0;
-	if (token->argc == 1)
+	if (cmd->argc == 1)
 		exit = export_no_args(env);
-	else if (token->argc > 1)
-		exit = export_with_args(token, env);
+	else if (cmd->argc > 1)
+		exit = export_with_args(cmd, env);
 	return (exit);
 }

@@ -6,68 +6,67 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/11 14:46:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/14 16:11:12 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //TODO - make a status array and make all po krasote vasche
-void	create_processes(t_appdata *appdata)
+static void	create_processes(t_appdata *appdata, t_list *list)
 {
 	int		i;
 	int		status;
 	pid_t	pid;
 
 	i = -1;
-	appdata->exec_data->processes = malloc(sizeof(pid_t) * (appdata->exec_data->pipe_counter + 1));
-	if (!appdata->exec_data->processes)
+	list->exec_data->processes = malloc(sizeof(pid_t) * list->size);
+	if (!list->exec_data->processes)
 		error_rising(appdata);
-	while (++i < (appdata->exec_data->pipe_counter + 1))
+	while (++i < list->size)
 	{
-		appdata->exec_data->processes[i] = fork();
-		if (appdata->exec_data->processes[i] == 0)
+		list->exec_data->processes[i] = fork();
+		if (list->exec_data->processes[i] == 0)
 		{
 			if (i == 0)
-				first_child(appdata);
-			else if (i == appdata->exec_data->pipe_counter)
-				last_child(appdata, i);
+				first_child(appdata, list);
+			else if (i == (list->size - 1))
+				last_child(appdata, list, i);
 			else
-				mid_child(appdata, i);
-			exit(0);
+				mid_child(appdata, list, i);
 		}
 	}
-	close_pipes_in_parent(appdata);
+	close_pipes_in_parent(list);
 	i = 0;
-	while (i < (appdata->exec_data->pipe_counter + 1))
+	while (i < list->size)
 	{
 		status = 0;
-		pid = waitpid(appdata->exec_data->processes[i], &status, 0);
+		pid = waitpid(list->exec_data->processes[i], &status, 0);
 		if (pid == -1)
 			error_rising(appdata);
 		i++;
 	}
 }
 
-void	prepare_pipes(t_appdata *appdata)
+static void	prepare_pipes(t_appdata *appdata, t_list *list)
 {
 	int	i;
 
 	i = -1;
-	appdata->exec_data->fd = malloc(sizeof(int *) * appdata->exec_data->pipe_counter);
-	if (!appdata->exec_data->fd)
+	list->exec_data->fd = malloc(sizeof(int *) * (list->size - 1));
+	if (!list->exec_data->fd)
 		error_rising(appdata);
-	while (++i < appdata->exec_data->pipe_counter)
+	while (++i < (list->size - 1))
 	{
-		appdata->exec_data->fd[i] = malloc(sizeof(int) * 2);
-		if (!appdata->exec_data->fd[i])
+		list->exec_data->fd[i] = malloc(sizeof(int) * 2);
+		if (!list->exec_data->fd[i])
 			error_rising(appdata);
-		if (pipe(appdata->exec_data->fd[i]) == -1)
+		if (pipe(list->exec_data->fd[i]) == -1)
 			error_rising(appdata);
 	}
 }
 
-void	execute_single(t_appdata *appdata)
+static void	execute_single(t_appdata *appdata, t_list *list)
 {
 	pid_t	pid;
 	int		status;
@@ -77,56 +76,33 @@ void	execute_single(t_appdata *appdata)
 	if (pid == -1)
 		error_rising(appdata);
 	if (pid == 0)
-		only_child(appdata);
+		only_child(appdata, list);
 	waitpid(pid, &status, 0);
 }
 
-void	execute_single_builtin(t_appdata *appdata)
-{
-	if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "cd", 2) == 0)
-		ft_cd(&appdata->cmd_tokens[0], appdata->env_var);
-	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "echo", 4) == 0)
-		ft_echo(&appdata->cmd_tokens[0]);
-	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "env", 3) == 0)
-		ft_env(appdata->env_var);
-	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "exit", 4) == 0)
-		ft_exit(appdata, &appdata->cmd_tokens[0]);
-	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "export", 7) == 0)
-		ft_export(&appdata->cmd_tokens[0], appdata->env_var);
-	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "pwd", 3) == 0)
-		ft_pwd();
-	else if (ft_strncmp(appdata->cmd_tokens[0].argv[0], "unset", 6) == 0)
-		ft_unset(&appdata->cmd_tokens[0], appdata->env_var);
-}
-
-void	start_execution(t_appdata *appdata)
+void	start_execution(t_appdata *appdata, t_list *list)
 {
 	t_exec_data	*exec_data;
 	int			i;
 
 	i = -1;
-	exec_data = appdata->exec_data;
-	get_number_of_pipe_and_redirection(appdata);
-	while (++i < appdata->cmd_tokens_num)
-		appdata->cmd_tokens[i].is_builtin = check_if_builtin(&appdata->cmd_tokens[i]);
-	if (appdata->cmd_tokens_num == 1 && appdata->cmd_tokens[0].is_builtin == 1)
-		execute_single_builtin(appdata);
-	else
+	exec_data = list->exec_data;
+	while (++i < list->size)
+		list->cmd[i].is_builtin = check_if_builtin(&list->cmd[i]);
+	if (list->cmd[0].input_redir_type != 0)
 	{
-		if (exec_data->input_redirection_num > 0)
-		{
-			exec_data->infile = open_files(appdata, 1);
-			if (appdata->srv_tokens[0].type == 4)
-				rwr_heredoc(appdata, appdata->cmd_tokens[0].delim);
-		}
-		if (exec_data->output_redirection_num > 0)
-			exec_data->outfile = open_files(appdata, 0);
-		if (exec_data->pipe_counter > 0)
-		{
-			prepare_pipes(appdata);
-			create_processes(appdata);
-		}
-		else
-			execute_single(appdata);
+		if (list->cmd[0].input_redir_type == 2)
+			exec_data->infile = open_files(list, 1);
+		else if (list->cmd[0].input_redir_type == 4)
+			rwr_heredoc(appdata, list, list->cmd[0].delim);
 	}
+	if (list->cmd[list->size -1].output_redir_type != 0)
+		exec_data->outfile = open_files(list, 0);
+	if (list->size > 1)
+	{
+		prepare_pipes(appdata, list);
+		create_processes(appdata, list);
+	}
+	else
+		execute_single(appdata, list);
 }

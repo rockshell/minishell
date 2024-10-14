@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/11 14:51:18 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/14 14:40:49 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_value(char *current_env)
 	return (ft_strdup(value + 1));
 }
 
-int	create_env_var_node(t_env **env, char *current_env)
+int	create_env_node(t_env **env, char *current_env)
 {
 	t_env	*node;
 	t_env	*last;
@@ -74,10 +74,10 @@ int	initialize_env_var(t_appdata *appdata, char **envp)
 	int	i;
 
 	i = 0;
-	appdata->env_var = NULL;
+	appdata->env = NULL;
 	while (envp[i])
 	{
-		if (create_env_var_node(&appdata->env_var, envp[i]) == 1)
+		if (create_env_node(&appdata->env, envp[i]) == 1)
 			return (1);
 		i++;
 	}
