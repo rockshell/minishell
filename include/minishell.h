@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/10 18:15:52 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:44:01 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,15 @@ typedef struct s_list
 
 typedef struct s_appdata
 {
-	int		num_of_input_strings;
-	int	 	tokens_num;
-	int		lists_num;
-	char	 **input_strings;
-	char	 **envp;
-	t_token	*tokens;
-	t_token	*first_token;
-	t_list 	*lists;
-	t_env  *env;
+	int			num_of_input_strings;
+	int	 		tokens_num;
+	int			lists_num;
+	char	 	**input_strings;
+	char	 	**envp;
+	t_env  		*env;
+	t_list 		*lists;
+	t_token		*tokens;
+	t_token		*first_token;
 	t_exec_data *exec_data;
 }  t_appdata;
 

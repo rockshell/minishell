@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/11 19:12:08 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:01:31 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ void	set_the_command_itself(t_appdata *appdata, t_cmd *cmd, int first)
 			current->is_parsed = 1;
 			i++;
 		}
-		current = current->next;		
+		current = current->next;
 	}
 }
 
+//TODO - rat things clear
 void	set_redirections_in_cmd(t_appdata *appdata, t_cmd *cmd, int first)
 {
 	t_token *current;
@@ -48,42 +49,33 @@ void	set_redirections_in_cmd(t_appdata *appdata, t_cmd *cmd, int first)
 		if (current->type == 3)
 		{
 			cmd->input_redir_type = 3;
-			cmd->infile_name = ft_strdup(current->prev->value);
-			current->is_parsed = 1;
-			current->prev->is_parsed = 1;
+			cmd->infile_name = ft_strdup(current->next->value);
 		}
 		else if(current->type == 4)
 		{
 			cmd->output_redir_type = 4;
 			cmd->outfile_name = ft_strdup(current->next->value);
-			current->is_parsed = 1;
-			current->next->is_parsed = 1;
 		}
 		else if(current->type == 5)
 		{
 			cmd->input_redir_type = 5;
 			cmd->delim = ft_strdup(current->next->value);
-			current->is_parsed = 1;
-			current->next->is_parsed = 1;
 		}
 		else if (current->type == 6)
 		{
 			cmd->output_redir_type = 6;
 			cmd->outfile_name = ft_strdup(current->next->value);
-			current->is_parsed = 1;
-			current->next->is_parsed = 1;
 		}
+		current->is_parsed = 1;
+		current->next->is_parsed = 1;
 		current = current->next;
 	}
 }
 
-void	set_pipes_in_cmd(t_appdata *appdata, t_cmd *cmd, int first, int last)
+void	set_pipes_in_cmd(t_appdata *appdata, t_cmd *cmd, int pipe_flag, int last)
 {
-	if (appdata->tokens[first].type == 2)
-	{
+	if (pipe_flag == 1)
 		cmd->is_pipe_before = 1;
-		appdata->tokens[first].is_parsed = 1;
-	}
 	if (appdata->tokens[last].type == 2)
 	{
 		cmd->is_pipe_after = 1;
@@ -96,7 +88,7 @@ int	count_lists(t_appdata *appdata)
 	int	res;
 	t_token *current;
 	
-	res = 0;
+	res = 1;
 	current = appdata->first_token;
 	while (current)
 	{
@@ -104,8 +96,8 @@ int	count_lists(t_appdata *appdata)
 			res++;
 		current = current->next;
 	}
-	if (res < 1)
-		res = 1;
+	// if (res < 1)
+	// 	res = 1;
 	return (res);
 }
 

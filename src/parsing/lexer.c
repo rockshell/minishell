@@ -6,13 +6,13 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/11 19:09:44 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:03:37 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd	*make_cmd(t_appdata *appdata, int first, int last)
+t_cmd	*make_cmd(t_appdata *appdata, int first, int last, int pipe_flag)
 {
 	t_cmd	*cmd;
 
@@ -26,11 +26,12 @@ t_cmd	*make_cmd(t_appdata *appdata, int first, int last)
 	cmd->infile_name = NULL;
 	cmd->outfile_name = NULL;
 	cmd->delim = NULL;
-	set_pipes_in_cmd(appdata, cmd, first, last);
+	set_pipes_in_cmd(appdata, cmd, pipe_flag, last);
 	set_redirections_in_cmd(appdata, cmd, first);
 	set_the_command_itself(appdata, cmd, first);
 	return(cmd);
 }
+
 
 t_list	*init_the_list(int start, int end)
 {
@@ -41,13 +42,14 @@ t_list	*init_the_list(int start, int end)
 	list->and_after = 0;
 	list->or_after = 0;
 	list->end_after = 0;
-	list->cmd = malloc(sizeof(t_cmd) * (end - start + 1));
+	list->cmd = malloc(sizeof(t_cmd) * (end - start)); //TODO - deal with overallocate 
 	return (list);
 }
 
 void	make_a_list(t_appdata *appdata, int start, int end, int i)
 {
 	int	j;
+	int	pipe_flag;
 	t_list	*list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
@@ -58,6 +60,7 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 	cmd_start = appdata->first_token;
 	cmd_end = cmd_start;
 	j = 0;
+	pipe_flag = 0;
 	while (cmd_end->pos < end)
 	{
 		while (cmd_start->pos < start)
@@ -65,12 +68,15 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 		cmd_end = cmd_start;
 		while (is_cmd_end(cmd_end) == 0)
 			cmd_end = cmd_end->next;
-		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos);
+		if (cmd_start->type == 2)
+			pipe_flag = 1;
+		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos, pipe_flag);
 		list->cmd[j] = *cmd;
-		cmd_start = cmd_end->next;
+		cmd_start = cmd_end + 1;
 		list->size++;
-		printf("Current list #: %i\nCurrent list size: %i\n", i, list->size);
 		j++;
+		printf("kek\n");
+		printf("%i\n", cmd_start->pos);
 	}
 	if (appdata->tokens[end].type == 7)
 		list->and_after = 1;
@@ -90,7 +96,7 @@ void  fill_the_lists(t_appdata *appdata)
 	i = -1;
 	start_pos = 0;
 	current = appdata->first_token;
-	while (++i <= appdata->lists_num)
+	while (++i < appdata->lists_num)
 	{
 		while (is_list_end(current) == 0)
 		{
@@ -99,6 +105,7 @@ void  fill_the_lists(t_appdata *appdata)
 		}
 		make_a_list(appdata, start_pos, end_pos, i);
 		start_pos = end_pos + 1;
+		end_pos = start_pos;
 	}
 }
 
@@ -108,6 +115,7 @@ void run_lexer(t_appdata *appdata)
 	t_list	*lists;
 	
 	num_of_lists = count_lists(appdata);
+	// printf("Lists num: %i\n", appdata->lists_num);
 	lists = malloc(sizeof(t_list) * num_of_lists);
 	appdata->lists_num = num_of_lists;
 	appdata->lists = lists;

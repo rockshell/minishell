@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/10 16:06:27 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/14 17:10:55 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@
 // 	return (0);
 // }
 
+//TODO - make it safe
 int	is_operator(char *input, int i)
 {
 	if (input[i] == '|')
