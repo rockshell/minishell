@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/15 17:42:22 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:10:47 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_cmd	*make_cmd(t_appdata *appdata, int first, int last, int pipe_flag)
 	cmd->infile_name = NULL;
 	cmd->outfile_name = NULL;
 	cmd->delim = NULL;
+	
 	set_pipes_in_cmd(appdata, cmd, pipe_flag, last);
 	set_redirections_in_cmd(appdata, cmd, first);
 	set_the_command_itself(appdata, cmd, first);
@@ -42,7 +43,7 @@ t_list	*init_the_list(int start, int end)
 	list->and_after = 0;
 	list->or_after = 0;
 	list->end_after = 0;
-	list->cmd = malloc(sizeof(t_cmd) * (end - start)); //TODO - deal with overallocate 
+	list->cmd = malloc(sizeof(t_cmd *) * (end - start)); //TODO - deal with overallocate 
 	return (list);
 }
 
@@ -61,7 +62,7 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 	cmd_end = cmd_start;
 	j = 0;
 	pipe_flag = 0;
-	while (cmd_end->pos < end)
+	while (cmd_end && cmd_end->pos < end)
 	{
 		while (cmd_start->pos < start)
 			cmd_start = cmd_start->next;
@@ -71,21 +72,20 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 		if (cmd_start->type == 2)
 			pipe_flag = 1;
 		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos, pipe_flag);
-		list->cmd[j] = *cmd;
-		cmd_start->pos = cmd_end->pos + 1;
-		cmd_end->pos = cmd_start->pos;
+		list->cmd[j++] = cmd;
+		cmd_start = cmd_end->next;
+		if (cmd_start)
+			cmd_end = cmd_start;
 		list->size++;
-		j++;
-		printf("kek\n");
-		printf("J: %i\n", j);
-		printf("Start pos: %i\n", cmd_start->pos);
-		printf("End pos: %i\n", cmd_end->pos);
-		printf("End: %i\n", end);
-		printf("Current list size: %i\n", list->size);
 	}
-	if (appdata->tokens[end].type == 7)
+	if (end >= appdata->tokens_num) {
+    	fprintf(stderr, "Error: Token index out of bounds.\n");
+    	return;  // Exit gracefully from this function
+	}
+
+	if (appdata->tokens[end].type == LOGICAL_AND)
 		list->and_after = 1;
-	else if(appdata->tokens[end].type == 8)
+	else if(appdata->tokens[end].type == LOGICAL_OR)
 		list->or_after = 1;
 	else
 		list->end_after = 1;
@@ -118,10 +118,10 @@ void run_lexer(t_appdata *appdata)
 	t_list	*lists;
 	
 	num_of_lists = count_lists(appdata);
-	// printf("Lists num: %i\n", appdata->lists_num);
 	lists = malloc(sizeof(t_list) * num_of_lists);
 	appdata->lists_num = num_of_lists;
 	appdata->lists = lists;
+	printf("Lists num: %i\n", appdata->lists_num);
 	fill_the_lists(appdata);
 }
 

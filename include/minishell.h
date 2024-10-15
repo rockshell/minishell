@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/14 16:44:01 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:10:46 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct s_list
 	int or_after;
 	int end_after;
 	int	size;
-	t_cmd  *cmd;
+	t_cmd  **cmd;
 	t_exec_data	*exec_data; //for Vita's use
 	// char *group_of_tokens;
 	// char **splitted_string;

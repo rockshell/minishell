@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/15 17:27:08 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:00:01 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,15 +110,6 @@ int	is_cmd_end(t_token *token)
 	return (0);
 }
 
-// int	is_cmd_end(t_token *token)
-// {
-// 	if (token->next != NULL || token->type != 2)
-// 		return (1); 
-// 	if (token->type != 7 || token->type != 8)
-// 		return (1);
-// 	return (0);
-// }
-
 int	is_list_end(t_token *token)
 {
 	if (token->next == NULL)
@@ -134,6 +125,15 @@ int	is_token_redirection(t_token *token)
 		return (1);
 	return (0);
 }
+
+// int	is_cmd_end(t_token *token)
+// {
+// 	if (token->next != NULL || token->type != 2)
+// 		return (1); 
+// 	if (token->type != 7 || token->type != 8)
+// 		return (1);
+// 	return (0);
+// }
 
 // int	get_type_of_string(char *string)
 // {
