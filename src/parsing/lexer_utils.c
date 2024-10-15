@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/14 18:01:31 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:27:08 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	is_cmd_end(t_token *token)
 
 int	is_list_end(t_token *token)
 {
-	if (token == NULL)
+	if (token->next == NULL)
 		return (1);
 	if (token->type == 7 || token->type == 8)
 		return (1);

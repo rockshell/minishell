@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/14 18:03:37 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 17:42:22 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,16 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 			pipe_flag = 1;
 		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos, pipe_flag);
 		list->cmd[j] = *cmd;
-		cmd_start = cmd_end + 1;
+		cmd_start->pos = cmd_end->pos + 1;
+		cmd_end->pos = cmd_start->pos;
 		list->size++;
 		j++;
 		printf("kek\n");
-		printf("%i\n", cmd_start->pos);
+		printf("J: %i\n", j);
+		printf("Start pos: %i\n", cmd_start->pos);
+		printf("End pos: %i\n", cmd_end->pos);
+		printf("End: %i\n", end);
+		printf("Current list size: %i\n", list->size);
 	}
 	if (appdata->tokens[end].type == 7)
 		list->and_after = 1;
@@ -99,10 +104,8 @@ void  fill_the_lists(t_appdata *appdata)
 	while (++i < appdata->lists_num)
 	{
 		while (is_list_end(current) == 0)
-		{
-			end_pos = current->pos;
 			current = current->next;
-		}
+		end_pos = current->pos;
 		make_a_list(appdata, start_pos, end_pos, i);
 		start_pos = end_pos + 1;
 		end_pos = start_pos;
