@@ -6,30 +6,33 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/15 19:10:47 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:46:23 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd	*make_cmd(t_appdata *appdata, int first, int last, int pipe_flag)
+t_cmd	make_cmd(t_appdata *appdata, int first, int last, int pipe_flag)
 {
-	t_cmd	*cmd;
+	t_cmd	cmd;
 
-	cmd = malloc(sizeof(t_cmd));
-	cmd->argc = 0;
-	cmd->input_redir_type = 0;
-	cmd->output_redir_type = 0;
-	cmd->is_pipe_before = 0;
-	cmd->is_pipe_after = 0;
-	cmd->argv = NULL;
-	cmd->infile_name = NULL;
-	cmd->outfile_name = NULL;
-	cmd->delim = NULL;
-	
-	set_pipes_in_cmd(appdata, cmd, pipe_flag, last);
-	set_redirections_in_cmd(appdata, cmd, first);
-	set_the_command_itself(appdata, cmd, first);
+	// cmd = malloc(sizeof(t_cmd));
+	cmd.argc = 0;
+	cmd.input_redir_type = 0;
+	cmd.output_redir_type = 0;
+	cmd.is_pipe_before = 0;
+	cmd.is_pipe_after = 0;
+	cmd.argv = NULL;
+	cmd.infile_name = NULL;
+	cmd.outfile_name = NULL;
+	cmd.delim = NULL;
+	printf("Making a new command\n");
+	set_pipes_in_cmd(appdata, &cmd, pipe_flag, last);
+	printf("Pipes are in place\n");
+	set_redirections_in_cmd(appdata, &cmd, first);
+	printf("Redirections are in place\n");
+	set_the_command_itself(appdata, &cmd, first);
+	printf("The command itself ready\n");
 	return(cmd);
 }
 
@@ -54,7 +57,7 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 	t_list	*list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
-	t_cmd	*cmd;
+	t_cmd	cmd;
 	
 	list = init_the_list(start, end);
 	appdata->lists[i] = *list;
@@ -71,8 +74,11 @@ void	make_a_list(t_appdata *appdata, int start, int end, int i)
 			cmd_end = cmd_end->next;
 		if (cmd_start->type == 2)
 			pipe_flag = 1;
+		printf("Making a command # %i for list # %i\n", j, i);
 		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos, pipe_flag);
+		printf("Attaching the command to the list\n");
 		list->cmd[j++] = cmd;
+		// list->cmd[j++] = *make_cmd(appdata, cmd_start->pos, cmd_end->pos, pipe_flag);
 		cmd_start = cmd_end->next;
 		if (cmd_start)
 			cmd_end = cmd_start;
@@ -106,7 +112,9 @@ void  fill_the_lists(t_appdata *appdata)
 		while (is_list_end(current) == 0)
 			current = current->next;
 		end_pos = current->pos;
+		printf("Going for the list # %i\n", i);
 		make_a_list(appdata, start_pos, end_pos, i);
+		printf("Made a list # %i\n", i);
 		start_pos = end_pos + 1;
 		end_pos = start_pos;
 	}

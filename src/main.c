@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/15 19:11:19 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/15 19:44:17 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void print_lists(t_appdata *appdata)
         j = 0;
         while (j < list->size)
         {
-            cmd = list->cmd[j];
+            cmd = &list->cmd[j];
             printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
 
             k = 0;
@@ -102,7 +102,7 @@ int	main(void)
 		// printf("Lists num: %i\n", appdata.lists_num);
 		// printf("First list's size: %i\n", appdata.lists[0].size);
 		// printf("Second list's size: %i\n", appdata.lists[1].size);
-		// print_lists(&appdata);
+		print_lists(&appdata);
 		// start_execution(&appdata);
 		// free_memory(&appdata);
 		// current = appdata.first_token;
