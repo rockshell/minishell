@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:37:40 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/08 18:23:55 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:31:50 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ int	is_valid_digit(char *str)
 
 	i = 0;
 	if (!str || str[0] == '\0')
-		return (0);
+		return (FALSE);
 	if (str[i] == '+' || str[i] == '-')
 		i++;
 	while (str[i])
 	{
-		if (ft_isdigit(str[i]) == 0)
-			return (0);
+		if (ft_isdigit(str[i]) == FALSE)
+			return (FALSE);
 		i++;
 	}
-	return (1);
+	return (TRUE);
 }
 
 long long	ft_atoll(char *str)

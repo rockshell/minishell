@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:49 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:48:04 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ int	create_env_node(t_env **env, char *current_env)
 	t_env	*last;
 
 	if (!env || !current_env)
-		return (1);
+		return (FAILURE);
 	node = malloc(sizeof(t_env));
 	if (!node)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	node->key = get_key(current_env);
 	if (!node->key)
 		return (free(node), 1);
@@ -60,13 +60,13 @@ int	create_env_node(t_env **env, char *current_env)
 	if (!*env)
 	{
 		*env = node;
-		return (0);
+		return (SUCCESS);
 	}
 	last = *env;
 	while (last->next != NULL)
 		last = last->next;
 	last->next = node;
-	return (0);
+	return (SUCCESS);
 }
 
 int	initialize_env_var(t_appdata *appdata, char **envp)
@@ -77,9 +77,9 @@ int	initialize_env_var(t_appdata *appdata, char **envp)
 	appdata->env = NULL;
 	while (envp[i])
 	{
-		if (create_env_node(&appdata->env, envp[i]) == 1)
-			return (1);
+		if (create_env_node(&appdata->env, envp[i]) == FAILURE)
+			return (FAILURE);
 		i++;
 	}
-	return (0);
+	return (SUCCESS);
 }

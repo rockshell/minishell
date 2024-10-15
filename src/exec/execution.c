@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/14 16:11:12 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:25:34 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,9 @@ void	start_execution(t_appdata *appdata, t_list *list)
 		list->cmd[i].is_builtin = check_if_builtin(&list->cmd[i]);
 	if (list->cmd[0].input_redir_type != 0)
 	{
-		if (list->cmd[0].input_redir_type == 2)
+		if (list->cmd[0].input_redir_type == STDIN)
 			exec_data->infile = open_files(list, 1);
-		else if (list->cmd[0].input_redir_type == 4)
+		else if (list->cmd[0].input_redir_type == HEREDOC)
 			rwr_heredoc(appdata, list, list->cmd[0].delim);
 	}
 	if (list->cmd[list->size -1].output_redir_type != 0)

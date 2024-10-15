@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/10 15:05:10 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 18:37:14 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_env(t_env *env)
 	t_env	*temp;
 
 	if (!env)
-		return (1);
+		return (SUCCESS);
 	temp = env;
 	while (temp)
 	{
@@ -25,5 +25,5 @@ int	ft_env(t_env *env)
 			printf("%s=%s\n", temp->key, temp->value);
 		temp = temp->next;
 	}
-	return (0);
+	return (SUCCESS);
 }

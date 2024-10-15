@@ -6,10 +6,9 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/08 17:30:59 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/14 16:51:48 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 # set a compiler and flags
 CC = cc
@@ -26,8 +25,6 @@ built-in/ft_export.c \
 built-in/ft_pwd.c \
 built-in/ft_unset.c \
 exec/children.c \
-exec/execution_utils.c \
-exec/execution_utils2.c \
 exec/execution.c \
 exec/file_manager.c \
 exec/get_next_line_utils.c \
@@ -38,8 +35,11 @@ parsing/lexer.c \
 parsing/lexer_utils.c \
 utils/built-in_utils1.c \
 utils/built-in_utils2.c \
+utils/env_utils.c \
+utils/execution_utils.c \
+utils/execution_utils2.c \
+utils/free_utils.c \
 env_init.c \
-env_utils.c \
 main.c
 OBJ = $(SRC:.c=.o)
 SRCS = $(addprefix $(SRC_PATH), $(SRC))

@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:58 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 14:40:49 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:41:47 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	export_no_args(t_env *env)
 	array_len = get_length_of_env(env);
 	array_of_keys = get_an_array_of_keys(env, array_len);
 	if (!array_of_keys)
-		return (1);
+		return (FAILURE);
 	sort_an_array(array_of_keys, array_len);
 	i = 0;
 	while (i < array_len)
@@ -37,7 +37,7 @@ static int	export_no_args(t_env *env)
 		i++;
 	}
 	free(array_of_keys);
-	return (0);
+	return (SUCCESS);
 }
 
 static int	change_value(t_env *env, char *argument)
@@ -46,10 +46,10 @@ static int	change_value(t_env *env, char *argument)
 	char	*key;
 
 	if (ft_strchr(argument, '=') == NULL)
-		return (0);
+		return (SUCCESS);
 	key = get_key(argument);
 	if (!key)
-		return (1);
+		return (FAILURE);
 	temp = env;
 	while (temp)
 	{
@@ -61,7 +61,7 @@ static int	change_value(t_env *env, char *argument)
 		temp = temp->next;
 	}
 	free(key);
-	return (0);
+	return (SUCCESS);
 }
 
 static int	export_with_args(t_cmd *cmd, t_env *env)

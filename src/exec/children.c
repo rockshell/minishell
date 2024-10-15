@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 16:08:56 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:45:13 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	first_child(t_appdata *appdata, t_list *list)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (list->cmd[0].is_builtin == 1)
+	if (list->cmd[0].is_builtin == TRUE)
 		execute_a_builtin(appdata, &list->cmd[0]);
 	else
 	{
@@ -58,7 +58,7 @@ void	last_child(t_appdata *appdata, t_list *list, int i)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (list->cmd[i].is_builtin == 1)
+	if (list->cmd[i].is_builtin == TRUE)
 		execute_a_builtin(appdata, &list->cmd[i]);
 	else
 	{
@@ -87,7 +87,7 @@ void	mid_child(t_appdata *appdata, t_list *list, int i)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (list->cmd[i].is_builtin == 1)
+	if (list->cmd[i].is_builtin == TRUE)
 		execute_a_builtin(appdata, &list->cmd[i]);
 	else
 	{
@@ -112,7 +112,7 @@ void	only_child(t_appdata *appdata, t_list *list)
 		error_rising(appdata);
 		exit(127);
 	}
-	if (list->cmd[0].is_builtin == 1)
+	if (list->cmd[0].is_builtin == TRUE)
 		execute_a_builtin(appdata, &list->cmd[0]);
 	else
 	{

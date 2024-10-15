@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 16:52:48 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/10 14:48:55 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 18:37:00 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdbool.h>
 # include <stddef.h>
 # include <stdlib.h>
 # include <stdio.h>
@@ -34,10 +35,28 @@
 # include "libft.h"
 
 # define ALLOC_ERROR "Error! The program failed to allocate memory!\n"
-# define CD_ONE_ARG_ERROR "Error! No absolute or relative path specified!\n"
-# define CD_TOO_MANY_ARG_ERROR "Error! Too many arguments!"
-# define EXIT_TOO_MANY_ARG_ERROR "minishell: exit: too many arguments\n"
+# define BAD_INPUT "Syntax error somewhere. \n"
 # define BUFFER_SIZE 42
+# define CD_ONE_ARG_ERROR "minishell: cd: no absolute or relative path specified\n"
+# define CD_TOO_MANY_ARG_ERROR "minishell: cd: too many arguments\n"
+# define EXIT_TOO_MANY_ARG_ERROR "minishell: exit: too many arguments\n"
+
+# define WORD 0
+# define ARGUMENT 1
+# define PIPE 2
+# define STDIN 3
+# define STDOUT 4
+# define HEREDOC 5
+# define APPEND 6
+# define LOGICAL_AND 7
+# define LOGICAL_OR 8
+# define SINGLE_QUOTE 9
+# define DOUBLE_QUOTE 10
+
+# define SUCCESS 0
+# define FAILURE 1
+# define COMMAND_MISUSE 2
+# define COMMAND_NOT_FOUND 127
 
 typedef struct s_env
 {
@@ -46,116 +65,149 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_srv_token
+typedef struct s_token t_token;
+/**
+ *
+ * This structure stores the necessary information for each token parsed
+ * from the user input in the minishell project, including its position,
+ * content, and type. It can also be part of a linked list for sequential
+ * token processing.
+ * 
+ * @var pos The position of the token in the command line.
+ * @var content The actual string value of the token (e.g., command, argument).
+ * @var type The type of the token (e.g., COMMAND, ARGUMENT, OPERATOR).
+ * @var next Pointer to the next token in the list (for linked list structure).
+ */
+typedef struct s_token
 {
-	int		input_id;
-	int		output_id;
-	char	*original;
+	int		pos;
 	int		type;
-}	t_srv_token;
+	int		is_parsed;
+	char	*value;
+	t_token *prev;
+	t_token *next;
+}	t_token;
 
-typedef struct s_cmd_token
+typedef struct s_cmd
 {
-	int		id;
-	int		argc;
-	int		is_builtin;
-	char	*original;
-	char	*cmd;
-	char	**argv;
-	char	*filename;
-	char	*delim;
-}	t_cmd_token;
+	int		argc; //num of things in argv
+	int		is_builtin; //TODO
+	int		input_redir_type;
+	int		output_redir_type;
+	int		is_pipe_after;
+	int		is_pipe_before;
+	// int		pipe;
+	char	**argv; //no redirects, command + args
+	char	*infile_name;
+	char	*outfile_name;
+	char	*delim; //for HEREDOC use ONLY
+}	t_cmd;
 
 typedef struct s_exec_data
 {
 	int		infile;
 	int		outfile;
 	int		status;
-	int		pipe_counter;
-	int		input_redirection_num;
-	int		output_redirection_num;
 	int		**fd;
 	pid_t	*processes;
 }	t_exec_data;
 
+typedef struct s_list
+{
+	int and_after;
+	int or_after;
+	int end_after;
+	int	size;
+	t_cmd  *cmd;
+	t_exec_data	*exec_data; //for Vita's use
+	// char *group_of_tokens;
+	// char **splitted_string;
+	// int num_of_strings;
+}  t_list;
+
 typedef struct s_appdata
 {
-	int			exit_code;
-	int			num_of_input_strings;
-	int			cmd_tokens_num;
-	int			srv_tokens_num;
-	char		**input_strings;
-	char		**envp_array;
-	t_exec_data	*exec_data;
-	t_cmd_token	*cmd_tokens;
-	t_srv_token	*srv_tokens;
-	t_env		*env_var;
-}	t_appdata;
+	int		num_of_input_strings;
+	int	 	tokens_num;
+	int		lists_num;
+	int		exit_code;
+	char	**input_strings;
+	char	**envp;
+	t_token	*tokens;
+	t_token	*first_token;
+	t_list 	*lists;
+	t_env  *env;
+	// t_exec_data *exec_data;
+}  t_appdata;
+
+//built-in
+int			ft_cd(t_cmd *cmd, t_env *env);
+int			ft_echo(t_cmd *cmd);
+int			ft_env(t_env *env);
+int			ft_exit(t_appdata *appdata, t_cmd *cmd);
+int			ft_export(t_cmd *cmd, t_env *env);
+int			ft_pwd(void);
+int			ft_unset(t_cmd *cmd, t_env *env);
+
+//built-in utils
+char		**get_an_array_of_keys(t_env *env, int len);
+char		**sort_an_array(char **array, int len);
+int			ft_strcmp(char *first_str, char *second_str);
+int			get_length_of_env(t_env *env);
+int			is_in_var(t_env *env, char *argument);
+int			is_valid_digit(char *str);
+int			is_valid_var(char *argument);
+long long	ft_atoll(char *str);
 
 //enviromentals
+int			create_env_node(t_env **env, char *current_env);
 int			initialize_env_var(t_appdata *appdata, char **envp);
-int			create_env_var_node(t_env **env, char *current_env);
+
+//environmentals utils
 char		*ft_get_env(t_env *env, char *key);
-void		free_and_renew_env_value(t_env *env, char *key, char *new_value);
-void		print_env(t_env *env, char *key);
 char		*get_key(char *current_env);
 char		*get_value(char *current_env);
+void		free_and_renew_env_value(t_env *env, char *key, char *new_value);
+void		print_env(t_env *env, char *key);
+
+//execution
+void		run_lexer(t_appdata *appdata);
+void		start_execution(t_appdata *appdata, t_list *list);
+
+//execution utils
+char		*get_next_line(int fd);
+char		*gnl_strjoin(char const *s1, char const *s2);
+char		*make_path(t_cmd *cmd);
+int			check_if_builtin(t_cmd *cmd);
+int			open_files(t_list *list, int is_input);
+size_t		gnl_strlen(const char *str);
+void		close_pipes_in_parent(t_list *list);
+void		close_fds(t_list *list, int current_pipe);
+void		execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
+void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
+void		redirect_only_child(t_appdata *appdata, t_list *list);
+void		rwr_heredoc(t_appdata *appdata, t_list *list, char *delim);
+
+//children
+void		first_child(t_appdata *appdata, t_list *list);
+void		last_child(t_appdata *appdata, t_list *list, int i);
+void		mid_child(t_appdata *appdata, t_list *list, int i);
+void		only_child(t_appdata *appdata, t_list *list);
 
 //utils 
 void		free_memory(t_appdata *appdata);
 void		error_rising(t_appdata *appdata);
 
-//built-in
-int			ft_cd(t_cmd_token *token, t_env *env);
-int			ft_echo(t_cmd_token *token);
-int			ft_env(t_env *env);
-int			ft_exit(t_appdata *appdata, t_cmd_token *token);
-int			ft_export(t_cmd_token *token, t_env *env);
-int			ft_pwd(void);
-int			ft_unset(t_cmd_token *token, t_env *env);
-
-//built-in utils
-int			is_valid_digit(char *str);
-long long	ft_atoll(char *str);
-int			ft_strcmp(char *first_str, char *second_str);
-int			is_valid_var(char *argument);
-int			is_in_var(t_env *env, char *argument);
-char		**sort_an_array(char **array, int len);
-char		**get_an_array_of_keys(t_env *env, int len);
-int			get_length_of_env(t_env *env);
-
 //parsing - utils
-int			ft_isspace(char c);
 char		*handle_num_quotes(char *input);
-void		free_tokens(char **tokens);
-size_t		handle_len_quotes(char *input, size_t i);
-int			initial_parsing(char *input, t_appdata *appdata);
-int			get_type_of_token(char *command);
-int			count_service_tokens(t_appdata *appdata, char **input_strings);
 int			count_command_tokens(t_appdata *appdata, char **input_strings);
+int			count_service_tokens(t_appdata *appdata, char **input_strings);
+int			ft_isspace(char c);
+int			get_type_of_token(char *command);
+int			initial_parsing(char *input, t_appdata *appdata);
+size_t		handle_len_quotes(char *input, size_t i);
 void		fill_service_tokens(t_appdata *appdata);
 void		fill_command_tokens(t_appdata *appdata);
+void		free_tokens(char **tokens);
 
-//execution utils
-int			open_files(t_appdata *appdata, int is_in);
-void		rwr_heredoc(t_appdata *appdata, char *delim);
-char		*get_next_line(int fd);
-char		*gnl_strjoin(char const *s1, char const *s2);
-size_t		gnl_strlen(const char *str);
-void		get_number_of_pipe_and_redirection(t_appdata *appdata);
-char		*make_path(t_cmd_token token);
-void		close_pipes_in_parent(t_appdata *appdata);
-void		io_redirection(t_appdata *appdata, int is_infile);
-void		close_fds(t_exec_data *exec_data, int current_pipe);
-int			check_if_builtin(t_cmd_token *token);
-
-//execution
-void		start_execution(t_appdata *appdata);
-void		run_lexer(t_appdata *appdata);
-
-//children
-void		first_child(t_appdata *appdata);
-void		last_child(t_appdata *appdata, int i);
-void		mid_child(t_appdata *appdata, int i);
-void		only_child(t_appdata *appdata);
 #endif

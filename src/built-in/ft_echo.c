@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:13:45 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 14:32:17 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 17:12:09 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ int	ft_echo(t_cmd *cmd)
 
 	i = 1;
 	is_new_line = 1;
-	if (ft_strncmp(cmd->argv[i], "-n", ft_strlen(cmd->argv[i])) == 0)
+	if (cmd->argc == 1)
+	{
+		printf("\n");
+		return (SUCCESS);
+	}
+	while (ft_strcmp(cmd->argv[i], "-n") == 0)
 	{
 		is_new_line = 0;
 		i++;
@@ -33,5 +38,5 @@ int	ft_echo(t_cmd *cmd)
 	}
 	if (is_new_line == 1)
 		printf("\n");
-	return (0);
+	return (SUCCESS);
 }

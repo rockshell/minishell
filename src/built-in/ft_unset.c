@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:19 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 14:37:56 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 19:04:08 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	ft_unset(t_cmd *cmd, t_env *env)
 
 	i = 1;
 	if (cmd->argc == 1)
-		return (0);
+		return (SUCCESS);
 	while (cmd->argv[i])
 	{
 		unset_command(&env, cmd->argv[i]);
 		i++;
 	}
-	return (0);
+	return (SUCCESS);
 }

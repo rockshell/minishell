@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:31:12 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/11 14:52:33 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 19:04:26 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,16 @@ int	is_valid_var(char *argument)
 	key = get_key(argument);
 	if (!key)
 		return (-1);
-	if (ft_isalpha(key[0]) != 1 && key[0] != '_')
-		return (0);
+	if (ft_isalpha(key[0]) == FALSE && key[0] != '_')
+		return (FALSE);
 	while (key[i] != '\0')
 	{
-		if (ft_isalnum(key[i]) == 1 || key[i] == '_')
+		if (ft_isalnum(key[i]) == TRUE || key[i] == '_')
 			i++;
 		else
-			return (0);
+			return (FALSE);
 	}
-	return (1);
+	return (TRUE);
 }
 
 int	is_in_var(t_env *env, char *argument)
@@ -105,14 +105,14 @@ int	is_in_var(t_env *env, char *argument)
 	temp = env;
 	key = get_key(argument);
 	if (!key)
-		return (1);
+		return (TRUE);
 	while (temp)
 	{
 		if (ft_strcmp(temp->key, key) == 0)
-			return (1);
+			return (TRUE);
 		else
 			temp = temp->next;
 	}
 	free(key);
-	return (0);
+	return (FALSE);
 }

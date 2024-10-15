@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:29:24 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 16:49:38 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:45:58 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	free_exec_data(t_list *list)
 		close(list->exec_data->infile);
 	if (list->exec_data->outfile != -1)
 		close(list->exec_data->outfile);
-	if (list->cmd[0].input_redir_type == 4)
+	if (list->cmd[0].input_redir_type == HEREDOC)
 		unlink("here_doc.txt");
 }
 
@@ -93,5 +93,5 @@ void	error_rising(t_appdata *appdata)
 {
 	perror("Error");
 	free_memory(appdata);
-	exit(1);
+	exit(FAILURE);
 }

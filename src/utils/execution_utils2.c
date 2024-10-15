@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 18:41:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 15:58:30 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:44:35 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@ int	check_if_builtin(t_cmd *cmd)
 
 	len = ft_strlen(cmd->argv[0]);
 	if (ft_strncmp(cmd->argv[0], "cd", len) == 0)
-		return (1);
+		return (TRUE);
 	else if (ft_strncmp(cmd->argv[0], "echo", len) == 0)
-		return (1);
+		return (TRUE);
 	else if (ft_strncmp(cmd->argv[0], "env", len) == 0)
-		return (1);
+		return (TRUE);
 	else if (ft_strncmp(cmd->argv[0], "exit", len) == 0)
-		return (1);
+		return (TRUE);
 	else if (ft_strncmp(cmd->argv[0], "export", len) == 0)
-		return (1);
+		return (TRUE);
 	else if (ft_strncmp(cmd->argv[0], "pwd", len) == 0)
-		return (1);
+		return (TRUE);
 	else if (ft_strncmp(cmd->argv[0], "unset", len) == 0)
-		return (1);
-	return (0);
+		return (TRUE);
+	return (FALSE);
 }
 
 void	io_redirection(t_appdata *appdata, t_list *list, int is_infile)
