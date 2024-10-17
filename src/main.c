@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/15 19:44:17 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:06:32 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void print_tokens(t_appdata *appdata)
 
 	// i = -1;
 	current = appdata->first_token;
-	printf("=================\nPrinting tokens one by one\n=================\n");
+	printf("=================\nPrinting tokens one by one\n==================\n");
 	while (current)
 	{
 		printf("Value: %s\n", current->value);
