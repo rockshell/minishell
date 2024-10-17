@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/15 19:00:01 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:03:35 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	set_the_command_itself(t_appdata *appdata, t_cmd *cmd, int first)
 		{
 			cmd->argv[i] = ft_strdup(current->value);
 			current->is_parsed = 1;
+			cmd->argc++;
 			i++;
 		}
 		current = current->next;
