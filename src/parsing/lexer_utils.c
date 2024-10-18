@@ -3,49 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/17 19:03:35 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/18 16:16:08 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_the_command_itself(t_appdata *appdata, t_cmd *cmd, int first)
+void	set_the_command_itself(t_cmd *cmd, t_token *first)
 {
 	int	i;
 	t_token *current;
 
-	current = &appdata->tokens[first];
-	while (is_cmd_end(current) == 0 && current->type == WORD && current->is_parsed == 0)
+	current = first;
+	while ((is_cmd_end(current) == 0 || current->next != NULL))
 	{
-		current = current->next;
-		cmd->argc++;
-	}	
-	cmd->argv = malloc(sizeof(char *) * cmd->argc);
-	current = &appdata->tokens[first];
+		if (current->type == WORD && current->is_parsed == 0)
+			cmd->argc++;
+		if (current->next)
+			current = current->next;
+		else
+			break;
+	}
+	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
+	current = first;
 	i = 0;
-	while (is_cmd_end(current) == 0)
+	while (is_cmd_end(current) == 0 || current->next != NULL)
 	{
 		if (current->type == WORD && current->is_parsed == 0)
 		{
+			printf("Current value: %s\n", current->value);
 			cmd->argv[i] = ft_strdup(current->value);
 			current->is_parsed = 1;
-			cmd->argc++;
 			i++;
 		}
-		current = current->next;
+		if (current->next)
+			current = current->next;
+		else
+			break;
 	}
+	cmd->argv[i] = NULL;
 }
 
 //TODO - rat things clear
-void	set_redirections_in_cmd(t_appdata *appdata, t_cmd *cmd, int first)
+void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 {
-	t_token *current;
-
-	current = &appdata->tokens[first];
-	while (is_cmd_end(current) == 0)
+	while (is_cmd_end(current) == 0 && current->next != NULL)
 	{
 		if (current->type == 3)
 		{
@@ -73,14 +78,14 @@ void	set_redirections_in_cmd(t_appdata *appdata, t_cmd *cmd, int first)
 	}
 }
 
-void	set_pipes_in_cmd(t_appdata *appdata, t_cmd *cmd, int pipe_flag, int last)
+void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last)
 {
 	if (pipe_flag == 1)
 		cmd->is_pipe_before = 1;
-	if (appdata->tokens[last].type == 2)
+	if (last->type == 2)
 	{
 		cmd->is_pipe_after = 1;
-		appdata->tokens[last].is_parsed = 1;
+		last->is_parsed = 1;
 	}
 }
 
@@ -104,7 +109,7 @@ int	count_lists(t_appdata *appdata)
 
 int	is_cmd_end(t_token *token)
 {
-	if (token->next == NULL || token->type == 2)
+	if (token->type == 2)
 		return (1); 
 	if (token->type == 7 || token->type == 8)
 		return (1);

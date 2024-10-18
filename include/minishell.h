@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/15 19:41:41 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/18 15:44:20 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,9 +150,9 @@ int		is_cmd_end(t_token *token);
 int		is_list_end(t_token *token);
 char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
-void	set_pipes_in_cmd(t_appdata *appdata, t_cmd *cmd, int first, int last);
-void 	set_redirections_in_cmd(t_appdata *appdata, t_cmd *cmd, int first);
-void	set_the_command_itself(t_appdata *appdata, t_cmd *cmd, int first);
+void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
+void	set_redirections_in_cmd(t_cmd *cmd, t_token *current);
+void	set_the_command_itself(t_cmd *cmd, t_token *first);
 size_t	handle_len_quotes(char *input, size_t i);
 // int		get_type_of_string(char *command);
 // int 	count_service_tokens(t_appdata *appdata, char **input_strings);

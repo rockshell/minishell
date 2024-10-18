@@ -3,50 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/17 19:01:29 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/18 16:05:11 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd	make_cmd(t_appdata *appdata, int first, int last, int is_pipe_before_flag)
+// void	make_cmd(t_appdata *appdata, int first, int last, int is_pipe_before_flag)
+void init_cmd(t_cmd *cmd, t_token *first_token, t_token *last_token, int is_pipe_before_flag)
 {
-	t_cmd	cmd;
+	// t_cmd	cmd;
 
 	// cmd = malloc(sizeof(t_cmd));
-	cmd.argc = 0;
-	cmd.input_redir_type = 0;
-	cmd.output_redir_type = 0;
-	cmd.is_pipe_before = 0;
-	cmd.is_pipe_after = 0;
-	cmd.argv = NULL;
-	cmd.infile_name = NULL;
-	cmd.outfile_name = NULL;
-	cmd.delim = NULL;
-	printf("Making a new command\n");
-	set_pipes_in_cmd(appdata, &cmd, is_pipe_before_flag, last);
-	printf("Pipes are in place\n");
-	set_redirections_in_cmd(appdata, &cmd, first);
-	printf("Redirections are in place\n");
-	set_the_command_itself(appdata, &cmd, first);
-	printf("The command itself ready\n");
-	return(cmd);
+	cmd->argc = 0;
+	cmd->input_redir_type = 0;
+	cmd->output_redir_type = 0;
+	cmd->is_pipe_before = 0;
+	cmd->is_pipe_after = 0;
+	cmd->argv = NULL;
+	cmd->infile_name = NULL;
+	cmd->outfile_name = NULL;
+	cmd->delim = NULL;
+	// printf("Making a new command\n");
+	set_pipes_in_cmd(cmd, is_pipe_before_flag, last_token);
+	// printf("Pipes are in place\n");
+	set_redirections_in_cmd(cmd, first_token);
+	// printf("Redirections are in place\n");
+	set_the_command_itself(cmd, first_token);
+	// printf("The command itself ready\n");
+	// return(cmd);
+	printf("Argc: %i\n", cmd->argc);
+	printf("Input redirection: %i\n", cmd->input_redir_type);
+	printf("Output redirection: %i\n", cmd->output_redir_type);
+	printf("Pipe before: %i\n", cmd->is_pipe_before);
+	printf("Pipe after: %i\n", cmd->is_pipe_after);
+	printf("Argv[0]: %s\n", cmd->argv[0]);
 }
 
 
 t_list	init_the_list(int start, int end)
 {
 	t_list	list;
-		
-	// list = malloc(sizeof(t_list));
+
 	list.size = 0;
 	list.and_after = 0;
 	list.or_after = 0;
 	list.end_after = 0;
 	list.cmd = malloc(sizeof(t_cmd *) * (end - start)); //TODO - deal with overallocate 
+	list.exec_data = malloc(sizeof(t_exec_data));
 	return (list);
 }
 
@@ -54,44 +61,50 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 {
 	int	j;
 	int	is_pipe_before_flag;
+	// t_cmd	cmd;
 	t_list	list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
-	t_cmd	cmd;
 	
 	j = 0;
 	is_pipe_before_flag = 0;
-	list = init_the_list(start, end);
 	cmd_start = &appdata->tokens[start];
+	// printf("Value of the first token: %s\n", cmd_start->value);
 	cmd_end = cmd_start;
-	while (cmd_end && cmd_end->pos < end)
+	list = init_the_list(start, end);
+	while (cmd_end && cmd_end->pos <= end)
 	{
-		// while (cmd_start->pos < start)
-		// 	cmd_start = cmd_start->next;
-		// cmd_end = cmd_start;
-		while (is_cmd_end(cmd_end) == 0)
+		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)
 			cmd_end = cmd_end->next;
-		if (cmd_start->type == 2)
+		// printf("kek\n");
+		// cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos, is_pipe_before_flag);
+		// printf("kek\n");
+		init_cmd(&list.cmd[j++], cmd_start, cmd_end, is_pipe_before_flag);
+		if (cmd_end->type == 2)
 			is_pipe_before_flag = 1;
-		cmd = make_cmd(appdata, cmd_start->pos, cmd_end->pos, is_pipe_before_flag);
-		list.cmd[j++] = cmd;
-		cmd_start = cmd_end->next;
-		if (cmd_start)
-			cmd_end = cmd_start;
+		// list.cmd[j++] = cmd;
 		list.size++;
+		if (cmd_end->next)
+		{
+			cmd_start = cmd_end->next;
+			cmd_end = cmd_start;
+		}
+		else
+			break;
 	}
-	// if (end >= appdata->tokens_num) {
-    // 	fprintf(stderr, "Error: Token index out of bounds.\n");
-    // 	return;  // Exit gracefully from this function
-	// }
-
 	if (appdata->tokens[end].type == LOGICAL_AND)
 		list.and_after = 1;
 	else if(appdata->tokens[end].type == LOGICAL_OR)
 		list.or_after = 1;
 	else
 		list.end_after = 1;
-		
+	// printf("\nargc = %d\n", list.cmd[j-1].argc);
+	// printf("input_redir_type = %d\n", list.cmd[j-1].input_redir_type);
+	// printf("output_redir_type = %d\n", list.cmd[j-1].output_redir_type);
+	// printf("is_pipe_after = %d\n", list.cmd[j-1].is_pipe_after);
+	// printf("infile name = %s\n", list.cmd[j-1].infile_name);
+	// printf("outfile name = %s\n", list.cmd[j-1].outfile_name);
+	// printf("argv[0] = %s\n", list.cmd[j-1].argv[0]);
 	return (list);
 }
 
