@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/18 17:20:17 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/18 17:28:06 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	set_the_command_itself(t_cmd *cmd, t_token *first)
 	t_token *current;
 
 	current = first;
-	while ((is_cmd_end(current) == 0 || current->next != NULL))
+	while (is_cmd_end(current) == 0)
 	{
 		if (current->type == WORD && current->is_parsed == 0)
 			cmd->argc++;
@@ -30,7 +30,8 @@ void	set_the_command_itself(t_cmd *cmd, t_token *first)
 	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
 	current = first;
 	i = 0;
-	while (is_cmd_end(current) == 0 || current->next != NULL)
+	// while (is_cmd_end(current) == 0 || current->next != NULL)
+	while (is_cmd_end(current) == 0)
 	{
 		if (current->type == WORD && current->is_parsed == 0)
 		{
