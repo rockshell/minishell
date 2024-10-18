@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/18 16:16:08 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/18 17:20:17 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,31 @@ void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 {
 	while (is_cmd_end(current) == 0 && current->next != NULL)
 	{
-		if (current->type == 3)
+		if (current->type >=3 && current->type <= 6)
 		{
-			cmd->input_redir_type = 3;
-			cmd->infile_name = ft_strdup(current->next->value);
+			if (current->type == 3)
+			{
+				cmd->input_redir_type = 3;
+				cmd->infile_name = ft_strdup(current->next->value);
+			}
+			else if(current->type == 4)
+			{
+				cmd->output_redir_type = 4;
+				cmd->outfile_name = ft_strdup(current->next->value);
+			}
+			else if(current->type == 5)
+			{
+				cmd->input_redir_type = 5;
+				cmd->delim = ft_strdup(current->next->value);
+			}
+			else if (current->type == 6)
+			{
+				cmd->output_redir_type = 6;
+				cmd->outfile_name = ft_strdup(current->next->value);
+			}
+			current->is_parsed = 1;
+			current->next->is_parsed = 1;
 		}
-		else if(current->type == 4)
-		{
-			cmd->output_redir_type = 4;
-			cmd->outfile_name = ft_strdup(current->next->value);
-		}
-		else if(current->type == 5)
-		{
-			cmd->input_redir_type = 5;
-			cmd->delim = ft_strdup(current->next->value);
-		}
-		else if (current->type == 6)
-		{
-			cmd->output_redir_type = 6;
-			cmd->outfile_name = ft_strdup(current->next->value);
-		}
-		current->is_parsed = 1;
-		current->next->is_parsed = 1;
 		current = current->next;
 	}
 }
