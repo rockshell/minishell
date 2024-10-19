@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 16:52:48 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 18:37:00 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/19 15:20:30 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ typedef struct s_appdata
 	int	 	tokens_num;
 	int		lists_num;
 	int		exit_code;
+	int		should_exit;
 	char	**input_strings;
 	char	**envp;
 	t_token	*tokens;
@@ -179,11 +180,11 @@ char		*get_next_line(int fd);
 char		*gnl_strjoin(char const *s1, char const *s2);
 char		*make_path(t_cmd *cmd);
 int			check_if_builtin(t_cmd *cmd);
+int			execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
 int			open_files(t_list *list, int is_input);
 size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
 void		close_fds(t_list *list, int current_pipe);
-void		execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
 void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
 void		redirect_only_child(t_appdata *appdata, t_list *list);
 void		rwr_heredoc(t_appdata *appdata, t_list *list, char *delim);

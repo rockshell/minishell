@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/14 16:11:41 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/19 15:00:03 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,23 @@ void	redirect_only_child(t_appdata *appdata, t_list *list)
 	}
 }
 
-void	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
+int	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
 {
-	if (ft_strncmp(cmd->argv[0], "cd", 2) == 0)
-		ft_cd(&cmd, appdata->env);
-	else if (ft_strncmp(cmd->argv[0], "echo", 4) == 0)
-		ft_echo(&cmd);
-	else if (ft_strncmp(cmd->argv[0], "env", 3) == 0)
-		ft_env(appdata->env);
-	else if (ft_strncmp(cmd->argv[0], "exit", 4) == 0)
-		ft_exit(appdata, &cmd);
-	else if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
-		ft_export(&cmd, appdata->env);
-	else if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0)
-		ft_pwd();
-	else if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)
-		ft_unset(&cmd, appdata->env);
+	int exit_status;
+	
+	if (ft_strcmp(cmd->argv[0], "cd") == 0)
+		exit_status = ft_cd(&cmd, appdata->env);
+	else if (ft_strcmp(cmd->argv[0], "echo") == 0)
+		exit_status = ft_echo(&cmd);
+	else if (ft_strcmp(cmd->argv[0], "env") == 0)
+		exit_status = ft_env(appdata->env);
+	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
+		exit_status = ft_exit(appdata, &cmd);
+	else if (ft_strcmp(cmd->argv[0], "export") == 0)
+		exit_status = ft_export(&cmd, appdata->env);
+	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+		exit_status = ft_pwd();
+	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+		exit_status = ft_unset(&cmd, appdata->env);
+	return (exit_status);
 }

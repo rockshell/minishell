@@ -6,18 +6,32 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/15 15:25:34 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/19 15:19:12 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //TODO - make a status array and make all po krasote vasche
+
+static void wait_for_children(t_appdata *appdata, t_list *list)
+{
+	int i;
+	pid_t	pid;
+	
+	i = 0;
+	while (i < list->size)
+	{
+		pid = waitpid(list->exec_data->processes[i], &list->exec_data->status, 0);
+		if (pid == -1)
+			error_rising(appdata);
+		i++;
+	}
+}
+
 static void	create_processes(t_appdata *appdata, t_list *list)
 {
-	int		i;
-	int		status;
-	pid_t	pid;
+	int	i;
 
 	i = -1;
 	list->exec_data->processes = malloc(sizeof(pid_t) * list->size);
@@ -37,15 +51,6 @@ static void	create_processes(t_appdata *appdata, t_list *list)
 		}
 	}
 	close_pipes_in_parent(list);
-	i = 0;
-	while (i < list->size)
-	{
-		status = 0;
-		pid = waitpid(list->exec_data->processes[i], &status, 0);
-		if (pid == -1)
-			error_rising(appdata);
-		i++;
-	}
 }
 
 static void	prepare_pipes(t_appdata *appdata, t_list *list)
@@ -71,13 +76,21 @@ static void	execute_single(t_appdata *appdata, t_list *list)
 	pid_t	pid;
 	int		status;
 
-	status = 0;
-	pid = fork();
-	if (pid == -1)
-		error_rising(appdata);
-	if (pid == 0)
-		only_child(appdata, list);
-	waitpid(pid, &status, 0);
+	if (list->cmd[0].is_builtin == FALSE)
+	{
+		pid = fork();
+		if (pid == -1)
+			error_rising(appdata);
+		if (pid == 0)
+			only_child(appdata, list);
+		if (waitpid(pid, &list->exec_data->status, 0) == -1)
+			error_rising(appdata);
+	}
+	else
+	{
+		status = execute_a_builtin(appdata, &list->cmd[0]);
+		list->exec_data->status = status;
+	}
 }
 
 void	start_execution(t_appdata *appdata, t_list *list)
@@ -102,6 +115,7 @@ void	start_execution(t_appdata *appdata, t_list *list)
 	{
 		prepare_pipes(appdata, list);
 		create_processes(appdata, list);
+		wait_for_children(appdata, list);
 	}
 	else
 		execute_single(appdata, list);

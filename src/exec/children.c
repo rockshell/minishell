@@ -6,16 +6,26 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 15:45:13 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/19 15:00:52 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void print_child_error_message(t_appdata *appdata, char *cmd_name)
+{
+	ft_putstr_fd(cmd_name, 2);
+	ft_putstr_fd(": command not found\n", 2);
+	error_rising(appdata);
+	exit(127);
+}
+
 void	first_child(t_appdata *appdata, t_list *list)
 {
 	char	*path;
+	int		status;
 
+	status = 0;
 	if (list->cmd[0].input_redir_type != 0)
 		io_redirection(appdata, list, 1);
 	if (dup2(list->exec_data->fd[0][1], 1) == -1)
@@ -23,14 +33,12 @@ void	first_child(t_appdata *appdata, t_list *list)
 	close_fds(list, 0);
 	path = make_path(&list->cmd[0]);
 	if (!path)
-	{
-		ft_putstr_fd(list->cmd[0].argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		error_rising(appdata);
-		exit(127);
-	}
+		print_child_error_message(appdata, list->cmd[0].argv[0]);
 	if (list->cmd[0].is_builtin == TRUE)
-		execute_a_builtin(appdata, &list->cmd[0]);
+	{
+		status = execute_a_builtin(appdata, &list->cmd[0]);
+		exit(status);
+	}
 	else
 	{
 		if (execve(path, list->cmd[0].argv, NULL) == -1)
@@ -44,7 +52,9 @@ void	first_child(t_appdata *appdata, t_list *list)
 void	last_child(t_appdata *appdata, t_list *list, int i)
 {
 	char	*path;
+	int		status;
 
+	status = 0;
 	if (list->cmd[list->size - 1].output_redir_type != 0)
 		io_redirection(appdata, list, 0);
 	if (dup2(list->exec_data->fd[i - 1][0], 0) == -1)
@@ -52,14 +62,12 @@ void	last_child(t_appdata *appdata, t_list *list, int i)
 	close_fds(list->exec_data, list->size - 1);
 	path = make_path(&list->cmd[i]);
 	if (!path)
-	{
-		ft_putstr_fd(list->cmd[i].argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		error_rising(appdata);
-		exit(127);
-	}
+		print_child_error_message(appdata, list->cmd[i].argv[0]);
 	if (list->cmd[i].is_builtin == TRUE)
-		execute_a_builtin(appdata, &list->cmd[i]);
+	{
+		status = execute_a_builtin(appdata, &list->cmd[i]);
+		exit(status);
+	}
 	else
 	{
 		if (execve(path, list->cmd[i].argv, NULL) == -1)
@@ -73,7 +81,9 @@ void	last_child(t_appdata *appdata, t_list *list, int i)
 void	mid_child(t_appdata *appdata, t_list *list, int i)
 {
 	char	*path;
+	int		status;
 
+	status = 0;
 	if (dup2(list->exec_data->fd[i - 1][0], 0) == -1)
 		error_rising(appdata);
 	if (dup2(list->exec_data->fd[i][1], 1) == -1)
@@ -81,14 +91,12 @@ void	mid_child(t_appdata *appdata, t_list *list, int i)
 	close_fds(list->exec_data, i);
 	path = make_path(&list->cmd[i]);
 	if (!path)
-	{
-		ft_putstr_fd(list->cmd[i].argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		error_rising(appdata);
-		exit(127);
-	}
+		print_child_error_message(appdata, list->cmd[i].argv[0]);
 	if (list->cmd[i].is_builtin == TRUE)
-		execute_a_builtin(appdata, &list->cmd[i]);
+	{
+		status = execute_a_builtin(appdata, &list->cmd[i]);
+		exit(status);
+	}
 	else
 	{
 		if (execve(path, list->cmd[i].argv, NULL) == -1)
@@ -102,18 +110,18 @@ void	mid_child(t_appdata *appdata, t_list *list, int i)
 void	only_child(t_appdata *appdata, t_list *list)
 {
 	char	*path;
+	int		status;
 
+	status = 0;
 	redirect_only_child(appdata, list);
 	path = make_path(&list->cmd[0]);
 	if (!path)
-	{
-		ft_putstr_fd(list->cmd[0].argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		error_rising(appdata);
-		exit(127);
-	}
+		print_child_error_message(appdata, list->cmd[0].argv[0]);
 	if (list->cmd[0].is_builtin == TRUE)
-		execute_a_builtin(appdata, &list->cmd[0]);
+	{
+		status = execute_a_builtin(appdata, &list->cmd[0]);
+		exit(status);
+	}
 	else
 	{
 		if (execve(path, list->cmd[0].argv, NULL) == -1)
