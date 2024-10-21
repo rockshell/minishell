@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/21 18:22:36 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/21 19:19:01 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,26 @@ int	is_operator(char *input, int i)
 {
 	if (input[i] == '|')
 	{
-		if (input[i + 1] == '|')
+		if (input[i + 1] && input[i + 1] == '|')
 			return (LOGICAL_OR);
 		else
 			return (PIPE);
 	}
 	else if (input[i] == '<')
 	{
-		if (input[i + 1] == '<')
+		if (input[i + 1] && input[i + 1] == '<')
 			return (HEREDOC);
 		else
 			return (STDIN);
 	}
 	else if (input[i] == '>')
 	{
-		if (input[i + 1] == '>')
+		if (input[i + 1] && input[i + 1] == '>')
 			return (APPEND);
 		else
 			return(STDOUT);
 	}
-	else if (input[i] == '&' && input[i + 1] == '&')
+	else if (input[i] == '&' && input[i + 1] && input[i + 1] == '&')
 		return (LOGICAL_AND);
 	return (WORD);
 }
@@ -98,7 +98,10 @@ size_t	len_of_input_string(char *input)
 
 	i = 0;
 	while (ft_isspace(input[i]))
+	{
+		i++;
 		input++;
+	}
 	while (!ft_isspace(input[i]) && input[i])
 	{
 		if (input[i] == '"' || input[i] == '\'')
@@ -114,11 +117,15 @@ t_token	*make_token(char *input, int *start, int token_pos)
 {
 	size_t	len;
 	t_token	*current;
+	char	*value;
 
 	current = init_token(token_pos);
 	len = len_of_input_string(input + *start);
-	current->value = malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(current->value, input + *start, len);
+	printf("Current len: %zu\n", len);
+	value = malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(value, input + *start, len + 1);
+	current->value = ft_strtrim(value, " ");
+	free(value);
 	*start += (int)len;
 	return(current);
 }
@@ -128,23 +135,26 @@ int run_parsing(char *input, t_appdata *appdata)
 	int	i;
 	int	j;
 	t_token	*current;
+	t_token	*prev;
 
 	i = -1;
 	j = 0;
+	prev = NULL;
 	appdata->tokens_num = count_tokens(input);
 	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
 
 	while (++i < appdata->tokens_num)
 	{
 		current = make_token(input, &j, i);
-		if (!appdata->first_token)
-			appdata->first_token = current;
-		else
+		if (prev != NULL)
 		{
-			current->prev = &appdata->tokens[i-1];
-			appdata->tokens[i-1].next = current;
+			current->prev = prev;
+			prev->next = current;
 		}
+		else
+			appdata->first_token = current;
 		appdata->tokens[i] = *current;
+		prev = current;
 	}
 	return (0);
 }
@@ -205,6 +215,7 @@ int run_parsing(char *input, t_appdata *appdata)
 // 	// 	return (1);
 // 	return (0);
 // }
+
 //TODO - differentiate single and double quotes
 // void	fill_tokens(char *input, t_appdata *appdata)
 // {

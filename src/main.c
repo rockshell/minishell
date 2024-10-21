@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/21 17:00:56 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/21 18:46:42 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,22 @@ void print_lists(t_appdata *appdata)
     }
 }
 
+t_appdata	init_appdata()
+{
+	t_appdata	appdata;
+
+	appdata.num_of_input_strings = 0;
+	appdata.tokens_num = 0;
+	appdata.lists_num = 0;
+	appdata.input_strings = NULL;
+	appdata.envp = NULL;
+	appdata.env = NULL;
+	appdata.lists = NULL;
+	appdata.tokens = NULL;
+	appdata.first_token = NULL;
+	appdata.exec_data = NULL;
+	return(appdata);
+}
 
 int	main(void)
 {
@@ -87,6 +103,7 @@ int	main(void)
 	// int		j;
 	
 	// i = 0;
+	appdata = init_appdata();
 	while (1)
 	{
 		input = readline("minishell: ");
@@ -94,6 +111,7 @@ int	main(void)
 			break;
 		save_history(input);
 		run_parsing(input, &appdata);
+		// printf("First token value: %s\n", appdata.first_token->value);
 		print_tokens(&appdata);
 		
 		free(input);
