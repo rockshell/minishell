@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/18 15:44:20 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/21 17:33:01 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int		run_parsing(char *input, t_appdata *appdata);
 int		count_lists(t_appdata *appdata);
 int		is_cmd_end(t_token *token);
 int		is_list_end(t_token *token);
+t_token	*init_token(int	i);
 char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
 void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);

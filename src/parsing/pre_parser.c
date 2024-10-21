@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 19:06:16 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/21 18:22:36 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,147 +65,93 @@ t_token		*handle_operator_token(char *input, int i, t_token *token)
 	return (token);
 }
 
-//TODO - differentiate single and double quotes
-void	fill_tokens(char *input, t_appdata *appdata)
+
+int	count_tokens(char *input)
 {
 	int	i;
-	int	j;
-	int	pos;
-	int	op_type;
-	int quotes_flag;
-	t_token *prev;
-	t_token *current;
 
 	i = 0;
-	pos = 0;
-	quotes_flag = 0;
-	appdata->tokens_num = 0;
-	prev = NULL;
-	while (input[i] != '\0')
+	while (*input)
 	{
-		current = malloc(sizeof(t_token));
-		current->pos = pos;
-		current->next = NULL;
-		current->is_parsed = 0;
-		appdata->tokens_num += 1;
-
-		op_type = is_operator(input, i);
-		if (op_type == WORD || (quotes_flag == 1 && op_type < 9))
+		while (ft_isspace(*input) && *input)
+			input++;
+		if (*input == '\0')
+			break ;
+		if (!ft_isspace(*input))
 		{
-			j = i;
-			while (input[j] != '\0' && (is_operator(input, j) == WORD || (quotes_flag == 1 && is_operator(input, j) < 9)))
+			i++;
+			if (*input == '"' || *input == '\'')
+				input = handle_num_quotes(input);
+			else
 			{
-				// printf("%c\n", input[j]);
-				j++;
+				while (!ft_isspace(*input) && *input)
+					input++;
 			}
-			current->value = ft_strtrim(ft_substr(input, i, j - i), " ");
-			// if (current->value[0] == '-')
-			// 	current->type = ARGUMENT;
-			// else
-			// 	current->type = WORD;
-			current->type = WORD;
-			i = j;
 		}
-		else if (op_type >= 2 && op_type <= 8)
-		{
-			current = handle_operator_token(input, i, current);
-			i += ft_strlen(current->value);
-			// printf("Current len: %li\n", ft_strlen(current->value));
-		}
-		else if (input[i] == '"' || input[i] == '\'')
-		{	
-			quotes_flag = !quotes_flag;
-			i++;
-			continue;
-		}
-		else
-		{
-			i++;
-			continue;
-		}
-		if (prev != NULL)
-		{
-			current->prev = prev;
-			prev->next = current;
-		}
-		else
-			appdata->first_token = current;
-		prev = current;
-		pos++;
 	}
+	return (i);
 }
 
+size_t	len_of_input_string(char *input)
+{
+	size_t	i;
+
+	i = 0;
+	while (ft_isspace(input[i]))
+		input++;
+	while (!ft_isspace(input[i]) && input[i])
+	{
+		if (input[i] == '"' || input[i] == '\'')
+			i = handle_len_quotes(input, i);
+		else
+			i++;
+	}
+	return (i);
+}
+
+//TODO - expand expandable tokens
+t_token	*make_token(char *input, int *start, int token_pos)
+{
+	size_t	len;
+	t_token	*current;
+
+	current = init_token(token_pos);
+	len = len_of_input_string(input + *start);
+	current->value = malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(current->value, input + *start, len);
+	*start += (int)len;
+	return(current);
+}
 
 int run_parsing(char *input, t_appdata *appdata)
 {
-	t_token	*current;
 	int	i;
+	int	j;
+	t_token	*current;
 
 	i = -1;
-	fill_tokens(input, appdata);
+	j = 0;
+	appdata->tokens_num = count_tokens(input);
 	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
-	current = appdata->first_token;
+
 	while (++i < appdata->tokens_num)
 	{
+		current = make_token(input, &j, i);
+		if (!appdata->first_token)
+			appdata->first_token = current;
+		else
+		{
+			current->prev = &appdata->tokens[i-1];
+			appdata->tokens[i-1].next = current;
+		}
 		appdata->tokens[i] = *current;
-		current = current->next;
 	}
-	
 	return (0);
 }
 
-// int	count_tokens(char *input)
-// {
-// 	int	i;
 
-// 	i = 0;
-// 	while (input[i])
-// 	{
-		
-// 	}
-	
-	// while (*input)
-	// {
-	// 	while (ft_isspace(*input) && *input)
-	// 	{
-	// 		input++;
-	// 		// sleep(1);
-	// 		// printf("whitespace\n");
-	// 	}
-	// 	if (*input == '\0')
-	// 		break ;
-	// 	if (!ft_isspace(*input))
-	// 	{
-	// 		i++;
-	// 		if (*input == '"' || *input == '\'')
-	// 			input = handle_num_quotes(input);
-	// 		else
-	// 		{
-	// 			while (!ft_isspace(*input) && *input)
-	// 				input++;
-	// 		}
-	// 	}
-	// }
-	// printf("Iterator is at %i\n", i);
-// 	return (i);
-// }
 
-// size_t	len_of_input_string(char *input)
-// {
-// 	size_t	i;
 
-// 	i = 0;
-// 	while (ft_isspace(input[i]))
-// 		input++;
-// 	while (!ft_isspace(input[i]) && input[i])
-// 	{
-// 		if (input[i] == '"' || input[i] == '\'')
-// 			i = handle_len_quotes(input, i);
-// 		else
-// 			i++;
-// 	}
-// 	return (i);
-// }
 
 // char	**fill_input_strings(char *input, char **input_strings)
 // {
@@ -258,4 +204,73 @@ int run_parsing(char *input, t_appdata *appdata)
 // 	// if (!appdata->exec_data)
 // 	// 	return (1);
 // 	return (0);
+// }
+//TODO - differentiate single and double quotes
+// void	fill_tokens(char *input, t_appdata *appdata)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	pos;
+// 	int	op_type;
+// 	int quotes_flag;
+// 	t_token *prev;
+// 	t_token *current;
+
+// 	i = 0;
+// 	pos = 0;
+// 	quotes_flag = 0;
+// 	appdata->tokens_num = 0;
+// 	prev = NULL;
+// 	while (input[i] != '\0')
+// 	{
+// 		current = malloc(sizeof(t_token));
+// 		current->pos = pos;
+// 		current->next = NULL;
+// 		current->is_parsed = 0;
+// 		appdata->tokens_num += 1;
+
+// 		op_type = is_operator(input, i);
+// 		if (op_type == WORD || (quotes_flag == 1 && op_type < 9))
+// 		{
+// 			j = i;
+// 			while (input[j] != '\0' && (is_operator(input, j) == WORD || (quotes_flag == 1 && is_operator(input, j) < 9)))
+// 			{
+// 				// printf("%c\n", input[j]);
+// 				j++;
+// 			}
+// 			current->value = ft_strtrim(ft_substr(input, i, j - i), " ");
+// 			// if (current->value[0] == '-')
+// 			// 	current->type = ARGUMENT;
+// 			// else
+// 			// 	current->type = WORD;
+// 			current->type = WORD;
+// 			i = j;
+// 		}
+// 		else if (op_type >= 2 && op_type <= 8)
+// 		{
+// 			current = handle_operator_token(input, i, current);
+// 			i += ft_strlen(current->value);
+// 			// printf("Current len: %li\n", ft_strlen(current->value));
+// 		}
+// 		else if (input[i] == '"' || input[i] == '\'')
+// 		{	
+// 			quotes_flag = !quotes_flag;
+// 			i++;
+// 			continue;
+// 		}
+// 		else
+// 		{
+// 			i++;
+// 			continue;
+// 		}
+// 		if (prev != NULL)
+// 		{
+// 			current->prev = prev;
+// 			prev->next = current;
+// 		}
+// 		else
+// 			appdata->first_token = current;
+// 		prev = current;
+// 		pos++;
+// 	}
 // }

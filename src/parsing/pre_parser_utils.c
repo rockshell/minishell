@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   pre_parser_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:44:59 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/03 14:17:01 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/21 18:16:31 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_token	*init_token(int	i)
+{
+	t_token	*current;
+	
+	current = malloc(sizeof(t_token));
+	current->pos = i;
+	current->is_parsed = 0;
+	current->prev = NULL;
+	current->next = NULL;
+	return(current);	 
+}
 
 int	ft_isspace(char c)
 {
