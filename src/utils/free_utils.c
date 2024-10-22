@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:29:24 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 15:45:58 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 19:04:59 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	free_memory(t_appdata *appdata)
 	int	i;
 
 	i = -1;
-	while (i < appdata->lists_num)
+	while (++i < appdata->lists_num)
 		free_lists(&appdata->lists[i]);
 	// free_tokens(appdata->tokens);
 	free_env(appdata->env);

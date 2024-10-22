@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 18:39:41 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 18:57:08 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ int	initialize_env_var(t_appdata *appdata, char **envp);
 void free_memory(t_appdata *appdata);
 void error_rising(t_appdata *appdata);
 void	free_exec_data(t_list *list);
-
+void	free_lists(t_list *list);
 
 
 //parsing - utils
