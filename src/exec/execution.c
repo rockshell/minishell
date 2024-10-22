@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/22 21:37:12 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 21:53:56 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ static void	prepare_pipes(t_appdata *appdata, t_list *list)
 	while (++i < (list->size - 1))
 	{
 		list->exec_data->fd[i] = malloc(sizeof(int) * 2);
+		list->exec_data->fd[i][0] = -1;
+		list->exec_data->fd[i][1] = -1;
 		if (!list->exec_data->fd[i])
 			error_rising(appdata);
 		if (pipe(list->exec_data->fd[i]) == -1)
@@ -108,7 +110,7 @@ void	start_execution(t_appdata *appdata, t_list *list)
 	i = -1;
 	init_exec_data(list);
 	while (++i < list->size)
-		list->cmd[i].is_builtin = check_if_builtin(&list->cmd[i]);
+		list->cmd[i].is_builtin = check_if_builtin(list->cmd[i]);
 	if (list->cmd[0].input_redir_type != 0)
 	{
 		if (list->cmd[0].input_redir_type == STDIN)

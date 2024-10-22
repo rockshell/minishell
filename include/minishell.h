@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 18:57:08 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 21:54:59 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void		start_execution(t_appdata *appdata, t_list *list);
 char		*get_next_line(int fd);
 char		*gnl_strjoin(char const *s1, char const *s2);
 char		*make_path(t_cmd *cmd);
-int			check_if_builtin(t_cmd *cmd);
+int			check_if_builtin(t_cmd cmd);
 int			execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
 int			open_files(t_list *list, int is_input);
 size_t		gnl_strlen(const char *str);

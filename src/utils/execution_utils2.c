@@ -3,33 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 18:41:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 15:44:35 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 21:54:57 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_if_builtin(t_cmd *cmd)
+int	check_if_builtin(t_cmd cmd)
 {
-	size_t	len;
-
-	len = ft_strlen(cmd->argv[0]);
-	if (ft_strncmp(cmd->argv[0], "cd", len) == 0)
+	if (ft_strcmp(cmd.argv[0], "cd") == 0)
 		return (TRUE);
-	else if (ft_strncmp(cmd->argv[0], "echo", len) == 0)
+	else if (ft_strcmp(cmd.argv[0], "echo") == 0)
 		return (TRUE);
-	else if (ft_strncmp(cmd->argv[0], "env", len) == 0)
+	else if (ft_strcmp(cmd.argv[0], "env") == 0)
 		return (TRUE);
-	else if (ft_strncmp(cmd->argv[0], "exit", len) == 0)
+	else if (ft_strcmp(cmd.argv[0], "exit") == 0)
 		return (TRUE);
-	else if (ft_strncmp(cmd->argv[0], "export", len) == 0)
+	else if (ft_strcmp(cmd.argv[0], "export") == 0)
 		return (TRUE);
-	else if (ft_strncmp(cmd->argv[0], "pwd", len) == 0)
+	else if (ft_strcmp(cmd.argv[0], "pwd") == 0)
 		return (TRUE);
-	else if (ft_strncmp(cmd->argv[0], "unset", len) == 0)
+	else if (ft_strcmp(cmd.argv[0], "unset") == 0)
 		return (TRUE);
 	return (FALSE);
 }
