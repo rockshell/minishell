@@ -6,63 +6,80 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/03 14:44:08 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 15:48:04 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_key(char *current_env)
+char	*get_key(char *current_env)
 {
 	char	*key;
-	size_t	i;
+	size_t	len;
 
-	i = 0;
-	while (current_env[i] != '=')
-		i++;
-	i++;
-	key = malloc(sizeof(char) * i + 1);
-	if (!key)
+	len = 0;
+	if (ft_strchr(current_env, '=') == NULL)
+		len = ft_strlen(current_env);
+	else
 	{
-		ft_putstr_fd(ALLOC_ERROR, 2);
-		return (NULL);
+		while (current_env[len] != '=')
+			len++;
 	}
-	ft_strlcpy(key, current_env, i + 1);
+	key = malloc(sizeof(char) * (len + 1));
+	if (!key)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
+	ft_strlcpy(key, current_env, len + 1);
 	return (key);
 }
 
-static char	*get_value(char *current_env)
+char	*get_value(char *current_env)
 {
-	int	i;
+	char	*value;
 
-	i = 0;
-	while (current_env[i] != '=')
-		i++;
-	i++;
-	return (current_env + i);
+	value = ft_strchr(current_env, '=');
+	if (!value)
+		return (NULL);
+	return (ft_strdup(value + 1));
 }
 
-int	create_node(t_env **env, char *current_env)
+int	create_env_node(t_env **env, char *current_env)
 {
 	t_env	*node;
 	t_env	*last;
 
-	last = *env;
+	if (!env || !current_env)
+		return (FAILURE);
 	node = malloc(sizeof(t_env));
 	if (!node)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	node->key = get_key(current_env);
 	if (!node->key)
-		return (1);
+		return (free(node), 1);
 	node->value = get_value(current_env);
 	node->next = NULL;
 	if (!*env)
 	{
 		*env = node;
-		return (0);
+		return (SUCCESS);
 	}
+	last = *env;
 	while (last->next != NULL)
 		last = last->next;
 	last->next = node;
-	return (0);
+	return (SUCCESS);
+}
+
+int	initialize_env_var(t_appdata *appdata, char **envp)
+{
+	int	i;
+
+	i = 0;
+	appdata->env = NULL;
+	while (envp[i])
+	{
+		if (create_env_node(&appdata->env, envp[i]) == FAILURE)
+			return (FAILURE);
+		i++;
+	}
+	return (SUCCESS);
 }

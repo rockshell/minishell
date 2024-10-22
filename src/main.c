@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 18:04:06 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 18:24:41 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,8 @@ t_appdata	init_appdata()
 {
 	t_appdata	appdata;
 
-	appdata.num_of_input_strings = 0;
 	appdata.tokens_num = 0;
 	appdata.lists_num = 0;
-	appdata.input_strings = NULL;
 	appdata.envp = NULL;
 	appdata.env = NULL;
 	appdata.lists = NULL;
@@ -90,11 +88,14 @@ t_appdata	init_appdata()
 	return(appdata);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_appdata	appdata;
+	(void) argc;
+	(void) argv;
 
+	initialize_env_var(&appdata, envp);
 	appdata = init_appdata();
 	while (1)
 	{
@@ -108,6 +109,5 @@ int	main(void)
 		run_lexer(&appdata);
 		print_lists(&appdata);
 	}
-	
 	return (0);
 }

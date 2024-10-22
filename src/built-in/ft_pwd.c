@@ -6,22 +6,24 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/08/30 15:16:46 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/15 18:40:04 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_pwd(t_env *env)
+int	ft_pwd(void)
 {
-	t_env	*temp;
+	char	current_wd[1024];
 
-	temp = env;
-	while (temp)
+	if (getcwd(current_wd, 1024) != NULL)
 	{
-		if (ft_strncmp(temp->key, "PWD=", 4) == 0)
-			printf("%s\n", temp->value);
-		else
-			temp = temp->next;
+		printf("%s\n", current_wd);
+		return (SUCCESS);
+	}
+	else
+	{
+		perror("minishell: pwd: ");
+		return (FAILURE);
 	}
 }
