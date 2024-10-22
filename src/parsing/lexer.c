@@ -6,128 +6,104 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/09/25 16:10:13 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 18:00:57 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int count_service_tokens(t_appdata *appdata, char **input_strings)
+void init_cmd(t_cmd *cmd, t_token *first_token, t_token *last_token, int is_pipe_before_flag)
 {
-	int i;
-	int counter;
-
-	i = -1;
-	counter = 0;
-	while (++i < appdata->num_of_input_strings)
-	{
-		if (get_type_of_token(input_strings[i]))
-			counter++;
-	}
-	return (counter);
+	cmd->argc = 0;
+	cmd->input_redir_type = 0;
+	cmd->output_redir_type = 0;
+	cmd->is_pipe_before = 0;
+	cmd->is_pipe_after = 0;
+	cmd->argv = NULL;
+	cmd->infile_name = NULL;
+	cmd->outfile_name = NULL;
+	cmd->delim = NULL;
+	set_pipes_in_cmd(cmd, is_pipe_before_flag, last_token);
+	set_redirections_in_cmd(cmd, first_token);
+	set_the_command_itself(cmd, first_token);
 }
 
-int count_command_tokens(t_appdata *appdata, char **input_strings)
+t_list	init_the_list(int start, int end)
 {
-	int i;
-	int counter;
+	t_list	list;
 
-	i = -1;
-	counter = 0;
-	while (++i < appdata->num_of_input_strings)
-	{
-		if (!get_type_of_token(input_strings[i]))
-		{
-			counter++;
-			while (!get_type_of_token(input_strings[i]))
-				i++;
-		}
-	}
-	return (counter);
+	list.size = 0;
+	list.and_after = 0;
+	list.or_after = 0;
+	list.end_after = 0;
+	list.cmd = malloc(sizeof(t_cmd *) * (end - start)); //TODO - deal with overallocate 
+	list.exec_data = malloc(sizeof(t_exec_data));
+	return (list);
 }
 
-int count_len_of_command_token(t_appdata *appdata, int i)
+//TODO - return a pointer instead of struct
+t_list	make_a_list(t_appdata *appdata, int start, int end)
 {
-	int len;
-
-	len = 0;
-	while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
-	{
-		len++;
-		i++;
-	}
-	return (len);
-}
-
-void fill_command_tokens(t_appdata *appdata)
-{
-	int i;
-	int j;
-	int pos;
-
-	i = 0;
+	int	j;
+	int	is_pipe_before_flag;
+	t_list	list;
+	t_token	*cmd_start;
+	t_token	*cmd_end;
+	
 	j = 0;
-	while (i < appdata->num_of_input_strings && get_type_of_token(appdata->input_strings[i]) == 0)
+	is_pipe_before_flag = 0;
+	cmd_start = &appdata->tokens[start];
+	cmd_end = cmd_start;
+	list = init_the_list(start, end);
+	while (cmd_end && cmd_end->pos <= end)
 	{
-		pos = 0;
-		appdata->cmd_tokens[j].argc = count_len_of_command_token(appdata, i);
-		if (appdata->cmd_tokens[j].argc > 0)
+		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)
+			cmd_end = cmd_end->next;
+		init_cmd(&list.cmd[j++], cmd_start, cmd_end, is_pipe_before_flag);
+		if (cmd_end->type == 2)
+			is_pipe_before_flag = 1;
+		list.size++;
+		if (cmd_end->next)
 		{
-			appdata->cmd_tokens[j].argv = malloc(sizeof(char *) * (appdata->cmd_tokens[j].argc + 1));
-			if (!appdata->cmd_tokens[j].argv)
-				error_rising(appdata);
-			//while (get_type_of_token(appdata->input_strings[i]) == 0 && i < appdata->num_of_input_strings)
-			while (pos < appdata->cmd_tokens[j].argc)
-			{
-				appdata->cmd_tokens[j].argv[pos] = ft_strdup(appdata->input_strings[i]);
-				if (!appdata->cmd_tokens[j].argv[pos])
-					error_rising(appdata);
-				i++;
-				pos++;
-			}
-			appdata->cmd_tokens[j].id = j;
-			appdata->cmd_tokens[j].argv[pos] = NULL;
-			j++;
+			cmd_start = cmd_end->next;
+			cmd_end = cmd_start;
 		}
-		while (get_type_of_token(appdata->input_strings[i]) != 0 && i < appdata->num_of_input_strings)
-			i++;
+		else
+			break;
 	}
-}
-
-void fill_service_tokens(t_appdata *appdata)
-{
-	int i;
-	int j;
-	int type;
-
-	i = -1;
-	j = 0;
-	type = 0;
-	while (++i < appdata->num_of_input_strings)
-	{
-		type = get_type_of_token(appdata->input_strings[i]);
-		if (type != 0)
-		{
-			appdata->srv_tokens[j].original = ft_strdup(appdata->input_strings[i]);
-			appdata->srv_tokens[j].type = type;
-			j++;
-		}
-	}
+	if (appdata->tokens[end].type == LOGICAL_AND)
+		list.and_after = 1;
+	else if(appdata->tokens[end].type == LOGICAL_OR)
+		list.or_after = 1;
+	else
+		list.end_after = 1;
+	return (list);
 }
 
 void run_lexer(t_appdata *appdata)
 {
-	appdata->srv_tokens_num = count_service_tokens(appdata, appdata->input_strings);
-	appdata->cmd_tokens_num = count_command_tokens(appdata, appdata->input_strings);
-	appdata->cmd_tokens = malloc(sizeof(t_cmd_token) * appdata->cmd_tokens_num);
-	if (!appdata->cmd_tokens)
-		return ;
-	appdata->srv_tokens = malloc(sizeof(t_srv_token) * appdata->srv_tokens_num);
-	if (!appdata->srv_tokens)
+	int		i;
+	int		num_of_lists;
+	int		start_pos;
+	int		end_pos;
+	t_token	*current;
+	t_list	*lists;
+	
+	i = -1;
+	start_pos = 0;
+	num_of_lists = count_lists(appdata);
+	lists = malloc(sizeof(t_list) * num_of_lists);
+	current = appdata->first_token;
+	while (++i < num_of_lists)
 	{
-		free(appdata->cmd_tokens);
-		return ;
+		while (is_list_end(current) == 0)
+			current = current->next;
+		end_pos = current->pos;
+		lists[i] = make_a_list(appdata, start_pos, end_pos);
+		start_pos = end_pos + 1;
+		current = current->next;
 	}
-	fill_service_tokens(appdata);
-	fill_command_tokens(appdata);
+	appdata->lists_num = num_of_lists;
+	appdata->lists = lists;
 }
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/03 16:52:48 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/19 15:20:30 by vitakinsfat      ###   ########.fr       */
+/*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
+/*   Updated: 2024/10/22 18:24:16 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+
 typedef struct s_token t_token;
 /**
  *
@@ -96,7 +97,6 @@ typedef struct s_cmd
 	int		output_redir_type;
 	int		is_pipe_after;
 	int		is_pipe_before;
-	// int		pipe;
 	char	**argv; //no redirects, command + args
 	char	*infile_name;
 	char	*outfile_name;
@@ -120,9 +120,6 @@ typedef struct s_list
 	int	size;
 	t_cmd  *cmd;
 	t_exec_data	*exec_data; //for Vita's use
-	// char *group_of_tokens;
-	// char **splitted_string;
-	// int num_of_strings;
 }  t_list;
 
 typedef struct s_appdata
@@ -132,13 +129,11 @@ typedef struct s_appdata
 	int		lists_num;
 	int		exit_code;
 	int		should_exit;
-	char	**input_strings;
 	char	**envp;
 	t_token	*tokens;
 	t_token	*first_token;
 	t_list 	*lists;
 	t_env  *env;
-	// t_exec_data *exec_data;
 }  t_appdata;
 
 //built-in
@@ -161,9 +156,29 @@ int			is_valid_var(char *argument);
 long long	ft_atoll(char *str);
 
 //enviromentals
-int			create_env_node(t_env **env, char *current_env);
-int			initialize_env_var(t_appdata *appdata, char **envp);
+int	create_env_node(t_env **env, char *current_env);
+int	initialize_env_var(t_appdata *appdata, char **envp);
 
+//utils 
+void free_memory(t_appdata *appdata);
+void error_rising(t_appdata *appdata);
+
+
+
+
+//parsing - utils
+int 	ft_isspace(char c);
+int		run_parsing(char *input, t_appdata *appdata);
+int		count_lists(t_appdata *appdata);
+int		is_cmd_end(t_token *token);
+int		is_list_end(t_token *token);
+void 	init_token(int	i, t_token *current);
+char	*handle_num_quotes(char *input);
+void	free_tokens(char **tokens);
+void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
+void	set_redirections_in_cmd(t_cmd *cmd, t_token *current);
+void	set_the_command_itself(t_cmd *cmd, t_token *first);
+size_t	handle_len_quotes(char *input, size_t i);
 //environmentals utils
 char		*ft_get_env(t_env *env, char *key);
 char		*get_key(char *current_env);

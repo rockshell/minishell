@@ -6,12 +6,13 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 18:11:20 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/08/29 15:53:40 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:40:16 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+//ft_strdup allocate memory and copy const char *str to the designated place
 char	*ft_strdup(const char *str)
 {
 	int		size;

@@ -3,14 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/09/23 19:46:46 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:59:18 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_operator(char *input)
+{
+	int	i;
+
+	i = 0;
+	if (input[i] == '|')
+	{
+		if (input[i + 1] && input[i + 1] == '|')
+			return (LOGICAL_OR);
+		else
+			return (PIPE);
+	}
+	else if (input[i] == '<')
+	{
+		if (input[i + 1] && input[i + 1] == '<')
+			return (HEREDOC);
+		else
+			return (STDIN);
+	}
+	else if (input[i] == '>')
+	{
+		if (input[i + 1] && input[i + 1] == '>')
+			return (APPEND);
+		else
+			return(STDOUT);
+	}
+	else if (input[i] == '&' && input[i + 1] && input[i + 1] == '&')
+		return (LOGICAL_AND);
+	return (WORD);
+}
 
 int	count_tokens(char *input)
 {
@@ -20,11 +51,7 @@ int	count_tokens(char *input)
 	while (*input)
 	{
 		while (ft_isspace(*input) && *input)
-		{
 			input++;
-			// sleep(1);
-			// printf("whitespace\n");
-		}
 		if (*input == '\0')
 			break ;
 		if (!ft_isspace(*input))
@@ -39,7 +66,6 @@ int	count_tokens(char *input)
 			}
 		}
 	}
-	// printf("Iterator is at %i\n", i);
 	return (i);
 }
 
@@ -60,47 +86,52 @@ size_t	len_of_input_string(char *input)
 	return (i);
 }
 
-char	**fill_input_strings(char *input, char **input_strings)
+void	get_to_the_token(char *input, int *i)
 {
-	int		i;
-	size_t	len;
-	char	*token_start;
-
-	i = 0;
-	len = 0;
-	while (*input)
-	{
-		while (ft_isspace(*input))
-			input++;
-		if (*input == '\0')
-			break ;
-		token_start = input;
-		len = len_of_input_string(input);
-		input_strings[i] = malloc(sizeof(char) * (len + 1));
-		if (!input_strings[i])
-			return (free_tokens(input_strings), ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-		ft_strlcpy(input_strings[i], token_start, len + 1);
-		input = token_start + len;
-		i++;
-	}
-	input_strings[i] = NULL;
-	return (input_strings);
+	while (ft_isspace(input[*i]))
+		(*i)++;
 }
 
-int	initial_parsing(char *input, t_appdata *appdata)
+//TODO - expand expandable tokens
+void	make_token(char *input, int *start, int token_pos, t_token *current)
 {
-	int		token_num;
+	size_t	len;
+	char	*value;
 
-	token_num = count_tokens(input);
-	appdata->num_of_input_strings = token_num;
-	appdata->input_strings = malloc(sizeof(char *) * (token_num + 1));
-	if (!appdata->input_strings)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), 1);
-	appdata->input_strings = fill_input_strings(input, appdata->input_strings);
-	if (!appdata->input_strings)
-		return (1);
-	appdata->exec_data = malloc(sizeof(t_exec_data));
-	if (!appdata->exec_data)
-		return (1);
+	init_token(token_pos, current);
+	len = len_of_input_string(input + *start);
+	value = malloc(sizeof(char) * (len + 1));
+	get_to_the_token(input, start);
+	ft_strlcpy(value, input + *start, len + 1);
+	current->value = ft_strtrim(value, " ");
+	current->type = is_operator(value);
+	free(value);
+	*start += (int)len;
+}
+
+int run_parsing(char *input, t_appdata *appdata)
+{
+	int	i;
+	int	j;
+	t_token	*prev;
+
+	i = -1;
+	j = 0;
+	prev = NULL;
+	appdata->tokens_num = count_tokens(input);
+	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
+
+	while (++i < appdata->tokens_num)
+	{
+		make_token(input, &j, i, &appdata->tokens[i]);
+		if (prev != NULL)
+		{
+			appdata->tokens[i].prev = prev;
+			prev->next = &appdata->tokens[i];
+		}
+		else
+			appdata->first_token = &appdata->tokens[i];
+		prev = &appdata->tokens[i];
+	}
 	return (0);
 }

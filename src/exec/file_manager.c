@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   file_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 15:24:40 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 18:19:25 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+// #include "minishell.h"
 
 int	open_files(t_list *list, int is_input)
 {
