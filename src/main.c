@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 18:24:41 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 18:41:02 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,9 @@ int	main(int argc, char **argv, char **envp)
 	t_appdata	appdata;
 	(void) argc;
 	(void) argv;
+	int	i;
 
+	i = 0;
 	initialize_env_var(&appdata, envp);
 	appdata = init_appdata();
 	while (1)
@@ -104,10 +106,26 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		save_history(input);
 		run_parsing(input, &appdata);
-		print_tokens(&appdata);
+		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
+		// print_lists(&appdata);
+		start_execution(&appdata, &appdata.lists[i]);
+		while (i < appdata.lists_num)
+		{	
+			if (appdata.lists[i].and_after && !appdata.lists[i].exec_data->status)
+			{
+				i++;
+				start_execution(&appdata, &appdata.lists[i]);
+			}
+			else if(appdata.lists[i].or_after && appdata.lists[i].exec_data->status)
+			{
+				i++;
+				start_execution(&appdata, &appdata.lists[i]);
+			}
+			else
+				break;
+		}
 	}
 	return (0);
 }
