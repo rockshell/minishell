@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 18:28:00 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 18:45:27 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	last_child(t_appdata *appdata, t_list *list, int i)
 		io_redirection(appdata, list, 0);
 	if (dup2(list->exec_data->fd[i - 1][0], 0) == -1)
 		error_rising(appdata);
-	close_fds(list->exec_data, list->size - 1);
+	close_fds(list, i);
 	path = make_path(&list->cmd[i]);
 	if (!path)
 		print_child_error_message(appdata, list->cmd[i].argv[0]);
@@ -88,7 +88,7 @@ void	mid_child(t_appdata *appdata, t_list *list, int i)
 		error_rising(appdata);
 	if (dup2(list->exec_data->fd[i][1], 1) == -1)
 		error_rising(appdata);
-	close_fds(list->exec_data, i);
+	close_fds(list, i);
 	path = make_path(&list->cmd[i]);
 	if (!path)
 		print_child_error_message(appdata, list->cmd[i].argv[0]);
