@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 19:24:34 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 19:40:45 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ t_appdata	init_appdata()
 
 	appdata.tokens_num = 0;
 	appdata.lists_num = 0;
+	appdata.exit_code = 0;
+	appdata.should_exit = 0;
 	appdata.envp = NULL;
 	appdata.env = NULL;
 	appdata.lists = NULL;

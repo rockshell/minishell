@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/22 18:44:20 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 19:39:23 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,24 +92,32 @@ static void	execute_single(t_appdata *appdata, t_list *list)
 	}
 }
 
+void init_exec_data(t_list *list)
+{
+	list->exec_data->infile = 0;
+	list->exec_data->outfile = 0;
+	list->exec_data->status = 0;
+	list->exec_data->fd = NULL;
+	list->exec_data->processes = NULL;
+}
+
 void	start_execution(t_appdata *appdata, t_list *list)
 {
-	t_exec_data	*exec_data;
-	int			i;
+	int	i;
 
 	i = -1;
-	exec_data = list->exec_data;
+	init_exec_data(list);
 	while (++i < list->size)
 		list->cmd[i].is_builtin = check_if_builtin(&list->cmd[i]);
 	if (list->cmd[0].input_redir_type != 0)
 	{
 		if (list->cmd[0].input_redir_type == STDIN)
-			exec_data->infile = open_files(list, 1);
+			list->exec_data->infile = open_files(list, 1);
 		else if (list->cmd[0].input_redir_type == HEREDOC)
 			rwr_heredoc(appdata, list, list->cmd[0].delim);
 	}
 	if (list->cmd[list->size -1].output_redir_type != 0)
-		exec_data->outfile = open_files(list, 0);
+		list->exec_data->outfile = open_files(list, 0);
 	if (list->size > 1)
 	{
 		prepare_pipes(appdata, list);
