@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 18:01:58 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/22 18:04:06 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ t_appdata	init_appdata()
 	appdata.lists = NULL;
 	appdata.tokens = NULL;
 	appdata.first_token = NULL;
-	appdata.exec_data = NULL;
 	return(appdata);
 }
 
