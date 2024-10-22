@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 19:40:45 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 21:21:33 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,17 @@ void print_lists(t_appdata *appdata)
     }
 }
 
-t_appdata	init_appdata()
+void	init_appdata(t_appdata *appdata)
 {
-	t_appdata	appdata;
-
-	appdata.tokens_num = 0;
-	appdata.lists_num = 0;
-	appdata.exit_code = 0;
-	appdata.should_exit = 0;
-	appdata.envp = NULL;
-	appdata.env = NULL;
-	appdata.lists = NULL;
-	appdata.tokens = NULL;
-	appdata.first_token = NULL;
-	return(appdata);
+	appdata->tokens_num = 0;
+	appdata->lists_num = 0;
+	appdata->exit_code = 0;
+	appdata->should_exit = 0;
+	appdata->envp = NULL;
+	appdata->env = NULL;
+	appdata->lists = NULL;
+	appdata->tokens = NULL;
+	appdata->first_token = NULL;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -98,14 +95,17 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	int	i;
 
-	i = 0;
+	init_appdata(&appdata);
 	initialize_env_var(&appdata, envp);
-	appdata = init_appdata();
 	while (1)
 	{
+		i = 0;
 		input = readline("minishell: ");
 		if (!input)
+		{
+			printf("break occured!\n");
 			break;
+		}
 		save_history(input);
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
@@ -113,20 +113,14 @@ int	main(int argc, char **argv, char **envp)
 		run_lexer(&appdata);
 		// print_lists(&appdata);
 		start_execution(&appdata, &appdata.lists[i]);
+		i++;
 		while (i < appdata.lists_num)
 		{	
 			if (appdata.lists[i].and_after && !appdata.lists[i].exec_data->status)
-			{
-				i++;
 				start_execution(&appdata, &appdata.lists[i]);
-			}
-			else if(appdata.lists[i].or_after && appdata.lists[i].exec_data->status)
-			{
-				i++;
+			else if (appdata.lists[i].or_after && appdata.lists[i].exec_data->status)
 				start_execution(&appdata, &appdata.lists[i]);
-			}
-			else
-				break;
+			i++;
 		}
 		if (appdata.should_exit == TRUE)
 		{
@@ -140,7 +134,6 @@ int	main(int argc, char **argv, char **envp)
 			free_lists(&appdata.lists[i]);
 			i++;
 		}
-		
 	}
 	return (0);
 }

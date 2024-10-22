@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/22 19:39:23 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 21:37:12 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ static void	execute_single(t_appdata *appdata, t_list *list)
 
 void init_exec_data(t_list *list)
 {
-	list->exec_data->infile = 0;
-	list->exec_data->outfile = 0;
+	list->exec_data->infile = -1;
+	list->exec_data->outfile = -1;
 	list->exec_data->status = 0;
 	list->exec_data->fd = NULL;
 	list->exec_data->processes = NULL;
