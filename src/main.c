@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/21 18:46:42 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:01:58 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ void	save_history(char *cmd)
 
 void print_tokens(t_appdata *appdata)
 {
-	// int	i;
 	t_token *current;
 
-	// i = -1;
 	current = appdata->first_token;
 	printf("=================\nPrinting tokens one by one\n==================\n");
 	while (current)
@@ -97,12 +95,7 @@ int	main(void)
 {
 	char		*input;
 	t_appdata	appdata;
-	// t_token		*current;
-	// t_list		*list;
-	// int		i;
-	// int		j;
-	
-	// i = 0;
+
 	appdata = init_appdata();
 	while (1)
 	{
@@ -111,29 +104,10 @@ int	main(void)
 			break;
 		save_history(input);
 		run_parsing(input, &appdata);
-		// printf("First token value: %s\n", appdata.first_token->value);
 		print_tokens(&appdata);
-		
 		free(input);
-		// run_lexer(&appdata);
-		// print_lists(&appdata);
-		
-		// printf("Lists num: %i\n", appdata.lists_num);
-		// printf("First list's size: %i\n", appdata.lists[0].size);
-		// printf("Second list's size: %i\n", appdata.lists[1].size);
-		// start_execution(&appdata);
-		// free_memory(&appdata);
-		// current = appdata.first_token;
-		
-		// while (++i < appdata.tokens_num)
-		// {
-		// 	printf("Value: %s\n", appdata.tokens[i].value);
-		// 	printf("Type: %i\n", appdata.tokens[i].type);
-		// 	printf("Position: %i\n", appdata.tokens[i].pos);
-		// 	printf("=====================\n");
-		// }
-		
-		
+		run_lexer(&appdata);
+		print_lists(&appdata);
 	}
 	
 	return (0);

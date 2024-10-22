@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/21 17:33:01 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:03:23 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ typedef struct s_cmd
 	int		output_redir_type;
 	int		is_pipe_after;
 	int		is_pipe_before;
-	// int		pipe;
 	char	**argv; //no redirects, command + args
 	char	*infile_name;
 	char	*outfile_name;
@@ -115,9 +114,6 @@ typedef struct s_list
 	int	size;
 	t_cmd  *cmd;
 	t_exec_data	*exec_data; //for Vita's use
-	// char *group_of_tokens;
-	// char **splitted_string;
-	// int num_of_strings;
 }  t_list;
 
 typedef struct s_appdata
@@ -131,7 +127,6 @@ typedef struct s_appdata
 	t_list 		*lists;
 	t_token		*tokens;
 	t_token		*first_token;
-	t_exec_data *exec_data;
 }  t_appdata;
 
 //enviromentals
@@ -141,25 +136,19 @@ int	create_node(t_env **env, char *current_env);
 void free_memory(t_appdata *appdata);
 void error_rising(t_appdata *appdata);
 
-
 //parsing - utils
 int 	ft_isspace(char c);
 int		run_parsing(char *input, t_appdata *appdata);
 int		count_lists(t_appdata *appdata);
 int		is_cmd_end(t_token *token);
 int		is_list_end(t_token *token);
-t_token	*init_token(int	i);
+void 	init_token(int	i, t_token *current);
 char	*handle_num_quotes(char *input);
 void	free_tokens(char **tokens);
 void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void	set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 void	set_the_command_itself(t_cmd *cmd, t_token *first);
 size_t	handle_len_quotes(char *input, size_t i);
-// int		get_type_of_string(char *command);
-// int 	count_service_tokens(t_appdata *appdata, char **input_strings);
-// int 	count_command_tokens(t_appdata *appdata, char **input_strings);
-// void 	fill_service_tokens(t_appdata *appdata);
-// void 	fill_command_tokens(t_appdata *appdata);
 
 //execution utils
 int	open_files(t_appdata *appdata, int is_in);

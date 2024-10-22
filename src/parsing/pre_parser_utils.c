@@ -3,26 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:44:59 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/21 18:40:09 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/10/22 18:01:40 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_token	*init_token(int	i)
+void init_token(int	i, t_token *current)
 {
-	t_token	*current;
-	
-	current = malloc(sizeof(t_token));
 	current->pos = i;
 	current->is_parsed = 0;
 	current->type = 0;
 	current->prev = NULL;
 	current->next = NULL;
-	return(current);	 
 }
 
 int	ft_isspace(char c)
