@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 19:05:07 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/22 19:24:34 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,13 @@ int	main(int argc, char **argv, char **envp)
 			free_memory(&appdata);
 			exit(exit_code);
 		}
-		free_lists(appdata.lists);
+		i = 0;
+		while (i < appdata.lists_num)
+		{
+			free_lists(&appdata.lists[i]);
+			i++;
+		}
+		
 	}
 	return (0);
 }
