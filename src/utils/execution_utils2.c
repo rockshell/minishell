@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 18:41:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 21:54:57 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/23 15:37:17 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	check_if_builtin(t_cmd cmd)
 {
+	if (!cmd.argv[0])
+		return (-1);
 	if (ft_strcmp(cmd.argv[0], "cd") == 0)
 		return (TRUE);
 	else if (ft_strcmp(cmd.argv[0], "echo") == 0)

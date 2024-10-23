@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/22 18:00:57 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/23 15:48:54 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_list	init_the_list(int start, int end)
 	list.and_after = 0;
 	list.or_after = 0;
 	list.end_after = 0;
-	list.cmd = malloc(sizeof(t_cmd *) * (end - start)); //TODO - deal with overallocate 
+	list.cmd = malloc(sizeof(t_cmd) * (end - start)); //TODO - deal with overallocate 
 	list.exec_data = malloc(sizeof(t_exec_data));
 	return (list);
 }
