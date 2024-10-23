@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/23 15:48:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/23 17:52:39 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 	initialize_env_var(&appdata, envp);
 	while (1)
 	{
-		i = 0;
+		i = 1;
 		input = readline("minishell: ");
 		if (!input)
 		{
@@ -108,17 +108,16 @@ int	main(int argc, char **argv, char **envp)
 		}
 		save_history(input);
 		run_parsing(input, &appdata);
-		print_tokens(&appdata);
+		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
-		start_execution(&appdata, &appdata.lists[i]);
-		i++;
+		// print_lists(&appdata);
+		start_execution(&appdata, &appdata.lists[0]);
 		while (i < appdata.lists_num)
 		{	
-			if (appdata.lists[i].and_after && !appdata.lists[i].exec_data->status)
+			if (appdata.lists[i - 1].and_after && !appdata.lists[i - 1].exec_data->status)
 				start_execution(&appdata, &appdata.lists[i]);
-			else if (appdata.lists[i].or_after && appdata.lists[i].exec_data->status)
+			else if (appdata.lists[i - 1].or_after && appdata.lists[i - 1].exec_data->status)
 				start_execution(&appdata, &appdata.lists[i]);
 			i++;
 		}
@@ -134,6 +133,7 @@ int	main(int argc, char **argv, char **envp)
 			free_lists(&appdata.lists[i]);
 			i++;
 		}
+		free(appdata.lists);
 	}
 	return (0);
 }
