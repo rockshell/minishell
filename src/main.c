@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/23 15:48:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/23 16:26:20 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,15 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell: ");
 		if (!input)
 		{
-			printf("break occured!\n");
+			// printf("break occured!\n");
 			break;
 		}
 		save_history(input);
 		run_parsing(input, &appdata);
-		print_tokens(&appdata);
+		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
+		// print_lists(&appdata);
 		start_execution(&appdata, &appdata.lists[i]);
 		i++;
 		while (i < appdata.lists_num)
