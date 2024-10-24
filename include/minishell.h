@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/22 21:54:59 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/24 15:56:21 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-
-typedef struct s_token t_token;
+typedef struct s_token	t_token;
 /**
  *
  * This structure stores the necessary information for each token parsed
@@ -85,8 +84,8 @@ typedef struct s_token
 	int		type;
 	int		is_parsed;
 	char	*value;
-	t_token *prev;
-	t_token *next;
+	t_token	*prev;
+	t_token	*next;
 }	t_token;
 
 typedef struct s_cmd
@@ -114,26 +113,26 @@ typedef struct s_exec_data
 
 typedef struct s_list
 {
-	int and_after;
-	int or_after;
-	int end_after;
-	int	size;
-	t_cmd  *cmd;
+	int			and_after;
+	int			or_after;
+	int			end_after;
+	int			size;
+	t_cmd		*cmd;
 	t_exec_data	*exec_data; //for Vita's use
-}  t_list;
+}	t_list;
 
 typedef struct s_appdata
 {
-	int	 	tokens_num;
+	int		tokens_num;
 	int		lists_num;
 	int		exit_code;
 	int		should_exit;
 	char	**envp;
 	t_token	*tokens;
 	t_token	*first_token;
-	t_list 	*lists;
-	t_env  *env;
-}  t_appdata;
+	t_list	*lists;
+	t_env	*env;
+}	t_appdata;
 
 //built-in
 int			ft_cd(t_cmd *cmd, t_env *env);
@@ -155,29 +154,9 @@ int			is_valid_var(char *argument);
 long long	ft_atoll(char *str);
 
 //enviromentals
-int	create_env_node(t_env **env, char *current_env);
-int	initialize_env_var(t_appdata *appdata, char **envp);
+int			create_env_node(t_env **env, char *current_env);
+int			initialize_env_var(t_appdata *appdata, char **envp);
 
-//utils 
-void free_memory(t_appdata *appdata);
-void error_rising(t_appdata *appdata);
-void	free_exec_data(t_list *list);
-void	free_lists(t_list *list);
-
-
-//parsing - utils
-int 	ft_isspace(char c);
-int		run_parsing(char *input, t_appdata *appdata);
-int		count_lists(t_appdata *appdata);
-int		is_cmd_end(t_token *token);
-int		is_list_end(t_token *token);
-void 	init_token(int	i, t_token *current);
-char	*handle_num_quotes(char *input);
-void	free_tokens(char **tokens);
-void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
-void	set_redirections_in_cmd(t_cmd *cmd, t_token *current);
-void	set_the_command_itself(t_cmd *cmd, t_token *first);
-size_t	handle_len_quotes(char *input, size_t i);
 //environmentals utils
 char		*ft_get_env(t_env *env, char *key);
 char		*get_key(char *current_env);
@@ -187,7 +166,9 @@ void		print_env(t_env *env, char *key);
 
 //execution
 void		run_lexer(t_appdata *appdata);
-void		start_execution(t_appdata *appdata, t_list *list);
+void		start_execution(t_appdata *appdata);
+void		init_exec_data(t_list *list);
+void		execute_single(t_appdata *appdata, t_list *list);
 
 //execution utils
 char		*get_next_line(int fd);
@@ -211,18 +192,22 @@ void		only_child(t_appdata *appdata, t_list *list);
 
 //utils 
 void		free_memory(t_appdata *appdata);
+void		free_env(t_env *env);
 void		error_rising(t_appdata *appdata);
+void		free_exec_data(t_list *list);
+void		free_lists(t_list *list);
 
 //parsing - utils
 char		*handle_num_quotes(char *input);
-int			count_command_tokens(t_appdata *appdata, char **input_strings);
-int			count_service_tokens(t_appdata *appdata, char **input_strings);
 int			ft_isspace(char c);
-int			get_type_of_token(char *command);
-int			initial_parsing(char *input, t_appdata *appdata);
+int			run_parsing(char *input, t_appdata *appdata);
+int			count_lists(t_appdata *appdata);
+int			is_cmd_end(t_token *token);
+int			is_list_end(t_token *token);
 size_t		handle_len_quotes(char *input, size_t i);
-void		fill_service_tokens(t_appdata *appdata);
-void		fill_command_tokens(t_appdata *appdata);
-void		free_tokens(char **tokens);
+void		init_token(int i, t_token *current);
+void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
+void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
+void		set_the_command_itself(t_cmd *cmd, t_token *first);
 
 #endif

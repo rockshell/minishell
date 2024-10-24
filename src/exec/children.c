@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 19:59:58 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/24 15:53:45 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void print_child_error_message(t_appdata *appdata, char *cmd_name)
+void	print_child_error_message(t_appdata *appdata, char *cmd_name)
 {
 	ft_putstr_fd(cmd_name, 2);
 	ft_putstr_fd(": command not found\n", 2);

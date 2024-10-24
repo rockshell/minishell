@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 18:47:10 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/24 17:21:35 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void	redirect_only_child(t_appdata *appdata, t_list *list)
 
 int	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
 {
-	int exit_status;
-	
+	int	exit_status;
+
 	exit_status = 0;
 	if (ft_strcmp(cmd->argv[0], "cd") == 0)
 		exit_status = ft_cd(cmd, appdata->env);
@@ -88,4 +88,13 @@ int	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
 	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
 		exit_status = ft_unset(cmd, appdata->env);
 	return (exit_status);
+}
+
+void	init_exec_data(t_list *list)
+{
+	list->exec_data->infile = -1;
+	list->exec_data->outfile = -1;
+	list->exec_data->status = 0;
+	list->exec_data->fd = NULL;
+	list->exec_data->processes = NULL;
 }

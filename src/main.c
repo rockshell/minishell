@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/23 16:26:20 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/24 16:14:06 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	save_history(char *cmd)
 		add_history(cmd);
 }
 
-void print_tokens(t_appdata *appdata)
+void	print_tokens(t_appdata *appdata)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = appdata->first_token;
 	printf("=================\nPrinting tokens one by one\n==================\n");
@@ -37,41 +37,41 @@ void print_tokens(t_appdata *appdata)
 	printf("=====================\n");
 }
 
-void print_lists(t_appdata *appdata)
+void	print_lists(t_appdata *appdata)
 {
-    int i;
-	int j;
-	int k;
-    t_list *list;
-    t_cmd *cmd;
+	int		i;
+	int		j;
+	int		k;
+	t_list	*list;
+	t_cmd	*cmd;
 
-    printf("\n=================\nPrinting lists one by one\n=================\n");
+	printf("\n=================\nPrinting lists one by one\n=================\n");
 
-    i = 0;
-    while (i < appdata->lists_num)
-    {
-        list = &appdata->lists[i];
-        printf("========== List %d (size: %d) ==========\n", i + 1, list->size);
+	i = 0;
+	while (i < appdata->lists_num)
+	{
+		list = &appdata->lists[i];
+		printf("========== List %d (size: %d) ==========\n", i + 1, list->size);
 
-        j = 0;
-        while (j < list->size)
-        {
-            cmd = &list->cmd[j];
-            printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
+		j = 0;
+		while (j < list->size)
+		{
+			cmd = &list->cmd[j];
+			printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
 
-            k = 0;
-            while (k < cmd->argc)
-            {
-                printf("    argv[%d]: %s\n", k, cmd->argv[k]);
-                k++;
-            }
+			k = 0;
+			while (k < cmd->argc)
+			{
+				printf("    argv[%d]: %s\n", k, cmd->argv[k]);
+				k++;
+			}
 
-            j++;
-        }
+			j++;
+		}
 
-        printf("========================================\n");
-        i++;
-    }
+		printf("========================================\n");
+		i++;
+	}
 }
 
 void	init_appdata(t_appdata *appdata)
@@ -87,55 +87,46 @@ void	init_appdata(t_appdata *appdata)
 	appdata->first_token = NULL;
 }
 
+void	new_cycle_preparation(t_appdata *appdata)
+{
+	int	exit_code;
+	int last_index;
+
+	exit_code = 0;
+	last_index = appdata->lists_num - 1;
+	if (appdata->should_exit == TRUE)
+	{
+		exit_code = appdata->exit_code;
+		free_env(appdata->env);
+		free_memory(appdata);
+		exit(exit_code);
+	}
+	appdata->exit_code = appdata->lists[last_index].exec_data->status;
+	free_memory(appdata);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_appdata	appdata;
-	(void) argc;
-	(void) argv;
-	int	i;
 
+	(void)argc;
+	(void)argv;
 	init_appdata(&appdata);
 	initialize_env_var(&appdata, envp);
 	while (1)
 	{
-		i = 1;
 		input = readline("minishell: ");
 		if (!input)
-		{
-			// printf("break occured!\n");
-			break;
-		}
+			break ;
 		save_history(input);
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
 		// print_lists(&appdata);
-		start_execution(&appdata, &appdata.lists[0]);
-		while (i < appdata.lists_num)
-		{	
-			if (appdata.lists[i - 1].and_after && !appdata.lists[i - 1].exec_data->status)
-				start_execution(&appdata, &appdata.lists[i]);
-			else if (appdata.lists[i - 1].or_after && appdata.lists[i - 1].exec_data->status)
-				start_execution(&appdata, &appdata.lists[i]);
-			i++;
-		}
-		if (appdata.should_exit == TRUE)
-		{
-			int exit_code = appdata.exit_code;
-			free_memory(&appdata);
-			exit(exit_code);
-		}
-		appdata.exit_code = appdata.lists[i-1].exec_data->status;
-		// printf("Appdata exit code: %i\n", appdata.exit_code);
-		i = 0;
-		while (i < appdata.lists_num)
-		{
-			free_lists(&appdata.lists[i]);
-			i++;
-		}
-		free(appdata.lists);
+		start_execution(&appdata);
+		new_cycle_preparation(&appdata);
 	}
 	return (0);
 }

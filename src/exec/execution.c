@@ -3,25 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/22 21:53:56 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/24 17:23:05 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //TODO - make a status array and make all po krasote vasche
-static void wait_for_children(t_appdata *appdata, t_list *list)
+static void	wait_for_children(t_appdata *appdata, t_list *list)
 {
-	int i;
+	int		i;
 	pid_t	pid;
-	
+
 	i = 0;
 	while (i < list->size)
 	{
-		pid = waitpid(list->exec_data->processes[i], &list->exec_data->status, 0);
+		pid = waitpid(list->exec_data->processes[i],
+				&list->exec_data->status, 0);
 		if (pid == -1)
 			error_rising(appdata);
 		i++;
@@ -72,38 +73,7 @@ static void	prepare_pipes(t_appdata *appdata, t_list *list)
 	}
 }
 
-static void	execute_single(t_appdata *appdata, t_list *list)
-{
-	pid_t	pid;
-	int		status;
-
-	if (list->cmd[0].is_builtin == FALSE)
-	{
-		pid = fork();
-		if (pid == -1)
-			error_rising(appdata);
-		if (pid == 0)
-			only_child(appdata, list);
-		if (waitpid(pid, &list->exec_data->status, 0) == -1)
-			error_rising(appdata);
-	}
-	else
-	{
-		status = execute_a_builtin(appdata, &list->cmd[0]);
-		list->exec_data->status = status;
-	}
-}
-
-void init_exec_data(t_list *list)
-{
-	list->exec_data->infile = -1;
-	list->exec_data->outfile = -1;
-	list->exec_data->status = 0;
-	list->exec_data->fd = NULL;
-	list->exec_data->processes = NULL;
-}
-
-void	start_execution(t_appdata *appdata, t_list *list)
+static void	execute_a_list(t_appdata *appdata, t_list *list)
 {
 	int	i;
 
@@ -128,4 +98,26 @@ void	start_execution(t_appdata *appdata, t_list *list)
 	}
 	else
 		execute_single(appdata, list);
+}
+
+void	start_execution(t_appdata *appdata)
+{
+	int	i;
+
+	i = 1;
+	execute_a_list(appdata, &appdata->lists[0]);
+	while (i < appdata->lists_num)
+	{
+		if (appdata->lists[i - 1].and_after == TRUE)
+		{
+			if (appdata->lists[i - 1].exec_data->status == SUCCESS)
+				execute_a_list(appdata, &appdata->lists[i]);
+		}
+		else if (appdata->lists[i - 1].or_after == TRUE)
+		{
+			if (appdata->lists[i - 1].exec_data->status != SUCCESS)
+				execute_a_list(appdata, &appdata->lists[i]);
+		}
+		i++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 18:45:50 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/24 15:52:43 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ int	open_files(t_list *list, int is_input)
 		res = open(list->cmd[0].infile_name, O_RDONLY);
 	else if (is_input == 1 && list->cmd[0].input_redir_type == HEREDOC)
 		res = open("here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (is_input == 0 && list->cmd[list->size - 1].output_redir_type == STDOUT)
+	else if (is_input == 0
+		&& list->cmd[list->size - 1].output_redir_type == STDOUT)
 		res = open(list->cmd[list->size - 1].outfile_name,
 				O_RDWR | O_CREAT | O_TRUNC, 0644);
-	else if (is_input == 0 && list->cmd[list->size - 1].output_redir_type == APPEND)
+	else if (is_input == 0
+		&& list->cmd[list->size - 1].output_redir_type == APPEND)
 		res = open(list->cmd[list->size - 1].outfile_name,
 				O_RDWR | O_CREAT | O_APPEND, 0644);
 	return (res);

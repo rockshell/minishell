@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/14 16:51:48 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/24 16:12:52 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,8 @@ utils/built-in_utils2.c \
 utils/env_utils.c \
 utils/execution_utils.c \
 utils/execution_utils2.c \
-utils/free_utils.c \
+utils/free_utils1.c \
+utils/free_utils2.c \
 env_init.c \
 main.c
 OBJ = $(SRC:.c=.o)
