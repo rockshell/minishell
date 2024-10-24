@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/23 17:52:39 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/24 13:35:31 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ int	main(int argc, char **argv, char **envp)
 			free_memory(&appdata);
 			exit(exit_code);
 		}
+		appdata.exit_code = appdata.lists[i-1].exec_data->status;
+		// printf("Appdata exit code: %i\n", appdata.exit_code);
 		i = 0;
 		while (i < appdata.lists_num)
 		{
