@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/24 13:35:31 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/23 16:26:20 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell: ");
 		if (!input)
 		{
-			printf("break occured!\n");
+			// printf("break occured!\n");
 			break;
 		}
 		save_history(input);
