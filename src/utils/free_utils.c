@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 15:29:24 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 19:24:15 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/23 17:42:43 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	free_exec_data(t_list *list)
 		free(list->exec_data->processes);
 	while (++i < (list->size - 1))
 	{
-		close(list->exec_data->fd[i][0]);
-		close(list->exec_data->fd[i][1]);
+		if (list->exec_data->fd[i][0] != -1)
+			close(list->exec_data->fd[i][0]);
+		if (list->exec_data->fd[i][1] != -1)
+			close(list->exec_data->fd[i][1]);
 		free(list->exec_data->fd[i]);
 	}
 	free(list->exec_data->fd);
@@ -32,6 +34,7 @@ void	free_exec_data(t_list *list)
 		close(list->exec_data->outfile);
 	if (list->cmd[0].input_redir_type == HEREDOC)
 		unlink("here_doc.txt");
+	free(list->exec_data);
 }
 
 void	free_lists(t_list *list)
@@ -40,10 +43,10 @@ void	free_lists(t_list *list)
 	int	j;
 
 	i = -1;
-	j = -1;
 	free_exec_data(list);
 	while (++i < list->size)
 	{
+		j = -1;
 		if (list->cmd[i].argv)
 		{
 			while (list->cmd[i].argv[++j])
@@ -56,8 +59,8 @@ void	free_lists(t_list *list)
 			free(list->cmd[i].infile_name);
 		if (list->cmd[i].outfile_name)
 			free(list->cmd[i].outfile_name);
-		//free(list->cmd[i]) if it was allocated
 	}
+	free(list->cmd);
 	//free(list) if it was allocated
 }
 
@@ -85,6 +88,7 @@ void	free_memory(t_appdata *appdata)
 	i = -1;
 	while (++i < appdata->lists_num)
 		free_lists(&appdata->lists[i]);
+	free(appdata->lists);
 	// free_tokens(appdata->tokens);
 	free_env(appdata->env);
 }

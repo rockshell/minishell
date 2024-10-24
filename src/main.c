@@ -99,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 	initialize_env_var(&appdata, envp);
 	while (1)
 	{
-		i = 0;
+		i = 1;
 		input = readline("minishell: ");
 		if (!input)
 		{
@@ -112,13 +112,12 @@ int	main(int argc, char **argv, char **envp)
 		free(input);
 		run_lexer(&appdata);
 		// print_lists(&appdata);
-		start_execution(&appdata, &appdata.lists[i]);
-		i++;
+		start_execution(&appdata, &appdata.lists[0]);
 		while (i < appdata.lists_num)
 		{	
-			if (appdata.lists[i].and_after && !appdata.lists[i].exec_data->status)
+			if (appdata.lists[i - 1].and_after && !appdata.lists[i - 1].exec_data->status)
 				start_execution(&appdata, &appdata.lists[i]);
-			else if (appdata.lists[i].or_after && appdata.lists[i].exec_data->status)
+			else if (appdata.lists[i - 1].or_after && appdata.lists[i - 1].exec_data->status)
 				start_execution(&appdata, &appdata.lists[i]);
 			i++;
 		}
@@ -128,12 +127,15 @@ int	main(int argc, char **argv, char **envp)
 			free_memory(&appdata);
 			exit(exit_code);
 		}
+		appdata.exit_code = appdata.lists[i-1].exec_data->status;
+		// printf("Appdata exit code: %i\n", appdata.exit_code);
 		i = 0;
 		while (i < appdata.lists_num)
 		{
 			free_lists(&appdata.lists[i]);
 			i++;
 		}
+		free(appdata.lists);
 	}
 	return (0);
 }
