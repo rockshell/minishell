@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/25 16:52:41 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/25 17:31:47 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ utils/built-in_utils1.c \
 utils/built-in_utils2.c \
 utils/children_utils.c \
 utils/env_utils.c \
+utils/envp_array_utils.c \
 utils/execution_utils.c \
 utils/free_utils1.c \
 utils/free_utils2.c \

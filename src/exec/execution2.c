@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:10 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 16:44:22 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/25 18:14:30 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,17 @@ int	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
 	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
 		exit_status = ft_exit(appdata, cmd);
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
+	{
 		exit_status = ft_export(cmd, appdata->env);
+		update_envp_array(appdata, appdata->env);
+	}
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
 		exit_status = ft_pwd();
 	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+	{
 		exit_status = ft_unset(cmd, appdata->env);
+		update_envp_array(appdata, appdata->env);
+	}
 	return (exit_status);
 }
 

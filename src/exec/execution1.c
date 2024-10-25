@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 16:54:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/25 18:11:38 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	start_execution(t_appdata *appdata)
 		if (appdata->should_exit == TRUE)
 		{
 			free_env(appdata->env);
+			free_envp_array(appdata->envp);
 			free_memory(appdata);
 			exit(appdata->exit_code);
 		}

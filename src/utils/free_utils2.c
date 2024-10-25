@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/24 16:12:02 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/25 18:17:52 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,21 @@ void	free_env(t_env *env)
 	env = NULL;
 }
 
+void	free_envp_array(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+		free(envp[i++]);
+	free(envp);
+}
+
 void	error_rising(t_appdata *appdata)
 {
 	perror("Error");
 	free_env(appdata->env);
+	free_envp_array(appdata->envp);
 	free_memory(appdata);
 	exit(FAILURE);
 }
