@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.c                                        :+:      :+:    :+:   */
+/*   execution1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 20:07:49 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/24 17:23:05 by vitakinsfat      ###   ########.fr       */
+/*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
+/*   Updated: 2024/10/25 16:54:21 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//TODO - make a status array and make all po krasote vasche
 static void	wait_for_children(t_appdata *appdata, t_list *list)
 {
 	int		i;
 	pid_t	pid;
+	int		status;
 
 	i = 0;
 	while (i < list->size)
 	{
-		pid = waitpid(list->exec_data->processes[i],
-				&list->exec_data->status, 0);
+		pid = waitpid(list->exec_data->processes[i], &status, 0);
 		if (pid == -1)
 			error_rising(appdata);
+		if (WIFEXITED(status))
+			list->exec_data->status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			list->exec_data->status = WTERMSIG(status) + SIGNAL_EXIT;
 		i++;
 	}
 }
@@ -108,6 +111,12 @@ void	start_execution(t_appdata *appdata)
 	execute_a_list(appdata, &appdata->lists[0]);
 	while (i < appdata->lists_num)
 	{
+		if (appdata->should_exit == TRUE)
+		{
+			free_env(appdata->env);
+			free_memory(appdata);
+			exit(appdata->exit_code);
+		}
 		if (appdata->lists[i - 1].and_after == TRUE)
 		{
 			if (appdata->lists[i - 1].exec_data->status == SUCCESS)

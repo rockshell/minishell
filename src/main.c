@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/24 16:14:06 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/24 20:51:35 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,6 @@ int	main(int argc, char **argv, char **envp)
 		start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}
-	return (0);
+	printf("EC = %d\n", appdata.exit_code);
+	return (appdata.exit_code);
 }

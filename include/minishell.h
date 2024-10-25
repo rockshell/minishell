@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/24 15:56:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/25 16:50:11 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@
 # define SUCCESS 0
 # define FAILURE 1
 # define COMMAND_MISUSE 2
+# define COMMAND_NOT_EXECUTABLE 126
 # define COMMAND_NOT_FOUND 127
+# define INVALID_ARGUMENT 128
+# define SIGNAL_EXIT 128
 
 typedef struct s_env
 {
@@ -181,6 +184,7 @@ size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
 void		close_fds(t_list *list, int current_pipe);
 void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
+void		print_child_error_message(t_appdata *appdata, char *cmd_name);
 void		redirect_only_child(t_appdata *appdata, t_list *list);
 void		rwr_heredoc(t_appdata *appdata, t_list *list, char *delim);
 

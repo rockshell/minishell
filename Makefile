@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/24 16:12:52 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/25 16:52:41 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,21 +25,22 @@ built-in/ft_export.c \
 built-in/ft_pwd.c \
 built-in/ft_unset.c \
 exec/children.c \
-exec/execution.c \
+exec/execution1.c \
+exec/execution2.c \
 exec/file_manager.c \
-exec/get_next_line_utils.c \
-exec/get_next_line.c \
 parsing/pre_parser_utils.c \
 parsing/pre_parser.c \
 parsing/lexer.c \
 parsing/lexer_utils.c \
 utils/built-in_utils1.c \
 utils/built-in_utils2.c \
+utils/children_utils.c \
 utils/env_utils.c \
 utils/execution_utils.c \
-utils/execution_utils2.c \
 utils/free_utils1.c \
 utils/free_utils2.c \
+utils/get_next_line_utils.c \
+utils/get_next_line.c \
 env_init.c \
 main.c
 OBJ = $(SRC:.c=.o)
