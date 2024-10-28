@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/24 15:56:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/25 18:19:21 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@
 # define SUCCESS 0
 # define FAILURE 1
 # define COMMAND_MISUSE 2
+# define COMMAND_NOT_EXECUTABLE 126
 # define COMMAND_NOT_FOUND 127
+# define INVALID_ARGUMENT 128
+# define SIGNAL_EXIT 128
 
 typedef struct s_env
 {
@@ -127,6 +130,7 @@ typedef struct s_appdata
 	int		lists_num;
 	int		exit_code;
 	int		should_exit;
+	int		envp_needs_update;
 	char	**envp;
 	t_token	*tokens;
 	t_token	*first_token;
@@ -156,6 +160,8 @@ long long	ft_atoll(char *str);
 //enviromentals
 int			create_env_node(t_env **env, char *current_env);
 int			initialize_env_var(t_appdata *appdata, char **envp);
+int			init_envp_array(t_appdata *appdata, char **envp);
+int			update_envp_array(t_appdata *appdata, t_env *env);
 
 //environmentals utils
 char		*ft_get_env(t_env *env, char *key);
@@ -181,6 +187,7 @@ size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
 void		close_fds(t_list *list, int current_pipe);
 void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
+void		print_child_error_message(t_appdata *appdata, char *cmd_name);
 void		redirect_only_child(t_appdata *appdata, t_list *list);
 void		rwr_heredoc(t_appdata *appdata, t_list *list, char *delim);
 
@@ -190,12 +197,13 @@ void		last_child(t_appdata *appdata, t_list *list, int i);
 void		mid_child(t_appdata *appdata, t_list *list, int i);
 void		only_child(t_appdata *appdata, t_list *list);
 
-//utils 
-void		free_memory(t_appdata *appdata);
+//utils for freeing
 void		free_env(t_env *env);
-void		error_rising(t_appdata *appdata);
+void		free_envp_array(char **envp);
 void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
+void		free_memory(t_appdata *appdata);
+void		error_rising(t_appdata *appdata);
 
 //parsing - utils
 char		*handle_num_quotes(char *input);

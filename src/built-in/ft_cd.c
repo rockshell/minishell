@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:11 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 19:15:30 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/28 16:27:50 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	update_envs(char *cwd, t_env *env)
 	char	new_pwd[1024];
 
 	if (getcwd(new_pwd, 1024) == NULL)
-		return (perror("minishell: cd:"), FAILURE);
+		return (perror("minishell: cd"), FAILURE);
 	free_and_renew_env_value(env, "OLDPWD", cwd);
 	free_and_renew_env_value(env, "PWD", new_pwd);
 	return (SUCCESS);
@@ -82,17 +82,17 @@ int	ft_cd(t_cmd *cmd, t_env *env)
 	else if (cmd->argc > 2)
 		return (ft_putstr_fd(CD_TOO_MANY_ARG_ERROR, 2), FAILURE);
 	if (getcwd(cwd, 1024) == NULL)
-		return (perror("minishell: cd: "), FAILURE);
+		return (perror("minishell: cd"), FAILURE);
 	if (cmd->argv[1] && cmd->argv[1][0] == '/')
 		path = ft_strdup(cmd->argv[1]);
 	else if (cmd->argv[1] && cmd->argv[1][0] != '/')
 	{
 		path = relative_path_preparation(cmd, env);
 		if (!path)
-			return (perror("minishell: cd: "), FAILURE);
+			return (perror("minishell: cd"), FAILURE);
 	}
 	if (chdir(path) == -1)
-		return (perror("minishell: cd: "), FAILURE);
+		return (perror("minishell: cd"), FAILURE);
 	if (get_type_of_relative_path(cmd) != 1)
 		update_envs(cwd, env);
 	free(path);
