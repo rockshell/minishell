@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 18:15:32 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/28 16:19:11 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,10 @@ void	first_child(t_appdata *appdata, t_list *list)
 		status = execute_a_builtin(appdata, &list->cmd[0]);
 		exit(status);
 	}
-	else
+	if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
 	{
-		if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
-		{
-			free(path);
-			error_rising(appdata);
-		}
+		free(path);
+		error_rising(appdata);
 	}
 }
 
@@ -60,13 +57,10 @@ void	last_child(t_appdata *appdata, t_list *list, int i)
 		status = execute_a_builtin(appdata, &list->cmd[i]);
 		exit(status);
 	}
-	else
+	if (execve(path, list->cmd[i].argv, appdata->envp) == -1)
 	{
-		if (execve(path, list->cmd[i].argv, appdata->envp) == -1)
-		{
-			free(path);
-			error_rising(appdata);
-		}
+		free(path);
+		error_rising(appdata);
 	}
 }
 
@@ -89,37 +83,24 @@ void	mid_child(t_appdata *appdata, t_list *list, int i)
 		status = execute_a_builtin(appdata, &list->cmd[i]);
 		exit(status);
 	}
-	else
+	if (execve(path, list->cmd[i].argv, appdata->envp) == -1)
 	{
-		if (execve(path, list->cmd[i].argv, appdata->envp) == -1)
-		{
-			free(path);
-			error_rising(appdata);
-		}
+		free(path);
+		error_rising(appdata);
 	}
 }
 
 void	only_child(t_appdata *appdata, t_list *list)
 {
 	char	*path;
-	int		status;
 
-	status = 0;
 	redirect_only_child(appdata, list);
-	if (list->cmd[0].is_builtin == TRUE)
-	{
-		status = execute_a_builtin(appdata, &list->cmd[0]);
-		exit(status);
-	}
 	path = make_path(&list->cmd[0]);
 	if (!path)
 		print_child_error_message(appdata, list->cmd[0].argv[0]);
-	else
-	{
-		if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
+	if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
 		{
 			free(path);
 			error_rising(appdata);
 		}
-	}
 }

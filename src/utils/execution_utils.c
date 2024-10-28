@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 18:41:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 16:49:08 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/28 16:42:35 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_if_builtin(t_cmd cmd)
 {
-	if (!cmd.argv[0])
+	if (!cmd.argv[0] || cmd.argv[0][0] == '\0')
 		return (-1);
 	if (ft_strcmp(cmd.argv[0], "cd") == 0)
 		return (TRUE);

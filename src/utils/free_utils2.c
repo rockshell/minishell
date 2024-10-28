@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 18:17:52 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/28 16:36:34 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,31 @@ void	free_envp_array(char **envp)
 	int	i;
 
 	i = 0;
+	if (!envp)
+		return ;
 	while (envp[i])
-		free(envp[i++]);
+	{
+		if (envp[i])
+			free(envp[i]);
+		i++;
+	}
 	free(envp);
 }
 
 void	error_rising(t_appdata *appdata)
 {
-	perror("Error");
+	int exit_code;
+
+	exit_code = 1;
+	if (errno == EACCES)
+		exit_code = COMMAND_NOT_EXECUTABLE;
+	else if (errno == ENOENT)
+		exit_code = COMMAND_NOT_FOUND;
+	else if (errno == ENOMEM)
+		exit_code = FAILURE;
+	perror("minishell: ");
 	free_env(appdata->env);
 	free_envp_array(appdata->envp);
 	free_memory(appdata);
-	exit(FAILURE);
+	exit(exit_code);
 }

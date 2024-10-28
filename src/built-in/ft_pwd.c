@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 18:40:04 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/28 16:28:53 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_pwd(void)
 	}
 	else
 	{
-		perror("minishell: pwd: ");
+		perror("minishell: pwd");
 		return (FAILURE);
 	}
 }

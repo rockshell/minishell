@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 18:11:38 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/28 16:17:07 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,13 @@ static void	wait_for_children(t_appdata *appdata, t_list *list)
 		pid = waitpid(list->exec_data->processes[i], &status, 0);
 		if (pid == -1)
 			error_rising(appdata);
-		if (WIFEXITED(status))
-			list->exec_data->status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			list->exec_data->status = WTERMSIG(status) + SIGNAL_EXIT;
+		if (i == list->size - 1)
+		{
+			if (WIFEXITED(status))
+				list->exec_data->status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				list->exec_data->status = WTERMSIG(status) + SIGNAL_EXIT;
+		}
 		i++;
 	}
 }
