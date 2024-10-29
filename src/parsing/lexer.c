@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/29 16:44:43 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/29 22:11:11 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,69 @@ void check_if_env(t_token *token)
 	}
 }
 
+void	expand_single_token(t_token *token, t_env *env)
+{
+	int		i;
+	int		j;
+	char	*temp;
+	char	*env_temp;
+	char	*value;
+	char	*new_value;
+	size_t	len;
+
+	value = token->value;
+	len = ft_strlen(value);
+	i = 0;
+	j = 0;
+	new_value = NULL;
+	while (i < (int)len)
+	{
+		while (value[j] != '$')
+			j++;
+		if (j != 0)
+		{
+			temp = ft_substr(value, i, (size_t)j);
+			new_value = gnl_strjoin(new_value, temp);
+			free(temp);
+		}
+		j++;
+		i = j;
+		while (ft_isspace(value[j]) == 0 && value[j] != '$' && value[j] != '\0')
+		{
+			// printf("J: %i\n", j);
+			j++;
+		}	
+		temp = ft_substr(value, i, (size_t) j-i);
+		env_temp = ft_get_env(env, temp);
+		printf("kek\n");
+		new_value = gnl_strjoin(new_value, env_temp);
+		printf("New value is: %s\n", new_value);
+		free(temp);
+		free(env_temp);
+		i = j;
+		i++;
+	}
+	free(token->value);
+	token->value = ft_strdup(new_value);
+	free(new_value);
+}
+
+void	expand_tokens(t_token *first_token, t_env *env)
+{
+	t_token *current;
+
+	current = first_token;
+	while (current)
+	{
+		if (current->needs_expanding)
+		{
+			expand_single_token(current, env);
+		}	
+		current = current->next;
+	}
+	
+}
+
 //TODO - return a pointer instead of struct
 t_list	make_a_list(t_appdata *appdata, int start, int end)
 {
@@ -100,6 +163,8 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 	list = init_the_list(start, end);
 	check_if_env(appdata->first_token);
 	clean_the_quotes(appdata, appdata->first_token);
+	// print_tokens(appdata);
+	expand_tokens(appdata->first_token, appdata->env);
 	while (cmd_end && cmd_end->pos <= end)
 	{
 		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
+#    By: arch <arch@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/29 16:47:44 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/29 22:05:35 by arch             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ utils/free_utils1.c \
 utils/free_utils2.c \
 utils/get_next_line_utils.c \
 utils/get_next_line.c \
+utils/print_utils.c \
 env_init.c \
 main.c
 OBJ = $(SRC:.c=.o)
