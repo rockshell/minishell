@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/28 16:43:32 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/29 16:30:24 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ void	new_cycle_preparation(t_appdata *appdata)
 		free_memory(appdata);
 		exit(exit_code);
 	}
-	appdata->exit_code = appdata->lists[last_index].exec_data->status;
+	if (appdata->lists)
+		appdata->exit_code = appdata->lists[last_index].exec_data->status;
 	free_memory(appdata);
 }
 
@@ -156,7 +157,8 @@ int	main(int argc, char **argv, char **envp)
 		free(input);
 		run_lexer(&appdata);
 		// print_lists(&appdata);
-		start_execution(&appdata);
+		if (appdata.exit_code != 2)
+			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}
 	return (appdata.exit_code);

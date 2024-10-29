@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/25 17:31:47 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/29 16:47:44 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ parsing/pre_parser_utils.c \
 parsing/pre_parser.c \
 parsing/lexer.c \
 parsing/lexer_utils.c \
+parsing/quotes_handling.c \
+parsing/syntax_check.c \
 utils/built-in_utils1.c \
 utils/built-in_utils2.c \
 utils/children_utils.c \

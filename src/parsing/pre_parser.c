@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 17:59:18 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/29 15:53:06 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,10 @@ void	make_token(char *input, int *start, int token_pos, t_token *current)
 	*start += (int)len;
 }
 
-int run_parsing(char *input, t_appdata *appdata)
+int	run_parsing(char *input, t_appdata *appdata)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 	t_token	*prev;
 
 	i = -1;
@@ -120,7 +120,6 @@ int run_parsing(char *input, t_appdata *appdata)
 	prev = NULL;
 	appdata->tokens_num = count_tokens(input);
 	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
-
 	while (++i < appdata->tokens_num)
 	{
 		make_token(input, &j, i, &appdata->tokens[i]);

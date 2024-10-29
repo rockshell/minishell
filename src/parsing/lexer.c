@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/24 17:20:22 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/29 16:44:43 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,48 @@ t_list	init_the_list(int start, int end)
 	return (list);
 }
 
+void	clean_the_quotes(t_appdata *appdata, t_token *token)
+{
+	char	*unquoted_value;
+	int		len;
+
+	while (token)
+	{
+		if (is_contain_quotes(token) == TRUE)
+		{
+			if (ft_strchr(token->value, '$'))
+				handle_env_quotes(appdata, token);
+			else
+			{
+				len = count_quoted_len(token);
+				unquoted_value = malloc(sizeof(char) * (len + 1));
+				if (!unquoted_value)
+					error_rising(appdata);
+				no_quote_copy(token, unquoted_value);
+				free(token->value);
+				token->value = ft_strdup(unquoted_value);
+				if (!token->value)
+					error_rising(appdata);
+				free(unquoted_value);
+			}
+		}
+		token = token->next;
+	}
+}
+
+void check_if_env(t_token *token)
+{
+	t_token *temp;
+
+	temp = token;
+	while (temp)
+	{
+		if (ft_strchr(temp->value, '$'))
+			temp->needs_expanding = 1;
+		temp = temp->next;
+	}
+}
+
 //TODO - return a pointer instead of struct
 t_list	make_a_list(t_appdata *appdata, int start, int end)
 {
@@ -56,6 +98,8 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 	cmd_start = &appdata->tokens[start];
 	cmd_end = cmd_start;
 	list = init_the_list(start, end);
+	check_if_env(appdata->first_token);
+	clean_the_quotes(appdata, appdata->first_token);
 	while (cmd_end && cmd_end->pos <= end)
 	{
 		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)
@@ -92,6 +136,11 @@ void run_lexer(t_appdata *appdata)
 	
 	i = -1;
 	start_pos = 0;
+	if (syntax_check(appdata->first_token) == FALSE)
+	{
+		appdata->exit_code = 2;
+		return ;
+	}
 	num_of_lists = count_lists(appdata);
 	lists = malloc(sizeof(t_list) * num_of_lists);
 	current = appdata->first_token;
@@ -107,4 +156,3 @@ void run_lexer(t_appdata *appdata)
 	appdata->lists_num = num_of_lists;
 	appdata->lists = lists;
 }
-

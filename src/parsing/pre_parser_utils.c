@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:44:59 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/22 18:01:40 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/29 15:53:22 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void init_token(int	i, t_token *current)
+void	init_token(int	i, t_token *current)
 {
 	current->pos = i;
 	current->is_parsed = 0;
+	current->needs_expanding = 0;
 	current->type = 0;
 	current->prev = NULL;
 	current->next = NULL;

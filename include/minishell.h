@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/25 18:19:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/29 16:45:15 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define CD_ONE_ARG_ERROR "minishell: cd: no absolute or relative path specified\n"
 # define CD_TOO_MANY_ARG_ERROR "minishell: cd: too many arguments\n"
 # define EXIT_TOO_MANY_ARG_ERROR "minishell: exit: too many arguments\n"
+# define SYNTAX_ERROR "minishell: syntax error near unexpected token `"
 
 # define WORD 0
 # define ARGUMENT 1
@@ -86,6 +87,7 @@ typedef struct s_token
 	int		pos;
 	int		type;
 	int		is_parsed;
+	int		needs_expanding;
 	char	*value;
 	t_token	*prev;
 	t_token	*next;
@@ -210,10 +212,17 @@ char		*handle_num_quotes(char *input);
 int			ft_isspace(char c);
 int			run_parsing(char *input, t_appdata *appdata);
 int			count_lists(t_appdata *appdata);
+int			count_quoted_len(t_token *token);
 int			is_cmd_end(t_token *token);
+int			is_contain_quotes(t_token *token);
 int			is_list_end(t_token *token);
+int			is_token_redirection(t_token *token);
+int			is_quotes_double(t_token *token);
+int			syntax_check(t_token *token);
 size_t		handle_len_quotes(char *input, size_t i);
+void 		handle_env_quotes(t_appdata *appdata, t_token *token);
 void		init_token(int i, t_token *current);
+void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 void		set_the_command_itself(t_cmd *cmd, t_token *first);
