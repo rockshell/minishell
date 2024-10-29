@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arch <arch@student.42.fr>                  +#+  +:+       +#+         #
+#    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/29 22:05:35 by arch             ###   ########.fr        #
+#    Updated: 2024/10/30 00:02:26 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ exec/children.c \
 exec/execution1.c \
 exec/execution2.c \
 exec/file_manager.c \
+parsing/expand_utils.c \
+parsing/expand.c \
 parsing/pre_parser_utils.c \
 parsing/pre_parser.c \
 parsing/lexer.c \
@@ -46,6 +48,7 @@ utils/get_next_line_utils.c \
 utils/get_next_line.c \
 utils/print_utils.c \
 env_init.c \
+init.c \
 main.c
 OBJ = $(SRC:.c=.o)
 SRCS = $(addprefix $(SRC_PATH), $(SRC))

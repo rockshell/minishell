@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/29 22:04:27 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/29 23:16:01 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,32 @@ void	save_history(char *cmd)
 		add_history(cmd);
 }
 
-void	init_appdata(t_appdata *appdata)
+void update_exit_code(t_appdata *appdata)
 {
-	appdata->tokens_num = 0;
-	appdata->lists_num = 0;
-	appdata->exit_code = 0;
-	appdata->should_exit = 0;
-	appdata->envp_needs_update = 0;
-	appdata->envp = NULL;
-	appdata->env = NULL;
-	appdata->lists = NULL;
-	appdata->tokens = NULL;
-	appdata->first_token = NULL;
+	int last_index;
+	int exit_code;
+	
+	last_index = appdata->lists_num - 1;
+	if (appdata->lists)
+	{
+		exit_code = appdata->lists[last_index].exec_data->status;
+		free(appdata->exit_status->value);
+		appdata->exit_status->value = ft_itoa(exit_code);
+	}
+	else
+	{
+		exit_code = appdata->exit_code;
+		free(appdata->exit_status->value);
+		appdata->exit_status->value = ft_itoa(exit_code);
+		appdata->exit_code = 0;
+	}
 }
 
 void	new_cycle_preparation(t_appdata *appdata)
 {
 	int	exit_code;
-	int last_index;
 
 	exit_code = 0;
-	last_index = appdata->lists_num - 1;
 	if (appdata->should_exit == TRUE)
 	{
 		exit_code = appdata->exit_code;
@@ -48,36 +53,8 @@ void	new_cycle_preparation(t_appdata *appdata)
 		free_memory(appdata);
 		exit(exit_code);
 	}
-	if (appdata->lists)
-		appdata->exit_code = appdata->lists[last_index].exec_data->status;
+	update_exit_code(appdata);
 	free_memory(appdata);
-}
-
-int	increment_shlvl(t_appdata *appdata, t_env *env)
-{
-	t_env	*temp;
-	int		num_val;
-
-	temp = env;
-	while (temp)
-	{
-		if (ft_strcmp(temp->key, "SHLVL") == 0)
-		{
-			num_val = ft_atoi(temp->value);
-			num_val++;
-			free(temp->value);
-			temp->value = ft_itoa(num_val);
-			if (!temp->value)
-			{
-				ft_putstr_fd(ALLOC_ERROR, 2);
-				error_rising(appdata);
-				return (FAILURE);
-			}
-			break ;
-		}
-		temp = temp->next;
-	}
-	return (SUCCESS);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -87,10 +64,8 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	init_appdata(&appdata);
-	initialize_env_var(&appdata, envp);
-	increment_shlvl(&appdata, appdata.env);
-	init_envp_array(&appdata, envp);
+	if (initialization(&appdata, envp) == FAILURE)
+		return (FAILURE);
 	while (1)
 	{
 		input = readline("minishell: ");

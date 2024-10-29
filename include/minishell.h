@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/29 22:07:08 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/30 00:01:58 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ typedef struct s_appdata
 	t_token	*first_token;
 	t_list	*lists;
 	t_env	*env;
+	t_env	*exit_status;
 }	t_appdata;
 
 //built-in
@@ -227,7 +228,17 @@ void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 void		set_the_command_itself(t_cmd *cmd, t_token *first);
 
+//expand -utils
+char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
+int			count_expandables(char *value);
+int			no_sep(char *value);
+void		expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
+
 //printing - utils
 void		print_tokens(t_appdata *appdata);
 void		print_lists(t_appdata *appdata);
+
+//init
+int			initialization(t_appdata *appdata, char **envp);
+
 #endif
