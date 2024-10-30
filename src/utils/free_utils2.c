@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/28 16:36:34 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:58:37 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	free_envp_array(char **envp)
 
 void	error_rising(t_appdata *appdata)
 {
-	int exit_code;
+	int	exit_code;
 
 	exit_code = 1;
 	if (errno == EACCES)

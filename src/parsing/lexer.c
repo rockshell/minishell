@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/29 23:52:45 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:54:37 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void init_cmd(t_cmd *cmd, t_token *first_token, t_token *last_token, int is_pipe_before_flag)
+void	init_cmd(t_cmd *cmd, t_token *first_token, t_token *last_token, int is_pipe_before_flag)
 {
 	cmd->argc = 0;
 	cmd->input_redir_type = 0;
@@ -71,9 +71,9 @@ void	clean_the_quotes(t_appdata *appdata, t_token *token)
 	}
 }
 
-void check_if_env(t_token *token)
+void	check_if_env(t_token *token)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = token;
 	while (temp)
@@ -87,12 +87,12 @@ void check_if_env(t_token *token)
 //TODO - return a pointer instead of struct
 t_list	make_a_list(t_appdata *appdata, int start, int end)
 {
-	int	j;
-	int	is_pipe_before_flag;
+	int		j;
+	int		is_pipe_before_flag;
 	t_list	list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
-	
+
 	j = 0;
 	is_pipe_before_flag = 0;
 	cmd_start = &appdata->tokens[start];
@@ -100,7 +100,6 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 	list = init_the_list(start, end);
 	check_if_env(appdata->first_token);
 	clean_the_quotes(appdata, appdata->first_token);
-	// print_tokens(appdata);
 	expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
 	while (cmd_end && cmd_end->pos <= end)
 	{
@@ -116,18 +115,18 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 			cmd_end = cmd_start;
 		}
 		else
-			break;
+			break ;
 	}
 	if (appdata->tokens[end].type == LOGICAL_AND)
 		list.and_after = 1;
-	else if(appdata->tokens[end].type == LOGICAL_OR)
+	else if (appdata->tokens[end].type == LOGICAL_OR)
 		list.or_after = 1;
 	else
 		list.end_after = 1;
 	return (list);
 }
 
-void run_lexer(t_appdata *appdata)
+void	run_lexer(t_appdata *appdata)
 {
 	int		i;
 	int		num_of_lists;

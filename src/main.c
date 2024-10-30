@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/29 23:16:01 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:56:43 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	save_history(char *cmd)
 		add_history(cmd);
 }
 
-void update_exit_code(t_appdata *appdata)
+void	update_exit_code(t_appdata *appdata)
 {
-	int last_index;
-	int exit_code;
-	
+	int	last_index;
+	int	exit_code;
+
 	last_index = appdata->lists_num - 1;
 	if (appdata->lists)
 	{

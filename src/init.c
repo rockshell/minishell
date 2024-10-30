@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:58:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/29 23:53:04 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:56:26 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	increment_shlvl(t_appdata *appdata, t_env *env)
 	return (SUCCESS);
 }
 
-int initialization(t_appdata *appdata, char **envp)
+int	initialization(t_appdata *appdata, char **envp)
 {
 	init_appdata(appdata);
 	if (initialize_env_var(appdata, envp) == FAILURE)

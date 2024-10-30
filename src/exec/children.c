@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/28 16:19:11 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:56:00 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ void	only_child(t_appdata *appdata, t_list *list)
 	if (!path)
 		print_child_error_message(appdata, list->cmd[0].argv[0]);
 	if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
-		{
-			free(path);
-			error_rising(appdata);
-		}
+	{
+		free(path);
+		error_rising(appdata);
+	}
 }

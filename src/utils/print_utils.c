@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:04:14 by arch              #+#    #+#             */
-/*   Updated: 2024/10/29 22:08:15 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/30 18:58:06 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,24 @@ void	print_lists(t_appdata *appdata)
 	t_cmd	*cmd;
 
 	printf("\n=================\nPrinting lists one by one\n=================\n");
-
 	i = 0;
 	while (i < appdata->lists_num)
 	{
 		list = &appdata->lists[i];
 		printf("========== List %d (size: %d) ==========\n", i + 1, list->size);
-
 		j = 0;
 		while (j < list->size)
 		{
 			cmd = &list->cmd[j];
 			printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
-
 			k = 0;
 			while (k < cmd->argc)
 			{
 				printf("    argv[%d]: %s\n", k, cmd->argv[k]);
 				k++;
 			}
-
 			j++;
 		}
-
 		printf("========================================\n");
 		i++;
 	}

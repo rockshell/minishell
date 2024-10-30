@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/29 15:53:06 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:51:29 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	is_operator(char *input)
 		if (input[i + 1] && input[i + 1] == '>')
 			return (APPEND);
 		else
-			return(STDOUT);
+			return (STDOUT);
 	}
 	else if (input[i] == '&' && input[i + 1] && input[i + 1] == '&')
 		return (LOGICAL_AND);

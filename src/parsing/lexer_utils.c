@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/22 18:01:29 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/30 18:51:01 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	set_the_command_itself(t_cmd *cmd, t_token *first)
 {
-	int	i;
-	t_token *current;
+	int		i;
+	t_token	*current;
 
 	current = first;
 	while (is_cmd_end(current) == 0)
@@ -25,7 +25,7 @@ void	set_the_command_itself(t_cmd *cmd, t_token *first)
 		if (current->next)
 			current = current->next;
 		else
-			break;
+			break ;
 	}
 	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
 	current = first;
@@ -41,7 +41,7 @@ void	set_the_command_itself(t_cmd *cmd, t_token *first)
 		if (current->next)
 			current = current->next;
 		else
-			break;
+			break ;
 	}
 	cmd->argv[i] = NULL;
 }
@@ -51,19 +51,19 @@ void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 {
 	while (is_cmd_end(current) == 0 && current->next != NULL)
 	{
-		if (current->type >=3 && current->type <= 6)
+		if (current->type >= 3 && current->type <= 6)
 		{
 			if (current->type == 3)
 			{
 				cmd->input_redir_type = 3;
 				cmd->infile_name = ft_strdup(current->next->value);
 			}
-			else if(current->type == 4)
+			else if (current->type == 4)
 			{
 				cmd->output_redir_type = 4;
 				cmd->outfile_name = ft_strdup(current->next->value);
 			}
-			else if(current->type == 5)
+			else if (current->type == 5)
 			{
 				cmd->input_redir_type = 5;
 				cmd->delim = ft_strdup(current->next->value);
@@ -93,9 +93,9 @@ void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last)
 
 int	count_lists(t_appdata *appdata)
 {
-	int	res;
-	t_token *current;
-	
+	int		res;
+	t_token	*current;
+
 	res = 1;
 	current = appdata->first_token;
 	while (current)
@@ -110,7 +110,7 @@ int	count_lists(t_appdata *appdata)
 int	is_cmd_end(t_token *token)
 {
 	if (token->type == 2)
-		return (1); 
+		return (1);
 	if (token->type == 7 || token->type == 8)
 		return (1);
 	return (0);

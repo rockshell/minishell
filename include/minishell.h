@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/30 00:01:58 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:57:12 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ int			is_token_redirection(t_token *token);
 int			is_quotes_double(t_token *token);
 int			syntax_check(t_token *token);
 size_t		handle_len_quotes(char *input, size_t i);
-void 		handle_env_quotes(t_appdata *appdata, t_token *token);
+void		handle_env_quotes(t_appdata *appdata, t_token *token);
 void		init_token(int i, t_token *current);
 void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);

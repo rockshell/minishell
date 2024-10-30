@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:44:59 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/29 15:53:22 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:52:07 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_token(int	i, t_token *current)
+void	init_token(int i, t_token *current)
 {
 	current->pos = i;
 	current->is_parsed = 0;

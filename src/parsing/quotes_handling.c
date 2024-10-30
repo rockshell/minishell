@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:38:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/29 15:40:37 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 18:53:02 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	no_quote_copy(t_token *token, char *str)
 	str[j] = '\0';
 }
 
-void handle_env_quotes(t_appdata *appdata, t_token *token)
+void	handle_env_quotes(t_appdata *appdata, t_token *token)
 {
 	char	*unquoted_value;
 	int		len;
@@ -103,5 +103,3 @@ void handle_env_quotes(t_appdata *appdata, t_token *token)
 	if (is_double == FALSE)
 		token->needs_expanding = 0;
 }
-
-
