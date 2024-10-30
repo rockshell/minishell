@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:44:59 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 18:52:07 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 22:03:50 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,23 @@ size_t	handle_len_quotes(char *input, size_t i)
 		return (i);
 	}
 	return (0);
+}
+
+size_t	handle_len_redirs(char *input, size_t i)
+{
+	if (input[i] == '<')
+	{
+		if (input[i + 1] && input[i + 1] == '<')
+			i++;
+		i++;
+	}
+	else if (input[i] == '>')
+	{
+		if (input[i + 1] && input[i + 1] == '>')
+			i++;
+		i++;
+	}
+	return (i);
 }
 
 void	free_tokens(char **tokens)

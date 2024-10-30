@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/30 18:57:12 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 22:11:20 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ void		error_rising(t_appdata *appdata);
 
 //parsing - utils
 char		*handle_num_quotes(char *input);
+size_t	handle_len_redirs(char *input, size_t i);
 int			ft_isspace(char c);
 int			run_parsing(char *input, t_appdata *appdata);
 int			count_lists(t_appdata *appdata);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 18:51:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/30 22:10:26 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,28 @@ int	is_operator(char *input)
 	return (WORD);
 }
 
+char *handle_redirection_tokens(char *input, int *tokens_num)
+{
+	int	i;
+
+	i = 0;
+	if (input[i] == '<')
+	{
+		if (input[i+1] && input[i+1] == '<')
+			i++;
+		i++;
+		tokens_num++;
+	}
+	if (input[i] == '>')
+	{
+		if (input[i+1] && input[i+1] == '>')
+			i++;
+		i++;
+		tokens_num++;
+	}
+	return (input + i);
+}
+
 int	count_tokens(char *input)
 {
 	int	i;
@@ -59,6 +81,8 @@ int	count_tokens(char *input)
 			i++;
 			if (*input == '"' || *input == '\'')
 				input = handle_num_quotes(input);
+			else if (*input == '<' || *input == '>')
+				input = handle_redirection_tokens(input, &i);
 			else
 			{
 				while (!ft_isspace(*input) && *input)
@@ -80,6 +104,11 @@ size_t	len_of_input_string(char *input)
 	{
 		if (input[i] == '"' || input[i] == '\'')
 			i = handle_len_quotes(input, i);
+		else if (input[i] == '<' || input[i] == '>')
+		{
+			i = handle_len_redirs(input, i);
+			break;
+		}
 		else
 			i++;
 	}
