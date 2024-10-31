@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 20:53:49 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 22:53:48 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_operator(char *input)
 	return (WORD);
 }
 
-void	make_token(char *input, int *start, int token_pos, t_token *current)
+int	make_token(char *input, int *start, int token_pos, t_token *current)
 {
 	size_t	len;
 	char	*value;
@@ -51,13 +51,18 @@ void	make_token(char *input, int *start, int token_pos, t_token *current)
 	init_token(token_pos, current);
 	len = len_of_input_string(input + *start);
 	value = malloc(sizeof(char) * (len + 1));
+	if (!value)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	while (ft_isspace(input[*start]))
 		(*start)++;
 	ft_strlcpy(value, input + *start, len + 1);
 	current->value = ft_strtrim(value, " ");
+	if (!current->value)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	current->type = is_operator(value);
 	free(value);
 	*start += (int)len;
+	return (SUCCESS);
 }
 
 int	run_parsing(char *input, t_appdata *appdata)
@@ -71,6 +76,8 @@ int	run_parsing(char *input, t_appdata *appdata)
 	prev = NULL;
 	appdata->tokens_num = count_tokens(input);
 	appdata->tokens = malloc(sizeof(t_token) * appdata->tokens_num);
+	if (!appdata->tokens)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	while (++i < appdata->tokens_num)
 	{
 		make_token(input, &j, i, &appdata->tokens[i]);
@@ -83,5 +90,5 @@ int	run_parsing(char *input, t_appdata *appdata)
 			appdata->first_token = &appdata->tokens[i];
 		prev = &appdata->tokens[i];
 	}
-	return (0);
+	return (SUCCESS);
 }

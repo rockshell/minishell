@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/31 22:20:00 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 23:16:00 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
+int	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
 {
 	cmd->argc = 0;
 	cmd->input_redir_type = 0;
@@ -25,24 +25,29 @@ void	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
 	cmd->delim = NULL;
 	set_pipes_in_cmd(cmd, is_pipe_before, last);
 	set_redirections_in_cmd(cmd, first);
-	set_the_command_itself(cmd, first);
+	if (set_the_command_itself(cmd, first) == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
-t_list	init_the_list(int start, int end)
+//TODO - deal with overallocate
+int	init_the_list(t_list *list, int start, int end)
 {
-	t_list	list;
-
-	list.size = 0;
-	list.and_after = 0;
-	list.or_after = 0;
-	list.end_after = 0;
-	list.cmd = malloc(sizeof(t_cmd) * (end - start)); //TODO - deal with overallocate 
-	list.exec_data = malloc(sizeof(t_exec_data));
-	init_exec_data(&list);
-	return (list);
+	list->size = 0;
+	list->and_after = 0;
+	list->or_after = 0;
+	list->end_after = 0;
+	list->cmd = malloc(sizeof(t_cmd) * (end - start));
+	if (!list->cmd)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+	list->exec_data = malloc(sizeof(t_exec_data));
+	if (!list->exec_data)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+	init_exec_data(list);
+	return (SUCCESS);
 }
 
-void	clean_the_quotes(t_appdata *appdata, t_token *token)
+int	clean_the_quotes(t_appdata *appdata, t_token *token)
 {
 	char	*unquoted_value;
 	int		len;
@@ -58,41 +63,24 @@ void	clean_the_quotes(t_appdata *appdata, t_token *token)
 				len = count_quoted_len(token);
 				unquoted_value = malloc(sizeof(char) * (len + 1));
 				if (!unquoted_value)
-					error_rising(appdata);
+					return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 				no_quote_copy(token, unquoted_value);
 				free(token->value);
 				token->value = ft_strdup(unquoted_value);
 				if (!token->value)
-					error_rising(appdata);
+					return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 				free(unquoted_value);
 			}
 		}
 		token = token->next;
 	}
+	return (SUCCESS);
 }
 
-void	check_if_env(t_token *token)
-{
-	t_token	*temp;
-
-	temp = token;
-	while (temp)
-	{
-		if (ft_strchr(temp->value, '$'))
-		{
-			if (ft_strlen(temp->value) > 1)
-				temp->needs_expanding = 1;
-		}
-		temp = temp->next;
-	}
-}
-
-//TODO - return a pointer instead of struct
-t_list	make_a_list(t_appdata *appdata, int start, int end)
+int	make_commands(t_appdata *appdata, t_list *list, int start, int end)
 {
 	int		j;
 	int		is_pipe_before_flag;
-	t_list	list;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
 
@@ -100,15 +88,15 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 	is_pipe_before_flag = 0;
 	cmd_start = &appdata->tokens[start];
 	cmd_end = cmd_start;
-	list = init_the_list(start, end);
 	while (cmd_end && cmd_end->pos <= end)
 	{
 		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)
 			cmd_end = cmd_end->next;
-		init_cmd(&list.cmd[j++], cmd_start, cmd_end, is_pipe_before_flag);
-		if (cmd_end->type == 2)
+		if (init_cmd(&list->cmd[j++], cmd_start, cmd_end, is_pipe_before_flag) == FAILURE)
+			return (FAILURE);
+		if (cmd_end->type == PIPE)
 			is_pipe_before_flag = 1;
-		list.size++;
+		list->size++;
 		if (cmd_end->next)
 		{
 			cmd_start = cmd_end->next;
@@ -117,22 +105,31 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 		else
 			break ;
 	}
-	if (appdata->tokens[end].type == LOGICAL_AND)
-		list.and_after = 1;
-	else if (appdata->tokens[end].type == LOGICAL_OR)
-		list.or_after = 1;
-	else
-		list.end_after = 1;
-	return (list);
+	return (SUCCESS);
 }
 
-void make_lists(t_appdata *appdata)
+int	make_a_list(t_appdata *appdata, t_list *list, int start, int end)
+{
+	if (init_the_list(list, start, end) == FAILURE)
+		return (FAILURE);
+	if (make_commands(appdata, list, start, end) == FAILURE)
+		return (FAILURE);
+	if (appdata->tokens[end].type == LOGICAL_AND)
+		list->and_after = 1;
+	else if (appdata->tokens[end].type == LOGICAL_OR)
+		list->or_after = 1;
+	else
+		list->end_after = 1;
+	return (SUCCESS);
+}
+
+int	make_lists(t_appdata *appdata)
 {
 	int		i;
 	int		start_pos;
 	int		end_pos;
 	t_token	*current;
-	
+
 	i = -1;
 	start_pos = 0;
 	current = appdata->first_token;
@@ -141,28 +138,30 @@ void make_lists(t_appdata *appdata)
 		while (is_list_end(current) == FALSE)
 			current = current->next;
 		end_pos = current->pos;
-		appdata->lists[i] = make_a_list(appdata, start_pos, end_pos);
+		if (make_a_list(appdata, &appdata->lists[i], start_pos, end_pos) == 1)
+			return (FAILURE);
 		start_pos = end_pos + 1;
 		current = current->next;
 	}
+	return (SUCCESS);
 }
 
-void	run_lexer(t_appdata *appdata)
+int	run_lexer(t_appdata *appdata)
 {
 	if (syntax_check(appdata->first_token) == FALSE)
 	{
 		appdata->exit_code = 2;
-		return ;
+		return (FAILURE);
 	}
-	clean_the_quotes(appdata, appdata->first_token);
+	if (clean_the_quotes(appdata, appdata->first_token) == FAILURE)
+		return (FAILURE);
 	check_if_env(appdata->first_token);
 	expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
 	appdata->lists_num = count_lists(appdata);
 	appdata->lists = malloc(sizeof(t_list) * appdata->lists_num);
 	if (!appdata->lists)
-	{
-		ft_putstr_fd(ALLOC_ERROR, 2);
-		return ;
-	}
-	make_lists(appdata);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+	if (make_lists(appdata) == FAILURE)
+		return (FAILURE);
+	return (SUCCESS);
 }

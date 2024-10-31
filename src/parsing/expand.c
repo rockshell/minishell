@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 20:59:43 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 23:29:29 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
+int	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
 {
 	int		i;
 	char	*temp;
@@ -34,14 +34,19 @@ void	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
 		i++;
 		temp = get_expanded_str(value, &i, env, exit_status);
 		new_value = gnl_strjoin(new_value, temp);
+		if (!new_value)
+			return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 		free(temp);
 	}
 	free(token->value);
 	token->value = ft_strdup(new_value);
+	if (!token->value)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	free(new_value);
+	return (SUCCESS);
 }
 
-void	simple_expanding(t_token *token, t_env *env, t_env *exit_status)
+int	simple_expanding(t_token *token, t_env *env, t_env *exit_status)
 {
 	char	*value;
 	char	*result;
@@ -49,24 +54,33 @@ void	simple_expanding(t_token *token, t_env *env, t_env *exit_status)
 	value = token->value;
 	value++;
 	result = expand_env_var(value, env, exit_status);
+	if (!result)
+		return (FAILURE);
 	free(token->value);
 	token->value = ft_strdup(result);
+	if (!token->value)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	free(result);
+	return (SUCCESS);
 }
 
-void	expand_single_token(t_token *token, t_env *env, t_env *exit_status)
+int	expand_single_token(t_token *token, t_env *env, t_env *exit_status)
 {
 	int	num_of_expandable;
 
 	num_of_expandable = count_expandables(token->value);
 	if (num_of_expandable == 1 && no_sep(token->value) == TRUE
 		&& token->value[0] == '$')
-		simple_expanding(token, env, exit_status);
+	{
+		if (simple_expanding(token, env, exit_status) == FAILURE)
+			return (FAILURE);
+	}
 	else
 		complex_expanding(token, env, exit_status);
+	return (SUCCESS);
 }
 
-void	expand_tokens(t_token *first_token, t_env *env, t_env *exit_status)
+int	expand_tokens(t_token *first_token, t_env *env, t_env *exit_status)
 {
 	t_token	*current;
 
@@ -75,9 +89,11 @@ void	expand_tokens(t_token *first_token, t_env *env, t_env *exit_status)
 	{
 		if (current->needs_expanding)
 		{
-			expand_single_token(current, env, exit_status);
+			if (expand_single_token(current, env, exit_status) == FAILURE)
+				return (FAILURE);
 			current->needs_expanding = 0;
 		}
 		current = current->next;
 	}
+	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/31 21:02:04 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 22:59:19 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ void		free_and_renew_env_value(t_env *env, char *key, char *new_value);
 void		print_env(t_env *env, char *key);
 
 //execution
-void		run_lexer(t_appdata *appdata);
 void		start_execution(t_appdata *appdata);
 void		init_exec_data(t_list *list);
 void		execute_single(t_appdata *appdata, t_list *list);
@@ -208,26 +207,30 @@ void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);
 void		error_rising(t_appdata *appdata);
 
-//parsing - utils
+//lexer - urils
 char		*handle_num_quotes(char *input);
 char		*handle_redirection_tokens(char *input);
 int			ft_isspace(char c);
+int			count_tokens(char *input);
 int			run_parsing(char *input, t_appdata *appdata);
+size_t		handle_len_quotes(char *input, size_t i);
+size_t		handle_len_redirs(char *input, size_t i);
+size_t		len_of_input_string(char *input);
+void		init_token(int i, t_token *current);
+
+//parser - utils
 int			count_lists(t_appdata *appdata);
 int			count_quoted_len(t_token *token);
-int			count_tokens(char *input);
 int			is_cmd_end(t_token *token);
 int			is_contain_quotes(t_token *token);
 int			is_list_end(t_token *token);
 int			is_token_redirection(t_token *token);
 int			is_quotes_double(t_token *token);
+int			run_lexer(t_appdata *appdata);
 int			set_the_command_itself(t_cmd *cmd, t_token *first);
 int			syntax_check(t_token *token);
-size_t		handle_len_quotes(char *input, size_t i);
-size_t		handle_len_redirs(char *input, size_t i);
-size_t		len_of_input_string(char *input);
+void		check_if_env(t_token *token);
 void		handle_env_quotes(t_appdata *appdata, t_token *token);
-void		init_token(int i, t_token *current);
 void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);

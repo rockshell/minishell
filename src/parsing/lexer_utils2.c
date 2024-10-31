@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:06:01 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 20:33:16 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 22:46:24 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,20 @@ int	count_lists(t_appdata *appdata)
 		current = current->next;
 	}
 	return (res);
+}
+
+void	check_if_env(t_token *token)
+{
+	t_token	*temp;
+
+	temp = token;
+	while (temp)
+	{
+		if (ft_strchr(temp->value, '$'))
+		{
+			if (ft_strlen(temp->value) > 1)
+				temp->needs_expanding = 1;
+		}
+		temp = temp->next;
+	}
 }
