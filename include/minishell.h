@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/30 22:11:20 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/31 21:02:04 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,27 +210,33 @@ void		error_rising(t_appdata *appdata);
 
 //parsing - utils
 char		*handle_num_quotes(char *input);
-size_t	handle_len_redirs(char *input, size_t i);
+char		*handle_redirection_tokens(char *input);
 int			ft_isspace(char c);
 int			run_parsing(char *input, t_appdata *appdata);
 int			count_lists(t_appdata *appdata);
 int			count_quoted_len(t_token *token);
+int			count_tokens(char *input);
 int			is_cmd_end(t_token *token);
 int			is_contain_quotes(t_token *token);
 int			is_list_end(t_token *token);
 int			is_token_redirection(t_token *token);
 int			is_quotes_double(t_token *token);
+int			set_the_command_itself(t_cmd *cmd, t_token *first);
 int			syntax_check(t_token *token);
 size_t		handle_len_quotes(char *input, size_t i);
+size_t		handle_len_redirs(char *input, size_t i);
+size_t		len_of_input_string(char *input);
 void		handle_env_quotes(t_appdata *appdata, t_token *token);
 void		init_token(int i, t_token *current);
 void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
-void		set_the_command_itself(t_cmd *cmd, t_token *first);
 
 //expand -utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
+char		*get_expanded_str(char *value, int *i, t_env *env, t_env *exit_status);
+char		*get_no_env_string(char *value, int i);
+char		*update_result(char *temp, char *new_value);
 int			count_expandables(char *value);
 int			no_sep(char *value);
 void		expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);

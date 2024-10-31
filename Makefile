@@ -6,7 +6,7 @@
 #    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/30 00:02:26 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/10/31 20:59:58 by vitakinsfat      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,15 @@ exec/children.c \
 exec/execution1.c \
 exec/execution2.c \
 exec/file_manager.c \
-parsing/expand_utils.c \
+parsing/expand_utils1.c \
+parsing/expand_utils2.c \
 parsing/expand.c \
-parsing/pre_parser_utils.c \
-parsing/pre_parser.c \
+parsing/lexer_utils1.c \
+parsing/lexer_utils2.c \
 parsing/lexer.c \
-parsing/lexer_utils.c \
+parsing/pre_parser_utils1.c \
+parsing/pre_parser_utils2.c \
+parsing/pre_parser.c \
 parsing/quotes_handling.c \
 parsing/syntax_check.c \
 utils/built-in_utils1.c \

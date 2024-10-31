@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   lexer_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 18:13:56 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/30 18:51:01 by vitakinsfat      ###   ########.fr       */
+/*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
+/*   Updated: 2024/10/31 20:33:12 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_the_command_itself(t_cmd *cmd, t_token *first)
+void	set_argc(t_cmd *cmd, t_token *first)
 {
-	int		i;
 	t_token	*current;
 
 	current = first;
-	while (is_cmd_end(current) == 0)
+	while (is_cmd_end(current) == FALSE)
 	{
 		if (current->type == WORD && current->is_parsed == 0)
 			cmd->argc++;
@@ -27,10 +26,20 @@ void	set_the_command_itself(t_cmd *cmd, t_token *first)
 		else
 			break ;
 	}
+}
+
+int	set_the_command_itself(t_cmd *cmd, t_token *first)
+{
+	int		i;
+	t_token	*current;
+
+	set_argc(cmd, first);
 	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
+	if (!cmd->argv)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	current = first;
 	i = 0;
-	while (is_cmd_end(current) == 0)
+	while (is_cmd_end(current) == FALSE)
 	{
 		if (current->type == WORD && current->is_parsed == 0)
 		{
@@ -44,33 +53,39 @@ void	set_the_command_itself(t_cmd *cmd, t_token *first)
 			break ;
 	}
 	cmd->argv[i] = NULL;
+	return (SUCCESS);
 }
 
-//TODO - rat things clear
+void	set_std_redirection(t_cmd *cmd, t_token *current)
+{
+	if (current->type == STDIN)
+	{
+		cmd->input_redir_type = STDIN;
+		cmd->infile_name = ft_strdup(current->next->value);
+	}
+	else if (current->type == STDOUT)
+	{
+		cmd->output_redir_type = STDOUT;
+		cmd->outfile_name = ft_strdup(current->next->value);
+	}
+}
+
 void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 {
-	while (is_cmd_end(current) == 0 && current->next != NULL)
+	while (is_cmd_end(current) == FALSE && current->next != NULL)
 	{
-		if (current->type >= 3 && current->type <= 6)
+		if (current->type >= STDIN && current->type <= APPEND)
 		{
-			if (current->type == 3)
+			if (current->type == STDIN || current->type == STDOUT)
+				set_std_redirection(cmd, current);
+			else if (current->type == HEREDOC)
 			{
-				cmd->input_redir_type = 3;
-				cmd->infile_name = ft_strdup(current->next->value);
-			}
-			else if (current->type == 4)
-			{
-				cmd->output_redir_type = 4;
-				cmd->outfile_name = ft_strdup(current->next->value);
-			}
-			else if (current->type == 5)
-			{
-				cmd->input_redir_type = 5;
+				cmd->input_redir_type = HEREDOC;
 				cmd->delim = ft_strdup(current->next->value);
 			}
-			else if (current->type == 6)
+			else if (current->type == APPEND)
 			{
-				cmd->output_redir_type = 6;
+				cmd->output_redir_type = APPEND;
 				cmd->outfile_name = ft_strdup(current->next->value);
 			}
 			current->is_parsed = 1;
@@ -82,52 +97,11 @@ void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 
 void	set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last)
 {
-	if (pipe_flag == 1)
+	if (pipe_flag == TRUE)
 		cmd->is_pipe_before = 1;
-	if (last->type == 2)
+	if (last->type == PIPE)
 	{
 		cmd->is_pipe_after = 1;
 		last->is_parsed = 1;
 	}
-}
-
-int	count_lists(t_appdata *appdata)
-{
-	int		res;
-	t_token	*current;
-
-	res = 1;
-	current = appdata->first_token;
-	while (current)
-	{
-		if (current->type == 7 || current->type == 8)
-			res++;
-		current = current->next;
-	}
-	return (res);
-}
-
-int	is_cmd_end(t_token *token)
-{
-	if (token->type == 2)
-		return (1);
-	if (token->type == 7 || token->type == 8)
-		return (1);
-	return (0);
-}
-
-int	is_list_end(t_token *token)
-{
-	if (token->next == NULL)
-		return (1);
-	if (token->type == 7 || token->type == 8)
-		return (1);
-	return (0);
-}
-
-int	is_token_redirection(t_token *token)
-{
-	if (token->type > 2 && token->type < 7)
-		return (1);
-	return (0);
 }

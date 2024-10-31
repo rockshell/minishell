@@ -6,13 +6,13 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/30 18:54:37 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 22:20:00 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_cmd(t_cmd *cmd, t_token *first_token, t_token *last_token, int is_pipe_before_flag)
+void	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
 {
 	cmd->argc = 0;
 	cmd->input_redir_type = 0;
@@ -23,9 +23,9 @@ void	init_cmd(t_cmd *cmd, t_token *first_token, t_token *last_token, int is_pipe
 	cmd->infile_name = NULL;
 	cmd->outfile_name = NULL;
 	cmd->delim = NULL;
-	set_pipes_in_cmd(cmd, is_pipe_before_flag, last_token);
-	set_redirections_in_cmd(cmd, first_token);
-	set_the_command_itself(cmd, first_token);
+	set_pipes_in_cmd(cmd, is_pipe_before, last);
+	set_redirections_in_cmd(cmd, first);
+	set_the_command_itself(cmd, first);
 }
 
 t_list	init_the_list(int start, int end)
@@ -79,7 +79,10 @@ void	check_if_env(t_token *token)
 	while (temp)
 	{
 		if (ft_strchr(temp->value, '$'))
-			temp->needs_expanding = 1;
+		{
+			if (ft_strlen(temp->value) > 1)
+				temp->needs_expanding = 1;
+		}
 		temp = temp->next;
 	}
 }
@@ -98,9 +101,6 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 	cmd_start = &appdata->tokens[start];
 	cmd_end = cmd_start;
 	list = init_the_list(start, end);
-	check_if_env(appdata->first_token);
-	clean_the_quotes(appdata, appdata->first_token);
-	expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
 	while (cmd_end && cmd_end->pos <= end)
 	{
 		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)
@@ -126,34 +126,43 @@ t_list	make_a_list(t_appdata *appdata, int start, int end)
 	return (list);
 }
 
-void	run_lexer(t_appdata *appdata)
+void make_lists(t_appdata *appdata)
 {
 	int		i;
-	int		num_of_lists;
 	int		start_pos;
 	int		end_pos;
 	t_token	*current;
-	t_list	*lists;
 	
 	i = -1;
 	start_pos = 0;
+	current = appdata->first_token;
+	while (++i < appdata->lists_num)
+	{
+		while (is_list_end(current) == FALSE)
+			current = current->next;
+		end_pos = current->pos;
+		appdata->lists[i] = make_a_list(appdata, start_pos, end_pos);
+		start_pos = end_pos + 1;
+		current = current->next;
+	}
+}
+
+void	run_lexer(t_appdata *appdata)
+{
 	if (syntax_check(appdata->first_token) == FALSE)
 	{
 		appdata->exit_code = 2;
 		return ;
 	}
-	num_of_lists = count_lists(appdata);
-	lists = malloc(sizeof(t_list) * num_of_lists);
-	current = appdata->first_token;
-	while (++i < num_of_lists)
+	clean_the_quotes(appdata, appdata->first_token);
+	check_if_env(appdata->first_token);
+	expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
+	appdata->lists_num = count_lists(appdata);
+	appdata->lists = malloc(sizeof(t_list) * appdata->lists_num);
+	if (!appdata->lists)
 	{
-		while (is_list_end(current) == 0)
-			current = current->next;
-		end_pos = current->pos;
-		lists[i] = make_a_list(appdata, start_pos, end_pos);
-		start_pos = end_pos + 1;
-		current = current->next;
+		ft_putstr_fd(ALLOC_ERROR, 2);
+		return ;
 	}
-	appdata->lists_num = num_of_lists;
-	appdata->lists = lists;
+	make_lists(appdata);
 }

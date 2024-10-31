@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/31 17:07:48 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/31 22:24:34 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		// print_lists(&appdata);
+		print_lists(&appdata);
 		if (appdata.exit_code != 2)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);

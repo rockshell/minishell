@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:31:12 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/15 19:04:26 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/10/31 21:25:38 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int	is_valid_var(char *argument)
 
 	i = 1;
 	key = get_key(argument);
+	// printf("Key is: %s\n", key);
 	if (!key)
 		return (-1);
 	if (ft_isalpha(key[0]) == FALSE && key[0] != '_')

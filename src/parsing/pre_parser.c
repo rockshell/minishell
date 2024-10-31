@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 17:07:14 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/31 20:53:49 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,90 +43,6 @@ int	is_operator(char *input)
 	return (WORD);
 }
 
-char *handle_redirection_tokens(char *input)
-{
-	int	i;
-
-	i = 0;
-	if (input[i] == '<')
-	{
-		if (input[i+1] && input[i+1] == '<')
-			i++;
-		i++;
-		// printf("Tokens num: %i\n", (*tokens_num));
-		// (*tokens_num)++;
-		// printf("Tokens num: %i\n", (*tokens_num));
-	}
-	if (input[i] == '>')
-	{
-		if (input[i+1] && input[i+1] == '>')
-			i++;
-		i++;
-		// printf("Tokens num: %i\n", (*tokens_num));
-		// (*tokens_num)++;
-		// printf("Tokens num: %i\n", (*tokens_num));
-	}
-	return (input + i);
-}
-
-int	count_tokens(char *input)
-{
-	int	i;
-
-	i = 0;
-	while (*input)
-	{
-		while (ft_isspace(*input) && *input)
-			input++;
-		if (*input == '\0')
-			break ;
-		if (!ft_isspace(*input))
-		{
-			i++;
-			if (*input == '"' || *input == '\'')
-				input = handle_num_quotes(input);
-			else if (*input == '<' || *input == '>')
-				// input = handle_redirection_tokens(input, &i);
-				input = handle_redirection_tokens(input);
-			else
-			{
-				while (!ft_isspace(*input) && *input)
-					input++;
-			}
-		}
-	}
-	return (i);
-}
-
-size_t	len_of_input_string(char *input)
-{
-	size_t	i;
-
-	i = 0;
-	while (ft_isspace(input[i]))
-		input++;
-	while (!ft_isspace(input[i]) && input[i])
-	{
-		if (input[i] == '"' || input[i] == '\'')
-			i = handle_len_quotes(input, i);
-		else if (input[i] == '<' || input[i] == '>')
-		{
-			i = handle_len_redirs(input, i);
-			break;
-		}
-		else
-			i++;
-	}
-	return (i);
-}
-
-void	get_to_the_token(char *input, int *i)
-{
-	while (ft_isspace(input[*i]))
-		(*i)++;
-}
-
-//TODO - expand expandable tokens
 void	make_token(char *input, int *start, int token_pos, t_token *current)
 {
 	size_t	len;
@@ -135,7 +51,8 @@ void	make_token(char *input, int *start, int token_pos, t_token *current)
 	init_token(token_pos, current);
 	len = len_of_input_string(input + *start);
 	value = malloc(sizeof(char) * (len + 1));
-	get_to_the_token(input, start);
+	while (ft_isspace(input[*start]))
+		(*start)++;
 	ft_strlcpy(value, input + *start, len + 1);
 	current->value = ft_strtrim(value, " ");
 	current->type = is_operator(value);

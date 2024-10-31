@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pre_parser_utils.c                                 :+:      :+:    :+:   */
+/*   pre_parser_utils1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 15:44:59 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 22:03:50 by arch             ###   ########.fr       */
+/*   Created: 2024/10/31 20:46:08 by vitakinsfat       #+#    #+#             */
+/*   Updated: 2024/10/31 20:46:10 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,18 +93,4 @@ size_t	handle_len_redirs(char *input, size_t i)
 		i++;
 	}
 	return (i);
-}
-
-void	free_tokens(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	while (tokens[i])
-	{
-		free(tokens[i]);
-		i++;
-	}
-	free(tokens);
-	tokens = NULL;
 }

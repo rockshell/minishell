@@ -3,84 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 21:30:12 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/31 20:59:43 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*get_no_env_string(char *value, int i)
-{
-	int		j;
-	char	*temp;
-	char	*new_value;
-
-	j = i;
-	temp = NULL;
-	new_value = NULL;
-	while (value[j] != '$')
-		j++;
-	if (j > i)
-	{
-		temp = ft_substr(value, i, j-i);
-		if (!temp)
-			return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-		new_value = gnl_strjoin(new_value, temp);
-		if (!new_value)
-			return (free(temp), ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-		free(temp);
-		return (new_value);
-	}
-	return (NULL);
-}
-
-char	*update_result(char *temp, char *new_value)
-{
-	if (temp == NULL)
-		return (NULL);
-	else
-	{
-		if (new_value == NULL)
-		{
-			new_value = ft_strdup(temp);
-			if (!new_value)
-				return (free(temp), ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-		}
-		else
-		{
-			new_value = gnl_strjoin(new_value, temp);
-			if (!new_value)
-				return (free(temp), ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-		}
-		free(temp);
-	}
-	return (new_value);
-}
-
-char	*get_expanded_string(char *value, int *i, t_env *env, t_env *exit_status)
-{
-	char	*temp;
-	char	*substr;
-	int		j;
-
-	j = *i;
-	temp = NULL;
-	substr = NULL;
-	while (ft_isspace(value[j]) == 0 && value[j] != '$' && value[j] != '\0')
-		j++;
-	substr = ft_substr(value, *i, (size_t)(j - *i));
-	if (!substr)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
-	temp = expand_env_var(substr, env, exit_status);
-	if (!temp)
-		return (free(substr), NULL);
-	free(substr);
-	*i = j;
-	return (temp);
-}
 
 void	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
 {
@@ -99,16 +29,11 @@ void	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
 	{
 		temp = get_no_env_string(value, i);
 		new_value = update_result(temp, new_value);
-		// printf("New value is: %s\n", new_value);
 		while (value[i] != '$')
 			i++;
 		i++;
-		temp = get_expanded_string(value, &i, env, exit_status);
-
-		// printf("New temp is: %s\n", temp);
-		// printf("kek\n");
+		temp = get_expanded_str(value, &i, env, exit_status);
 		new_value = gnl_strjoin(new_value, temp);
-		// printf("New value is: %s\n", new_value);
 		free(temp);
 	}
 	free(token->value);
