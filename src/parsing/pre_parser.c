@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 22:10:26 by arch             ###   ########.fr       */
+/*   Updated: 2024/10/31 17:07:14 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_operator(char *input)
 	return (WORD);
 }
 
-char *handle_redirection_tokens(char *input, int *tokens_num)
+char *handle_redirection_tokens(char *input)
 {
 	int	i;
 
@@ -53,14 +53,18 @@ char *handle_redirection_tokens(char *input, int *tokens_num)
 		if (input[i+1] && input[i+1] == '<')
 			i++;
 		i++;
-		tokens_num++;
+		// printf("Tokens num: %i\n", (*tokens_num));
+		// (*tokens_num)++;
+		// printf("Tokens num: %i\n", (*tokens_num));
 	}
 	if (input[i] == '>')
 	{
 		if (input[i+1] && input[i+1] == '>')
 			i++;
 		i++;
-		tokens_num++;
+		// printf("Tokens num: %i\n", (*tokens_num));
+		// (*tokens_num)++;
+		// printf("Tokens num: %i\n", (*tokens_num));
 	}
 	return (input + i);
 }
@@ -82,7 +86,8 @@ int	count_tokens(char *input)
 			if (*input == '"' || *input == '\'')
 				input = handle_num_quotes(input);
 			else if (*input == '<' || *input == '>')
-				input = handle_redirection_tokens(input, &i);
+				// input = handle_redirection_tokens(input, &i);
+				input = handle_redirection_tokens(input);
 			else
 			{
 				while (!ft_isspace(*input) && *input)
