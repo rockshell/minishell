@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils1.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:46:08 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 20:46:10 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 22:07:27 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*handle_num_quotes(char *input)
 			i++;
 		if (input[i] == '"')
 			i++;
-		return (input + i);
 	}
 	else if (*input == '\'')
 	{
@@ -50,7 +49,6 @@ char	*handle_num_quotes(char *input)
 			i++;
 		if (input[i] == '\'')
 			i++;
-		return (input + i);
 	}
 	return (input + i);
 }
