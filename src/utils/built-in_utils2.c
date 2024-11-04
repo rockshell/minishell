@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:31:12 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 21:25:38 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 18:34:32 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	is_in_var(t_env *env, char *argument)
 	while (temp)
 	{
 		if (ft_strcmp(temp->key, key) == 0)
-			return (TRUE);
+			return (free(key), TRUE);
 		else
 			temp = temp->next;
 	}

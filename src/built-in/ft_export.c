@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:58 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 21:58:28 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 19:24:46 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,32 @@ static int	change_value(t_env *env, char *argument)
 {
 	t_env	*temp;
 	char	*key;
+	char	*new_value;
 
-	if (ft_strchr(argument, '=') == NULL)
-		return (SUCCESS);
 	key = get_key(argument);
 	if (!key)
 		return (FAILURE);
+	new_value = NULL;
+	if (ft_strchr(argument, '=') != NULL)
+	{
+		new_value = get_value(argument);
+		if (!new_value && ft_strchr(argument, '=') != NULL)
+			return (free(key), FAILURE);
+	}
 	temp = env;
 	while (temp)
 	{
 		if (ft_strcmp(temp->key, key) == 0)
 		{
 			free(temp->value);
-			temp->value = get_value(argument);
+			temp->value = new_value;
+			free(key);
+			return (SUCCESS);
 		}
 		temp = temp->next;
 	}
 	free(key);
+	free(new_value);
 	return (SUCCESS);
 }
 

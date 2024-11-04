@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 21:55:51 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 19:21:19 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,14 @@ char	*get_value(char *current_env)
 {
 	char	*value;
 
-	value = ft_strchr(current_env, '=');
-	if (!value)
-		return (NULL);
-	return (ft_strdup(value + 1));
+	if (ft_strchr(current_env, '=') != NULL)
+	{
+		value = ft_strchr(current_env, '=');
+		if (!value)
+			return (NULL);
+		return (ft_strdup(value + 1));
+	}
+	return (NULL);
 }
 
 int	create_env_node(t_env **env, char *current_env)
@@ -54,8 +58,14 @@ int	create_env_node(t_env **env, char *current_env)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	node->key = get_key(current_env);
 	if (!node->key)
-		return (free(node), 1);
-	node->value = get_value(current_env);
+		return (free(node), FAILURE);
+	node->value = NULL;
+	if (ft_strchr(current_env, '=') != NULL)
+	{
+		node->value = get_value(current_env);
+		if (!node->value)
+			return(free(node->key), free(node), FAILURE);
+	}
 	node->next = NULL;
 	if (!*env)
 	{

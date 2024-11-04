@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 23:29:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 17:18:27 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
 	{
 		temp = get_no_env_string(value, i);
 		new_value = update_result(temp, new_value);
-		while (value[i] != '$')
+		while (i < (int)len && value[i] != '$')
 			i++;
 		i++;
 		temp = get_expanded_str(value, &i, env, exit_status);
@@ -53,6 +53,12 @@ int	simple_expanding(t_token *token, t_env *env, t_env *exit_status)
 
 	value = token->value;
 	value++;
+	if (*value == '?' && ft_strlen(value) != 1)
+	{
+		if (complex_expanding(token, env, exit_status) == FAILURE)
+			return (FAILURE);
+		return (SUCCESS);
+	}
 	result = expand_env_var(value, env, exit_status);
 	if (!result)
 		return (FAILURE);

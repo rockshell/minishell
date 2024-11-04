@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/31 22:59:19 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 16:15:39 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,8 +241,8 @@ char		*get_expanded_str(char *value, int *i, t_env *env, t_env *exit_status);
 char		*get_no_env_string(char *value, int i);
 char		*update_result(char *temp, char *new_value);
 int			count_expandables(char *value);
+int			expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
 int			no_sep(char *value);
-void		expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
 
 //printing - utils
 void		print_tokens(t_appdata *appdata);

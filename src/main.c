@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/10/31 22:24:34 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 19:36:27 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		input = readline("minishell: ");
-		if (!input)
-			break ;
+		// if (!input)
+		// 	break ;
 		save_history(input);
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
-		if (appdata.exit_code != 2)
+		// print_lists(&appdata);
+		if (appdata.exit_code != 2 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}

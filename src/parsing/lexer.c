@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/10/31 23:16:00 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 16:18:30 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,8 @@ int	make_lists(t_appdata *appdata)
 
 int	run_lexer(t_appdata *appdata)
 {
+	if (!appdata->first_token)
+		return (SUCCESS);
 	if (syntax_check(appdata->first_token) == FALSE)
 	{
 		appdata->exit_code = 2;
