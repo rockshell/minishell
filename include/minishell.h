@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/04 23:27:06 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/05 20:25:11 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,18 @@ typedef struct s_cmd
 	int		is_builtin; //TODO
 	int		input_redir_type;
 	int		output_redir_type;
+	// TODO
+	// int		*input_redir_type;
+	// int		*output_redir_type;
+	int		num_of_infiles;
+	int		num_of_outfiles;
 	int		is_pipe_after;
 	int		is_pipe_before;
 	char	**argv; //no redirects, command + args
 	char	*infile_name;
 	char	*outfile_name;
+	// char	**infile_name;
+	// char	**outfile_name;
 	char	*delim; //for HEREDOC use ONLY
 }	t_cmd;
 

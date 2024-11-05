@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/04 23:03:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/05 18:15:42 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	main(int argc, char **argv, char **envp)
 		// 	break ;
 		save_history(input);
 		run_parsing(input, &appdata);
-		// print_tokens(&appdata);
+		print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
 		print_lists(&appdata);
