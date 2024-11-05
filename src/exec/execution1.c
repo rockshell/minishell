@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 23:16:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/05 19:28:44 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static void	execute_a_list(t_appdata *appdata, t_list *list)
 		create_processes(appdata, list);
 		wait_for_children(appdata, list);
 	}
-	else
+	else if (list->size == 1)
 		execute_single(appdata, list);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/04 23:03:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/05 19:06:35 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
+		// print_lists(&appdata);
 		if (appdata.exit_code != 2 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
