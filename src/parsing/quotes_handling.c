@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:38:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 18:53:02 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:24:45 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	no_quote_copy(t_token *token, char *str)
 	str[j] = '\0';
 }
 
-void	handle_env_quotes(t_appdata *appdata, t_token *token)
+int	handle_env_quotes(t_token *token)
 {
 	char	*unquoted_value;
 	int		len;
@@ -93,13 +93,14 @@ void	handle_env_quotes(t_appdata *appdata, t_token *token)
 	is_double = is_quotes_double(token);
 	unquoted_value = malloc(sizeof(char) * (len + 1));
 	if (!unquoted_value)
-		error_rising(appdata);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	no_quote_copy(token, unquoted_value);
 	free(token->value);
 	token->value = ft_strdup(unquoted_value);
 	if (!token->value)
-		error_rising(appdata);
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	free(unquoted_value);
 	if (is_double == FALSE)
 		token->needs_expanding = 0;
+	return (SUCCESS);
 }

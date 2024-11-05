@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:58:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/30 18:56:26 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:28:57 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	increment_shlvl(t_appdata *appdata, t_env *env)
 			if (!temp->value)
 			{
 				ft_putstr_fd(ALLOC_ERROR, 2);
-				error_rising(appdata);
+				error_rising(appdata, "");
 				return (FAILURE);
 			}
 			break ;

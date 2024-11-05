@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/04 16:15:39 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:27:06 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
 void		close_fds(t_list *list, int current_pipe);
 void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
-void		print_child_error_message(t_appdata *appdata, char *cmd_name);
+void		print_child_error_message(char *cmd_name);
 void		redirect_only_child(t_appdata *appdata, t_list *list);
 void		rwr_heredoc(t_appdata *appdata, t_list *list, char *delim);
 
@@ -205,7 +205,7 @@ void		free_envp_array(char **envp);
 void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);
-void		error_rising(t_appdata *appdata);
+void		error_rising(t_appdata *appdata, char *argument);
 
 //lexer - urils
 char		*handle_num_quotes(char *input);
@@ -221,6 +221,7 @@ void		init_token(int i, t_token *current);
 //parser - utils
 int			count_lists(t_appdata *appdata);
 int			count_quoted_len(t_token *token);
+int			handle_env_quotes(t_token *token);
 int			is_cmd_end(t_token *token);
 int			is_contain_quotes(t_token *token);
 int			is_list_end(t_token *token);
@@ -230,7 +231,6 @@ int			run_lexer(t_appdata *appdata);
 int			set_the_command_itself(t_cmd *cmd, t_token *first);
 int			syntax_check(t_token *token);
 void		check_if_env(t_token *token);
-void		handle_env_quotes(t_appdata *appdata, t_token *token);
 void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);

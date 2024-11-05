@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/24 15:52:43 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:18:57 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	rwr_heredoc(t_appdata *appdata, t_list *list, char *delim)
 	char	*line;
 
 	if (list->exec_data->infile == -1)
-		error_rising(appdata);
+		error_rising(appdata, "heredoc");
 	while (1)
 	{
 		ft_putstr_fd("> ", 1);
@@ -54,6 +54,6 @@ void	rwr_heredoc(t_appdata *appdata, t_list *list, char *delim)
 	if (!list->exec_data->infile)
 	{
 		unlink("here_doc.txt");
-		error_rising(appdata);
+		error_rising(appdata, "heredoc");
 	}
 }

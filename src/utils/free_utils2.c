@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 19:35:27 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:22:50 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	free_envp_array(char **envp)
 	free(envp);
 }
 
-void	error_rising(t_appdata *appdata)
+void	error_rising(t_appdata *appdata, char *argument)
 {
 	int	exit_code;
 
@@ -83,7 +83,8 @@ void	error_rising(t_appdata *appdata)
 		exit_code = COMMAND_NOT_FOUND;
 	else if (errno == ENOMEM)
 		exit_code = FAILURE;
-	perror("minishell: ");
+	ft_putstr_fd("minishell: ", 2);
+	perror(argument);
 	free_env(appdata->env);
 	free_envp_array(appdata->envp);
 	free_memory(appdata);

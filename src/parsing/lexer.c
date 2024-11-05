@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/04 22:14:28 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/04 23:26:22 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	init_the_list(t_list *list, int start, int end)
 	return (SUCCESS);
 }
 
-int	clean_the_quotes(t_appdata *appdata, t_token *token)
+int	clean_the_quotes(t_token *token)
 {
 	char	*unquoted_value;
 	int		len;
@@ -57,7 +57,7 @@ int	clean_the_quotes(t_appdata *appdata, t_token *token)
 		if (is_contain_quotes(token) == TRUE)
 		{
 			if (ft_strchr(token->value, '$'))
-				handle_env_quotes(appdata, token);
+				handle_env_quotes(token);
 			else
 			{
 				len = count_quoted_len(token);
@@ -156,7 +156,7 @@ int	run_lexer(t_appdata *appdata)
 		return (FAILURE);
 	}
 	check_if_env(appdata->first_token);
-	if (clean_the_quotes(appdata, appdata->first_token) == FAILURE)
+	if (clean_the_quotes(appdata->first_token) == FAILURE)
 		return (FAILURE);
 	expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
 	appdata->lists_num = count_lists(appdata);

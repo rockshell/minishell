@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/28 16:17:07 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:16:21 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	wait_for_children(t_appdata *appdata, t_list *list)
 	{
 		pid = waitpid(list->exec_data->processes[i], &status, 0);
 		if (pid == -1)
-			error_rising(appdata);
+			error_rising(appdata, "waitpid");
 		if (i == list->size - 1)
 		{
 			if (WIFEXITED(status))
@@ -41,8 +41,8 @@ static void	create_processes(t_appdata *appdata, t_list *list)
 
 	i = -1;
 	list->exec_data->processes = malloc(sizeof(pid_t) * list->size);
-	if (!list->exec_data->processes)
-		error_rising(appdata);
+	// if (!list->exec_data->processes)
+	// 	error_rising(appdata);
 	while (++i < list->size)
 	{
 		list->exec_data->processes[i] = fork();
@@ -65,17 +65,17 @@ static void	prepare_pipes(t_appdata *appdata, t_list *list)
 
 	i = -1;
 	list->exec_data->fd = malloc(sizeof(int *) * (list->size - 1));
-	if (!list->exec_data->fd)
-		error_rising(appdata);
+	// if (!list->exec_data->fd)
+	// 	error_rising(appdata);
 	while (++i < (list->size - 1))
 	{
 		list->exec_data->fd[i] = malloc(sizeof(int) * 2);
 		list->exec_data->fd[i][0] = -1;
 		list->exec_data->fd[i][1] = -1;
-		if (!list->exec_data->fd[i])
-			error_rising(appdata);
+		// if (!list->exec_data->fd[i])
+		// 	error_rising(appdata);
 		if (pipe(list->exec_data->fd[i]) == -1)
-			error_rising(appdata);
+			error_rising(appdata, "pipe");
 	}
 }
 

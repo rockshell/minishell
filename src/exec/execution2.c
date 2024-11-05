@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:10 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 18:14:30 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/04 23:16:55 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	execute_single(t_appdata *appdata, t_list *list)
 	{
 		pid = fork();
 		if (pid == -1)
-			error_rising(appdata);
+			error_rising(appdata, "fork");
 		if (pid == 0)
 			only_child(appdata, list);
 		if (waitpid(pid, &status, 0) == -1)
-			error_rising(appdata);
+			error_rising(appdata, "waitpid");
 		if (WIFEXITED(status))
 			list->exec_data->status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
