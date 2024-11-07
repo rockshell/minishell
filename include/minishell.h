@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/05 20:25:11 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/07 18:14:47 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,21 +97,22 @@ typedef struct s_cmd
 {
 	int		argc; //num of things in argv
 	int		is_builtin; //TODO
-	int		input_redir_type;
-	int		output_redir_type;
+	// int		input_redir_type;
+	// int		output_redir_type;
 	// TODO
-	// int		*input_redir_type;
-	// int		*output_redir_type;
+	int		*input_redir_type;
+	int		*output_redir_type;
 	int		num_of_infiles;
 	int		num_of_outfiles;
+	int		num_of_delims;
 	int		is_pipe_after;
 	int		is_pipe_before;
 	char	**argv; //no redirects, command + args
-	char	*infile_name;
-	char	*outfile_name;
-	// char	**infile_name;
-	// char	**outfile_name;
-	char	*delim; //for HEREDOC use ONLY
+	// char	*infile_name;
+	// char	*outfile_name;
+	char	**infile_name;
+	char	**outfile_name;
+	char	**delim; //for HEREDOC use ONLY
 }	t_cmd;
 
 typedef struct s_exec_data
@@ -242,7 +243,7 @@ void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 
-//expand -utils
+//expand - utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
 char		*get_expanded_str(char *value, int *i, t_env *env, t_env *exit_status);
 char		*get_no_env_string(char *value, int i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:04:14 by arch              #+#    #+#             */
-/*   Updated: 2024/10/30 18:58:06 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 18:14:04 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ void	print_lists(t_appdata *appdata)
 				printf("    argv[%d]: %s\n", k, cmd->argv[k]);
 				k++;
 			}
+			printf("Number of input redirects: %i\n", cmd->num_of_infiles);
+			printf("Number of output redirects: %i\n", cmd->num_of_outfiles);
+			printf("Number of HEREDOC's: %i\n", cmd->num_of_delims);
 			j++;
 		}
 		printf("========================================\n");
