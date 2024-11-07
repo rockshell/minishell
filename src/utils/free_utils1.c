@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/24 16:13:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 20:44:25 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,5 @@ void	free_lists(t_list *list)
 		if (list->cmd[i].outfile_name)
 			free(list->cmd[i].outfile_name);
 	}
-	free(list->cmd);
+	// free(&list->cmd[i]);
 }

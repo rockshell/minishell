@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:58:41 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 17:47:16 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 20:00:45 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,14 @@ char	*get_no_env_string(char *value, int i)
 
 char	*update_result(char *temp, char *new_value)
 {
-	if (temp == NULL)
+	char *str = NULL;
+	if (!temp && !new_value)
 		return (NULL);
+	if (temp == NULL && new_value)
+	{
+		str = ft_strdup(new_value);
+		return (str);
+	}
 	else
 	{
 		if (new_value == NULL)
