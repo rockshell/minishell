@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/05 19:06:35 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/07 00:15:39 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,14 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		input = readline("minishell: ");
-		// if (!input)
-		// 	break ;
-		save_history(input);
+		if (input)
+			save_history(input);
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
 		// print_lists(&appdata);
-		if (appdata.exit_code != 2 && appdata.first_token)
+		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}

@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:44:13 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/29 16:46:11 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 00:02:02 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,67 @@ int	redirection_syntax_check(t_token *token)
 	return (TRUE);
 }
 
+int	or_check(t_token *token)
+{
+	t_token	*temp;
+
+	temp = token;
+	while (temp)
+	{
+		if (temp->type == LOGICAL_OR)
+		{
+			if (temp->pos == 0 || temp->next == NULL
+				|| (temp->next->type != WORD
+					&& is_token_redirection(temp->next) == FALSE))
+			{
+				print_syntax_error_message(temp);
+				return (FALSE);
+			}
+			else if (temp->prev != NULL && temp->prev->type != WORD)
+			{
+				print_syntax_error_message(temp);
+				return (FALSE);
+			}
+		}
+		temp = temp->next;
+	}
+	return (TRUE);
+}
+
+int	and_check(t_token *token)
+{
+	t_token	*temp;
+
+	temp = token;
+	while (temp)
+	{
+		if (temp->type == LOGICAL_AND || temp->value[0] == '&')
+		{
+			if (temp->pos == 0 || temp->next == NULL
+				|| (temp->next->type != WORD
+					&& is_token_redirection(temp->next) == FALSE))
+			{
+				print_syntax_error_message(temp);
+				return (FALSE);
+			}
+			else if (temp->prev != NULL && temp->prev->type != WORD)
+			{
+				print_syntax_error_message(temp);
+				return (FALSE);
+			}
+		}
+		temp = temp->next;
+	}
+	return (TRUE);
+}
+
 int	syntax_check(t_token *token)
 {
-	if (pipe_syntax_check(token) == FALSE)
+	if (or_check(token) == FALSE)
+		return (FALSE);
+	else if (and_check(token) == FALSE)
+		return (FALSE);	
+	else if (pipe_syntax_check(token) == FALSE)
 		return (FALSE);
 	else if (redirection_syntax_check(token) == FALSE)
 		return (FALSE);

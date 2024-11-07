@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:06:01 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 22:46:24 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/06 23:47:43 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,15 @@ int	count_lists(t_appdata *appdata)
 void	check_if_env(t_token *token)
 {
 	t_token	*temp;
+	char	*check;
+	int		i;
 
+	i = 0;
 	temp = token;
 	while (temp)
 	{
-		if (ft_strchr(temp->value, '$'))
+		check = ft_strchr(temp->value, '$');
+		if (check && ft_isspace(check[i + 1]) == FALSE)
 		{
 			if (ft_strlen(temp->value) > 1)
 				temp->needs_expanding = 1;

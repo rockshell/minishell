@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   children_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/05 20:22:36 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/07 00:24:25 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//TODO - free an array "paths"
 char	*make_path(t_cmd *cmd)
 {
 	int		i;
@@ -26,20 +27,20 @@ char	*make_path(t_cmd *cmd)
 	}
 	i = 0;
 	paths = ft_split(getenv("PATH"), ':');
-	cmd_with_slash = ft_strjoin("/", cmd->argv[0]);
 	while (paths[i])
 	{
+		cmd_with_slash = ft_strjoin("/", cmd->argv[0]);
 		current_path = ft_strjoin(paths[i], cmd_with_slash);
+		free(cmd_with_slash);
 		if (access(current_path, F_OK) == 0)
-			break ;
+			return (current_path);
 		free(current_path);
 		i++;
 	}
-	free(cmd_with_slash);
-	return (current_path);
+	return (NULL);
 }
 
-void redirect_error(t_appdata *appdata, char *argument)
+void	redirect_error(t_appdata *appdata, char *argument)
 {
 	if (errno == 14)
 	{
@@ -66,7 +67,7 @@ void	redirect_only_child(t_appdata *appdata, t_list *list)
 			redirect_error(appdata, list->cmd[0].infile_name);
 		if (access(list->cmd[0].infile_name, F_OK) == -1
 			|| access(list->cmd[0].infile_name, R_OK) == -1)
-			redirect_error(appdata, list->cmd[0].infile_name); 
+			redirect_error(appdata, list->cmd[0].infile_name);
 		if (dup2(list->exec_data->infile, 0) == -1)
 			error_rising(appdata, list->cmd[0].infile_name);
 		close(list->exec_data->infile);
@@ -89,7 +90,7 @@ void	io_redirection(t_appdata *appdata, t_list *list, int is_infile)
 	{
 		if (access(list->cmd[0].infile_name, F_OK) == -1
 			|| access(list->cmd[0].infile_name, R_OK) == -1)
-			redirect_error(appdata, list->cmd[0].infile_name); 
+			redirect_error(appdata, list->cmd[0].infile_name);
 		if (list->exec_data->infile == -1)
 			redirect_error(appdata, list->cmd[0].infile_name);
 		if (dup2(list->exec_data->infile, 0) == -1)

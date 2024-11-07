@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/05 20:24:23 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/06 23:44:05 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ void	first_child(t_appdata *appdata, t_list *list)
 		exit(status);
 	}
 	if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
-	{
-		free(path);
 		error_rising(appdata, list->cmd[0].argv[0]);
-	}
 }
 
 void	last_child(t_appdata *appdata, t_list *list, int i)
@@ -60,10 +57,7 @@ void	last_child(t_appdata *appdata, t_list *list, int i)
 		exit(status);
 	}
 	if (execve(path, list->cmd[i].argv, appdata->envp) == -1)
-	{
-		free(path);
 		error_rising(appdata, list->cmd[i].argv[0]);
-	}
 }
 
 void	mid_child(t_appdata *appdata, t_list *list, int i)
@@ -86,10 +80,7 @@ void	mid_child(t_appdata *appdata, t_list *list, int i)
 		exit(status);
 	}
 	if (execve(path, list->cmd[i].argv, appdata->envp) == -1)
-	{
-		free(path);
 		error_rising(appdata, list->cmd[i].argv[0]);
-	}
 }
 
 void	only_child(t_appdata *appdata, t_list *list)
@@ -102,8 +93,5 @@ void	only_child(t_appdata *appdata, t_list *list)
 	if (!path)
 		print_child_error_message(list->cmd[0].argv[0]);
 	if (execve(path, list->cmd[0].argv, appdata->envp) == -1)
-	{
-		free(path);
 		error_rising(appdata, list->cmd[0].argv[0]);
-	}
 }
