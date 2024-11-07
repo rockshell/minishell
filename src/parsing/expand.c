@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 17:18:27 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 20:01:33 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ int	expand_single_token(t_token *token, t_env *env, t_env *exit_status)
 			return (FAILURE);
 	}
 	else
-		complex_expanding(token, env, exit_status);
+	{
+		if (complex_expanding(token, env, exit_status) == FAILURE)
+			return (FAILURE);
+	}
 	return (SUCCESS);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_array_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:31:13 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/25 18:29:08 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 17:00:41 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static int	get_len_of_env(t_env *env)
 
 static int	renew_envp_array(t_appdata *appdata, t_env *env)
 {
-	char	*joined_str;
 	t_env	*temp;
 	int		i;
 
@@ -44,15 +43,17 @@ static int	renew_envp_array(t_appdata *appdata, t_env *env)
 	temp = env;
 	while (temp)
 	{
-		joined_str = ft_strjoin(temp->key, "=");
-		if (!joined_str)
-			return (error_free(appdata, i), ft_putstr_fd(ALLOC_ERROR, 2), 1);
-		appdata->envp[i] = ft_strjoin(joined_str, temp->value);
-		free(joined_str);
+		appdata->envp[i] = ft_strjoin(temp->key, "=");
 		if (!appdata->envp[i])
 			return (error_free(appdata, i), ft_putstr_fd(ALLOC_ERROR, 2), 1);
-		i++;
+		if (temp->value)
+		{
+			appdata->envp[i] = gnl_strjoin(appdata->envp[i], temp->value);
+			if (!appdata->envp[i])
+				return (error_free(appdata, i), ft_putstr_fd(ALLOC_ERROR, 2), 1);
+		}
 		temp = temp->next;
+		i++;
 	}
 	appdata->envp[i] = NULL;
 	return (SUCCESS);

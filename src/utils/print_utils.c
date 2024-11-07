@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:04:14 by arch              #+#    #+#             */
-/*   Updated: 2024/10/30 18:58:06 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/05 17:52:22 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ void	print_lists(t_appdata *appdata)
 		while (j < list->size)
 		{
 			cmd = &list->cmd[j];
+			printf("Input redirection type: %d\n", cmd->input_redir_type);
+			printf("Output redirection type: %d\n", cmd->output_redir_type);
+			printf("Infile name: %s\n", cmd->infile_name);
+			printf("Outfile name: %s\n", cmd->outfile_name);
 			printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
 			k = 0;
 			while (k < cmd->argc)

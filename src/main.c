@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/04 23:03:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 20:45:16 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	update_exit_code(t_appdata *appdata)
 		exit_code = appdata->lists[last_index].exec_data->status;
 		free(appdata->exit_status->value);
 		appdata->exit_status->value = ft_itoa(exit_code);
+		appdata->exit_code = 0;
 	}
 	else
 	{
@@ -69,15 +70,14 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		input = readline("minishell: ");
-		// if (!input)
-		// 	break ;
-		save_history(input);
+		if (input)
+			save_history(input);
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
-		if (appdata.exit_code != 2 && appdata.first_token)
+		// print_lists(&appdata);
+		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}

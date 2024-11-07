@@ -6,7 +6,7 @@
 /*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 19:21:19 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 00:23:08 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	create_env_node(t_env **env, char *current_env)
 	{
 		node->value = get_value(current_env);
 		if (!node->value)
-			return(free(node->key), free(node), FAILURE);
+			return (free(node->key), free(node), FAILURE);
 	}
 	node->next = NULL;
 	if (!*env)
