@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/07 17:01:58 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/07 19:45:20 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	update_exit_code(t_appdata *appdata)
 		exit_code = appdata->lists[last_index].exec_data->status;
 		free(appdata->exit_status->value);
 		appdata->exit_status->value = ft_itoa(exit_code);
+		appdata->exit_code = 0;
 	}
 	else
 	{
