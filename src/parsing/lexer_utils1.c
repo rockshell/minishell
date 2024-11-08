@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 17:19:54 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:55:33 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ void	set_std_redirection(t_cmd *cmd, t_token *current, int *input_i, int *output
 	{
 		cmd->input_redir_type[*input_i] = STDIN;
 		cmd->infile_name[*input_i] = ft_strdup(current->next->value);
-		*input_i++;
+		(*input_i)++;
 	}
 	else if (current->type == STDOUT)
 	{
 		cmd->output_redir_type[*output_i] = STDOUT;
 		cmd->outfile_name[*output_i] = ft_strdup(current->next->value);
-		*output_i++;
+		(*output_i)++;
 	}
 }
 
@@ -83,7 +83,7 @@ void	count_amount_of_redirections(t_cmd *cmd, t_token *current)
 			cmd->num_of_infiles++;	
 		}
 		if (current->type == STDOUT || current->type == APPEND )
-			cmd->num_of_outfiles;
+			cmd->num_of_outfiles++;
 		current = current->next;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/24 16:13:21 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/08 19:02:52 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,13 @@ void	close_exec_data_fd(t_list *list)
 		}
 		free(list->exec_data->fd);
 	}
-	if (list->exec_data->infile != -1)
-		close(list->exec_data->infile);
-	if (list->exec_data->outfile != -1)
-		close(list->exec_data->outfile);
+	if (list->exec_data->infile_fd != -1)
+		close(list->exec_data->infile_fd);
+	if (list->exec_data->outfile_fd != -1)
+		close(list->exec_data->outfile_fd);
 }
 
+//TODO unlink heredok ok?
 void	free_exec_data(t_list *list)
 {
 	if (!list->exec_data)
@@ -45,8 +46,8 @@ void	free_exec_data(t_list *list)
 	if (list->exec_data->processes)
 		free(list->exec_data->processes);
 	close_exec_data_fd(list);
-	if (list->cmd && list->cmd[0].input_redir_type == HEREDOC)
-		unlink("here_doc.txt");
+	// if (list->cmd && list->cmd[0].input_redir_type == HEREDOC)
+	// 	unlink("here_doc.txt");
 	free(list->exec_data);
 }
 

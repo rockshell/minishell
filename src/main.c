@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/05 18:15:42 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/08 19:03:37 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,10 @@ int	main(int argc, char **argv, char **envp)
 		// 	break ;
 		save_history(input);
 		run_parsing(input, &appdata);
-		print_tokens(&appdata);
+		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		print_lists(&appdata);
+		// print_lists(&appdata);
 		if (appdata.exit_code != 2 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
