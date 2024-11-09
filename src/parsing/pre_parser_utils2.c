@@ -3,16 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:46:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/05 20:32:31 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/09 17:11:18 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+//Old version
+// int	count_tokens(char *input)
+// {
+// 	int	i;
 
-int	count_tokens(char *input)
+// 	i = 0;
+// 	while (*input)
+// 	{
+// 		while (ft_isspace(*input) && *input)
+// 			input++;
+// 		if (*input == '\0')
+// 			break ;
+// 		if (!ft_isspace(*input))
+// 		{
+// 			i++;
+// 			if (*input == '"' || *input == '\'')
+// 				input = handle_num_quotes(input);
+// 			else if (*input == '<' || *input == '>')
+// 				input = handle_redirection_tokens(input);
+// 			else
+// 			{
+// 				while (!ft_isspace(*input) && *input)
+// 					input++;
+// 			}
+// 		}
+// 	}
+// 	return (i);
+// }
+
+//New version
+int count_tokens(char *input)
 {
 	int	i;
 
@@ -20,20 +49,32 @@ int	count_tokens(char *input)
 	while (*input)
 	{
 		while (ft_isspace(*input) && *input)
-			input++;
-		if (*input == '\0')
-			break ;
-		if (!ft_isspace(*input))
 		{
-			i++;
+			input++;
+		}
+		if (*input == '\0')
+		{
+			break;
+		}
+		while (!ft_isspace(*input) && *input)
+		{
+			// printf("kek\n");
 			if (*input == '"' || *input == '\'')
+			{
 				input = handle_num_quotes(input);
+				if (ft_isspace(*input) || *input == '\0')
+					i++;
+			}
 			else if (*input == '<' || *input == '>')
+			{
 				input = handle_redirection_tokens(input);
+				i++;
+			}
 			else
 			{
-				while (!ft_isspace(*input) && *input)
-					input++;
+				input++;
+				if (ft_isspace(*input) || *input == '\0')
+					i++;
 			}
 		}
 	}
