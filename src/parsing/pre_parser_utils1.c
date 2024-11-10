@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:46:08 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 22:07:27 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/09 18:27:15 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,13 @@ size_t	handle_len_redirs(char *input, size_t i)
 			i++;
 		i++;
 	}
+	return (i);
+}
+
+size_t	handle_len_pipes(char *input, size_t i)
+{
+	if (input[i + 1] && input[i + 1] == '|')
+		i++;
+	i++;
 	return (i);
 }
