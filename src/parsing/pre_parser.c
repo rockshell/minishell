@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 22:53:48 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/10 13:15:42 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,27 @@ int	make_token(char *input, int *start, int token_pos, t_token *current)
 {
 	size_t	len;
 	char	*value;
+	// int		test;
 
+	// test = 0;
 	init_token(token_pos, current);
+	while (ft_isspace(input[*start]))
+	{
+		(*start)++;
+		// test++;
+		// printf("I: %i\n", test);
+	}
 	len = len_of_input_string(input + *start);
 	value = malloc(sizeof(char) * (len + 1));
 	if (!value)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-	while (ft_isspace(input[*start]))
-		(*start)++;
 	ft_strlcpy(value, input + *start, len + 1);
 	current->value = ft_strtrim(value, " ");
 	if (!current->value)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	current->type = is_operator(value);
-	free(value);
+	// printf("Value: %s\n", value);
+	// free(value);
 	*start += (int)len;
 	return (SUCCESS);
 }
