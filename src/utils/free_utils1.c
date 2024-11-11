@@ -90,5 +90,5 @@ void	free_lists(t_list *list)
 		if (list->cmd[i].outfile_name)
 			free(list->cmd[i].outfile_name);
 	}
-	free(list->cmd);
+	// free(&list->cmd[i]);
 }

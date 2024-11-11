@@ -54,6 +54,10 @@ void	print_lists(t_appdata *appdata)
 		while (j < list->size)
 		{
 			cmd = &list->cmd[j];
+			printf("Input redirection type: %d\n", cmd->input_redir_type);
+			printf("Output redirection type: %d\n", cmd->output_redir_type);
+			printf("Infile name: %s\n", cmd->infile_name);
+			printf("Outfile name: %s\n", cmd->outfile_name);
 			printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
 			k = 0;
 			while (k < cmd->argc)

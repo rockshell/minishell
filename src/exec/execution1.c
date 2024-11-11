@@ -129,7 +129,7 @@ static int	execute_a_list(t_appdata *appdata, t_list *list)
 		if (execute_multiple(appdata, list) == FAILURE)
 			return (FAILURE);
 	}
-	else
+	else if (list->size == 1)
 		execute_single(appdata, list);
 	return (SUCCESS);
 }

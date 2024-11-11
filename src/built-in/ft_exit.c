@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:15:51 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/19 15:23:27 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/07 15:51:48 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ int	ft_exit(t_appdata *appdata, t_cmd *cmd)
 	ft_putstr_fd("exit\n", 1);
 	appdata->should_exit = 1;
 	if (cmd->argc == 1)
+	{
 		appdata->exit_code = SUCCESS;
+		return (SUCCESS);
+	}
 	else if (cmd->argc > 2)
 	{
 		ft_putstr_fd(EXIT_TOO_MANY_ARG_ERROR, 2);

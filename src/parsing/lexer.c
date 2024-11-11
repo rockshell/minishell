@@ -149,6 +149,26 @@ int	make_lists(t_appdata *appdata)
 	return (SUCCESS);
 }
 
+int star_check(t_token *token)
+{
+	t_token	*temp;
+
+	temp = token;
+	while (temp)
+	{
+		if (is_token_redirection(temp) == TRUE)
+		{
+			if (temp->next->value[0] == '*' && token->next->type != HEREDOC)
+			{
+				ft_putstr_fd("minishell: *: ambiguous redirect\n", 2);
+				return (FALSE);
+			}
+		}
+		temp = temp->next;
+	}
+	return (TRUE);
+}
+
 int	run_lexer(t_appdata *appdata)
 {
 	if (!appdata->first_token)
@@ -156,6 +176,11 @@ int	run_lexer(t_appdata *appdata)
 	if (syntax_check(appdata->first_token) == FALSE)
 	{
 		appdata->exit_code = 2;
+		return (FAILURE);
+	}
+	if (star_check(appdata->first_token) == FALSE)
+	{
+		appdata->exit_code = 1;
 		return (FAILURE);
 	}
 	check_if_env(appdata->first_token);
