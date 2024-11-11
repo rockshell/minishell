@@ -6,24 +6,26 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/05 19:28:44 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:53:19 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	wait_for_children(t_appdata *appdata, t_list *list)
+//TODO waitpid error handling
+static int	wait_for_children(t_list *list)
 {
 	int		i;
-	pid_t	pid;
+	// pid_t	pid;
 	int		status;
 
 	i = 0;
 	while (i < list->size)
 	{
-		pid = waitpid(list->exec_data->processes[i], &status, 0);
-		if (pid == -1)
-			error_rising(appdata, "waitpid");
+		// pid = waitpid(list->exec_data->processes[i], &status, 0);
+		waitpid(list->exec_data->processes[i], &status, 0);
+		// if (pid == -1)
+		// error_rising(appdata, "waitpid");
 		if (i == list->size - 1)
 		{
 			if (WIFEXITED(status))
@@ -33,16 +35,17 @@ static void	wait_for_children(t_appdata *appdata, t_list *list)
 		}
 		i++;
 	}
+	return (SUCCESS);
 }
 
-static void	create_processes(t_appdata *appdata, t_list *list)
+static int	create_processes(t_appdata *appdata, t_list *list)
 {
 	int	i;
 
 	i = -1;
 	list->exec_data->processes = malloc(sizeof(pid_t) * list->size);
-	// if (!list->exec_data->processes)
-	// 	error_rising(appdata);
+	if (!list->exec_data->processes)
+		return(ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	while (++i < list->size)
 	{
 		list->exec_data->processes[i] = fork();
@@ -57,53 +60,78 @@ static void	create_processes(t_appdata *appdata, t_list *list)
 		}
 	}
 	close_pipes_in_parent(list);
+	return (SUCCESS);
 }
 
-static void	prepare_pipes(t_appdata *appdata, t_list *list)
+//TODO pipe error handling
+static int	prepare_pipes(t_list *list)
 {
 	int	i;
 
 	i = -1;
 	list->exec_data->fd = malloc(sizeof(int *) * (list->size - 1));
-	// if (!list->exec_data->fd)
-	// 	error_rising(appdata);
+	if (!list->exec_data->fd)
+		return(ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	while (++i < (list->size - 1))
 	{
 		list->exec_data->fd[i] = malloc(sizeof(int) * 2);
+		if (!list->exec_data->fd[i])
+			return(ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 		list->exec_data->fd[i][0] = -1;
 		list->exec_data->fd[i][1] = -1;
-		// if (!list->exec_data->fd[i])
-		// 	error_rising(appdata);
-		if (pipe(list->exec_data->fd[i]) == -1)
-			error_rising(appdata, "pipe");
+		pipe(list->exec_data->fd[i]);
+			// error_rising(appdata, "pipe");
 	}
+	return (SUCCESS);
 }
 
-static void	execute_a_list(t_appdata *appdata, t_list *list)
+int execute_multiple(t_appdata *appdata, t_list *list)
+{
+	if (prepare_pipes(list) == FAILURE)
+	{
+		list->exec_data->status = 1;
+		return (FAILURE);
+	}
+	if (create_processes(appdata, list) == FAILURE)
+	{
+		list->exec_data->status = 1;
+		return (FAILURE);
+	}
+	if (wait_for_children(list) == FAILURE)
+	{
+		list->exec_data->status = 1;
+		return (FAILURE);
+	}
+	return (SUCCESS);
+}
+
+static int	execute_a_list(t_appdata *appdata, t_list *list)
 {
 	int	i;
 
 	i = -1;
-	init_exec_data(list);
 	while (++i < list->size)
 		list->cmd[i].is_builtin = check_if_builtin(list->cmd[i]);
-	if (list->cmd[0].input_redir_type != 0)
+	i = -1;
+	while (++i < list->size)
 	{
-		if (list->cmd[0].input_redir_type == STDIN)
-			list->exec_data->infile = open_files(list, 1);
-		else if (list->cmd[0].input_redir_type == HEREDOC)
-			rwr_heredoc(appdata, list, list->cmd[0].delim);
+		if (list->cmd[i].num_of_infiles != 0 || list->cmd[i].num_of_outfiles != 0)
+		{
+			if (file_manager(list->exec_data, &list->cmd[i]) == FAILURE)
+			{
+				list->exec_data->status = 1;
+				return (FAILURE);
+			}
+		}
 	}
-	if (list->cmd[list->size -1].output_redir_type != 0)
-		list->exec_data->outfile = open_files(list, 0);
 	if (list->size > 1)
 	{
-		prepare_pipes(appdata, list);
-		create_processes(appdata, list);
-		wait_for_children(appdata, list);
+		if (execute_multiple(appdata, list) == FAILURE)
+			return (FAILURE);
 	}
 	else if (list->size == 1)
 		execute_single(appdata, list);
+	return (SUCCESS);
 }
 
 void	start_execution(t_appdata *appdata)

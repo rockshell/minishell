@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/09 18:27:32 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/08 18:53:37 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,20 +97,28 @@ typedef struct s_cmd
 {
 	int		argc; //num of things in argv
 	int		is_builtin; //TODO
-	int		input_redir_type;
-	int		output_redir_type;
+	// int		input_redir_type;
+	// int		output_redir_type;
+	// TODO
+	int		*input_redir_type;
+	int		*output_redir_type;
+	int		num_of_infiles;
+	int		num_of_outfiles;
+	int		num_of_delims;
 	int		is_pipe_after;
 	int		is_pipe_before;
 	char	**argv; //no redirects, command + args
-	char	*infile_name;
-	char	*outfile_name;
-	char	*delim; //for HEREDOC use ONLY
+	// char	*infile_name;
+	// char	*outfile_name;
+	char	**infile_name;
+	char	**outfile_name;
+	char	**delim; //for HEREDOC use ONLY
 }	t_cmd;
 
 typedef struct s_exec_data
 {
-	int		infile;
-	int		outfile;
+	int		infile_fd;
+	int		outfile_fd;
 	int		status;
 	int		**fd;
 	pid_t	*processes;
@@ -184,14 +192,13 @@ char		*gnl_strjoin(char const *s1, char const *s2);
 char		*make_path(t_cmd *cmd);
 int			check_if_builtin(t_cmd cmd);
 int			execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
-int			open_files(t_list *list, int is_input);
+int 		file_manager(t_exec_data *exec_data, t_cmd *cmd);
 size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
 void		close_fds(t_list *list, int current_pipe);
 void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
 void		print_child_error_message(char *cmd_name);
 void		redirect_only_child(t_appdata *appdata, t_list *list);
-void		rwr_heredoc(t_appdata *appdata, t_list *list, char *delim);
 
 //children
 void		first_child(t_appdata *appdata, t_list *list);
@@ -238,7 +245,7 @@ void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 
-//expand -utils
+//expand - utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
 char		*get_expanded_str(char *value, int *i, t_env *env, t_env *exit_status);
 char		*get_no_env_string(char *value, int i);

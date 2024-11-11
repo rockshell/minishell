@@ -6,54 +6,114 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/05 20:23:30 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:53:11 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	open_files(t_list *list, int is_input)
+static int	open_files(char *filename, int redir_type, int is_input)
 {
 	int	res;
 
 	res = 0;
-	if (is_input == 1 && list->cmd[0].input_redir_type == STDIN)
-		res = open(list->cmd[0].infile_name, O_RDONLY);
-	else if (is_input == 1 && list->cmd[0].input_redir_type == HEREDOC)
+	if (is_input == 1 && redir_type == STDIN)
+		res = open(filename, O_RDONLY);
+	else if (is_input == 1 && redir_type == HEREDOC)
 		res = open("here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (is_input == 0
-		&& list->cmd[list->size - 1].output_redir_type == STDOUT)
-		res = open(list->cmd[list->size - 1].outfile_name,
-				O_RDWR | O_CREAT | O_TRUNC, 0644);
-	else if (is_input == 0
-		&& list->cmd[list->size - 1].output_redir_type == APPEND)
-		res = open(list->cmd[list->size - 1].outfile_name,
-				O_RDWR | O_CREAT | O_APPEND, 0644);
+	else if (is_input == 0 && redir_type == STDOUT)
+		res = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	else if (is_input == 0 && redir_type == APPEND)
+		res = open(filename, O_RDWR | O_CREAT | O_APPEND, 0644);
 	return (res);
 }
 
-void	rwr_heredoc(t_appdata *appdata, t_list *list, char *delim)
+static int	rwr_heredoc(t_exec_data *exec_data, char *delim)
 {
 	char	*line;
 
-	if (list->exec_data->infile == -1)
-		error_rising(appdata, "heredoc");
 	while (1)
 	{
 		ft_putstr_fd("> ", 1);
 		line = get_next_line(0);
 		if (!line || ft_strncmp(line, delim, ft_strlen(line)) == 0)
 			break ;
-		write(list->exec_data->infile, line, ft_strlen(line));
-		write(list->exec_data->infile, "\n", 1);
+		write(exec_data->infile_fd, line, ft_strlen(line));
+		write(exec_data->infile_fd, "\n", 1);
 		free(line);
 	}
 	free(line);
-	close(list->exec_data->infile);
-	list->exec_data->infile = open("here_doc.txt", O_RDONLY, 0664);
-	if (!list->exec_data->infile)
+	close(exec_data->infile_fd);
+	exec_data->infile_fd = open("here_doc.txt", O_RDONLY, 0664);
+	if (exec_data->infile_fd == -1)
 	{
 		unlink("here_doc.txt");
-		error_rising(appdata, "heredoc");
+		return (FAILURE);
 	}
+	return (SUCCESS);
+}
+
+static int manage_infiles(t_exec_data *exec_data, t_cmd *cmd)
+{
+	int i;
+	int j;
+	
+	i = -1;
+	j = 0;
+	while (++i < cmd->num_of_infiles)
+	{
+		exec_data->infile_fd = open_files(cmd->infile_name[i], cmd->input_redir_type[i], 1);
+		if (exec_data->infile_fd == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->infile_name[i], 2);
+			ft_putstr_fd(": Permission denied\n", 2);
+			return (FAILURE);
+		}
+		if (cmd->input_redir_type[i] == HEREDOC)
+		{
+			if (rwr_heredoc(exec_data, cmd->delim[j]) == FAILURE)
+				return (FAILURE);
+			j++;
+		}
+		if (i < cmd->num_of_infiles - 1)
+			close(exec_data->infile_fd);
+	}
+	return (SUCCESS);
+}
+
+static int manage_outfiles(t_exec_data *exec_data, t_cmd *cmd)
+{
+	int i;
+	
+	i = -1;
+	while (++i < cmd->num_of_outfiles)
+	{
+		exec_data->outfile_fd = open_files(cmd->outfile_name[i], cmd->output_redir_type[i], 0);
+		if (exec_data->outfile_fd == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->outfile_name[i], 2);
+			ft_putstr_fd(": Permission denied\n", 2);
+			return (FAILURE);
+		}
+		if (i < cmd->num_of_outfiles - 1)
+			close(exec_data->outfile_fd);
+	}
+	return (SUCCESS);
+}
+
+int file_manager(t_exec_data *exec_data, t_cmd *cmd)
+{
+	if (cmd->num_of_infiles != 0)
+	{
+		if (manage_infiles(exec_data, cmd) == FAILURE)
+			return (FAILURE);
+	}
+	if (cmd->num_of_outfiles != 0)
+	{
+		if (manage_outfiles(exec_data, cmd) == FAILURE)
+			return (FAILURE);
+	}
+	return (SUCCESS);
 }

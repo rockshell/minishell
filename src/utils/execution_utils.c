@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 18:41:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/28 16:42:35 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/08 18:12:59 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	close_pipes_in_parent(t_list *list)
 
 void	init_exec_data(t_list *list)
 {
-	list->exec_data->infile = -1;
-	list->exec_data->outfile = -1;
+	list->exec_data->infile_fd = -1;
+	list->exec_data->outfile_fd = -1;
 	list->exec_data->status = 0;
 	list->exec_data->fd = NULL;
 	list->exec_data->processes = NULL;

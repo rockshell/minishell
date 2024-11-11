@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 00:24:25 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/08 19:01:17 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,10 @@ void	close_fds(t_list *list, int current_pipe)
 		if (i != current_pipe)
 			close(list->exec_data->fd[i][1]);
 	}
-	if (current_pipe != 0 && list->exec_data->infile != 0)
-		close(list->exec_data->infile);
-	if (current_pipe != (list->size - 1) && list->exec_data->outfile != 0)
-		close(list->exec_data->outfile);
+	if (current_pipe != 0 && list->exec_data->infile_fd != 0)
+		close(list->exec_data->infile_fd);
+	if (current_pipe != (list->size - 1) && list->exec_data->outfile_fd != 0)
+		close(list->exec_data->outfile_fd);
 }
 
 void	print_child_error_message(char *cmd_name)

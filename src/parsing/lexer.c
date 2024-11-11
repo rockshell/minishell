@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/07 00:14:29 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/08 18:12:07 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ int	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
 	cmd->argc = 0;
 	cmd->input_redir_type = 0;
 	cmd->output_redir_type = 0;
+	cmd->num_of_infiles = 0;
+	cmd->num_of_outfiles = 0;
+	cmd->num_of_delims = 0;
 	cmd->is_pipe_before = 0;
 	cmd->is_pipe_after = 0;
 	cmd->argv = NULL;
