@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:10 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 17:55:48 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:53:56 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	execute_single(t_appdata *appdata, t_list *list)
 		if (pid == -1)
 			error_rising(appdata, "fork");
 		if (pid == 0)
-			only_child(appdata, list);
+			only_child(appdata, &list->cmd[0]);
 		if (waitpid(pid, &status, 0) == -1)
 			error_rising(appdata, "waitpid");
 		if (WIFEXITED(status))

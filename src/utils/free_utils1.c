@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/08 19:02:52 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:58:59 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	close_exec_data_fd(t_list *list)
 		}
 		free(list->exec_data->fd);
 	}
-	if (list->exec_data->infile_fd != -1)
-		close(list->exec_data->infile_fd);
-	if (list->exec_data->outfile_fd != -1)
-		close(list->exec_data->outfile_fd);
+	// if (list->exec_data->infile_fd != -1)
+	// 	close(list->exec_data->infile_fd);
+	// if (list->exec_data->outfile_fd != -1)
+	// 	close(list->exec_data->outfile_fd);
 }
 
 //TODO unlink heredok ok?
@@ -89,6 +89,10 @@ void	free_lists(t_list *list)
 			free(list->cmd[i].infile_name);
 		if (list->cmd[i].outfile_name)
 			free(list->cmd[i].outfile_name);
+		if (list->cmd[i].infile_fd != -1)
+			close(list->cmd[i].infile_fd);
+		if (list->cmd[i].outfile_fd != -1)
+			close(list->cmd[i].outfile_fd);
 	}
 	// free(&list->cmd[i]);
 }

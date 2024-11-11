@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/08 18:53:19 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:54:46 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ static int	create_processes(t_appdata *appdata, t_list *list)
 		if (list->exec_data->processes[i] == 0)
 		{
 			if (i == 0)
-				first_child(appdata, list);
+				first_child(appdata, list->exec_data, &list->cmd[0]);
 			else if (i == (list->size - 1))
-				last_child(appdata, list, i);
+				last_child(appdata, list->exec_data, &list->cmd[i], i);
 			else
-				mid_child(appdata, list, i);
+				mid_child(appdata, list->exec_data, &list->cmd[i], i);
 		}
 	}
 	close_pipes_in_parent(list);
@@ -117,7 +117,7 @@ static int	execute_a_list(t_appdata *appdata, t_list *list)
 	{
 		if (list->cmd[i].num_of_infiles != 0 || list->cmd[i].num_of_outfiles != 0)
 		{
-			if (file_manager(list->exec_data, &list->cmd[i]) == FAILURE)
+			if (file_manager(&list->cmd[i]) == FAILURE)
 			{
 				list->exec_data->status = 1;
 				return (FAILURE);
