@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/08 18:53:11 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/11 17:54:38 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ static int	rwr_heredoc(t_exec_data *exec_data, char *delim)
 	return (SUCCESS);
 }
 
+void print_file_error(char *argument)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(argument);
+}
+
 static int manage_infiles(t_exec_data *exec_data, t_cmd *cmd)
 {
 	int i;
@@ -62,14 +68,11 @@ static int manage_infiles(t_exec_data *exec_data, t_cmd *cmd)
 	j = 0;
 	while (++i < cmd->num_of_infiles)
 	{
+		if (access(cmd->infile_name[i], F_OK) == -1)
+			return (print_file_error(cmd->infile_name[i]), FAILURE);
 		exec_data->infile_fd = open_files(cmd->infile_name[i], cmd->input_redir_type[i], 1);
-		if (exec_data->infile_fd == -1)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd->infile_name[i], 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-			return (FAILURE);
-		}
+		if (access(cmd->infile_name[i], R_OK) == -1)
+			return (print_file_error(cmd->infile_name[i]), FAILURE);
 		if (cmd->input_redir_type[i] == HEREDOC)
 		{
 			if (rwr_heredoc(exec_data, cmd->delim[j]) == FAILURE)
@@ -82,6 +85,7 @@ static int manage_infiles(t_exec_data *exec_data, t_cmd *cmd)
 	return (SUCCESS);
 }
 
+//TODO folder permission check
 static int manage_outfiles(t_exec_data *exec_data, t_cmd *cmd)
 {
 	int i;
@@ -90,13 +94,8 @@ static int manage_outfiles(t_exec_data *exec_data, t_cmd *cmd)
 	while (++i < cmd->num_of_outfiles)
 	{
 		exec_data->outfile_fd = open_files(cmd->outfile_name[i], cmd->output_redir_type[i], 0);
-		if (exec_data->outfile_fd == -1)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd->outfile_name[i], 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-			return (FAILURE);
-		}
+		if (access(cmd->outfile_name[i], W_OK) == -1)
+			return (print_file_error(cmd->outfile_name[i]), FAILURE);
 		if (i < cmd->num_of_outfiles - 1)
 			close(exec_data->outfile_fd);
 	}
