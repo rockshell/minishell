@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/08 19:01:17 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:23:38 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,24 +63,24 @@ void	redirect_only_child(t_appdata *appdata, t_list *list)
 {
 	if (list->cmd[0].input_redir_type != 0)
 	{
-		if (list->exec_data->infile == -1)
-			redirect_error(appdata, list->cmd[0].infile_name);
-		if (access(list->cmd[0].infile_name, F_OK) == -1
-			|| access(list->cmd[0].infile_name, R_OK) == -1)
-			redirect_error(appdata, list->cmd[0].infile_name);
-		if (dup2(list->exec_data->infile, 0) == -1)
-			error_rising(appdata, list->cmd[0].infile_name);
-		close(list->exec_data->infile);
+		if (list->exec_data->infile_fd == -1)
+			redirect_error(appdata, list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1]);
+		if (access(list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1], F_OK) == -1
+			|| access(list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1], R_OK) == -1)
+			redirect_error(appdata, list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1]);
+		if (dup2(list->exec_data->infile_fd, 0) == -1)
+			error_rising(appdata, list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1]);
+		close(list->exec_data->infile_fd);
 	}
 	if (list->cmd[0].output_redir_type != 0)
 	{
-		if (list->exec_data->outfile == -1)
-			redirect_error(appdata, list->cmd[0].outfile_name);
-		if (access(list->cmd[0].outfile_name, W_OK) == -1)
-			redirect_error(appdata, list->cmd[0].outfile_name);
-		if (dup2(list->exec_data->outfile, 1) == -1)
-			redirect_error(appdata, list->cmd[0].outfile_name);
-		close(list->exec_data->outfile);
+		if (list->exec_data->outfile_fd == -1)
+			redirect_error(appdata, list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1]);
+		if (access(list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1], W_OK) == -1)
+			redirect_error(appdata, list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1]);
+		if (dup2(list->exec_data->outfile_fd, 1) == -1)
+			redirect_error(appdata, list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1]);
+		close(list->exec_data->outfile_fd);
 	}
 }
 
@@ -88,21 +88,21 @@ void	io_redirection(t_appdata *appdata, t_list *list, int is_infile)
 {
 	if (is_infile == 1)
 	{
-		if (access(list->cmd[0].infile_name, F_OK) == -1
-			|| access(list->cmd[0].infile_name, R_OK) == -1)
-			redirect_error(appdata, list->cmd[0].infile_name);
-		if (list->exec_data->infile == -1)
-			redirect_error(appdata, list->cmd[0].infile_name);
-		if (dup2(list->exec_data->infile, 0) == -1)
+		if (access(list->cmd[0].infile_name[0], F_OK) == -1
+			|| access(list->cmd[0].infile_name[0], R_OK) == -1)
+			redirect_error(appdata, list->cmd[0].infile_name[0]);
+		if (list->exec_data->infile_fd == -1)
+			redirect_error(appdata, list->cmd[0].infile_name[0]);
+		if (dup2(list->exec_data->infile_fd, 0) == -1)
 			error_rising(appdata, "dup2");
 	}
 	if (is_infile == 0)
 	{
-		if (access(list->cmd[list->size - 1].outfile_name, W_OK) == -1)
-			redirect_error(appdata, list->cmd[list->size - 1].outfile_name);
-		if (list->exec_data->outfile == -1)
-			redirect_error(appdata, list->cmd[list->size - 1].outfile_name);
-		if (dup2(list->exec_data->outfile, 1) == -1)
+		if (access(list->cmd[list->size - 1].outfile_name[list->cmd[list->size - 1].num_of_outfiles - 1], W_OK) == -1)
+			redirect_error(appdata, list->cmd[list->size - 1].outfile_name[list->cmd[list->size - 1].num_of_outfiles - 1]);
+		if (list->exec_data->outfile_fd == -1)
+			redirect_error(appdata, list->cmd[list->size - 1].outfile_name[list->cmd[list->size - 1].num_of_outfiles - 1]);
+		if (dup2(list->exec_data->outfile_fd, 1) == -1)
 			error_rising(appdata, "dup2");
 	}
 }
