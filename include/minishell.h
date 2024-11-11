@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/08 18:53:37 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/11 18:47:31 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,5 +260,9 @@ void		print_lists(t_appdata *appdata);
 
 //init
 int			initialization(t_appdata *appdata, char **envp);
+
+//signals
+void		sigint_handler(int signum);
+void		sigquit_handler(int signum);
 
 #endif

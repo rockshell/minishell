@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+         #
+#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/10/31 20:59:58 by vitakinsfat      ###   ########.fr        #
+#    Updated: 2024/11/11 18:39:17 by akulikov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ utils/free_utils2.c \
 utils/get_next_line_utils.c \
 utils/get_next_line.c \
 utils/print_utils.c \
+utils/signals.c \
 env_init.c \
 init.c \
 main.c
