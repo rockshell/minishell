@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 18:54:46 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:05:12 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,11 @@ static int	execute_a_list(t_appdata *appdata, t_list *list)
 		{
 			if (file_manager(&list->cmd[i]) == FAILURE)
 			{
-				list->exec_data->status = 1;
-				return (FAILURE);
+				if (i == (list->size - 1))
+				{
+					list->exec_data->status = 1;
+					return (FAILURE);
+				}
 			}
 		}
 	}

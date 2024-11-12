@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 19:40:22 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:28:29 by vitakinsfat      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ void	first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd)
 		io_redirection(appdata, cmd, 1);
 	if (cmd->num_of_outfiles != 0)
 		io_redirection(appdata, cmd, 0);
-	if (dup2(exec_data->fd[0][1], 1) == -1)
-		error_rising(appdata, "dup2");
+	if (cmd->num_of_outfiles == 0)
+	{
+		if (dup2(exec_data->fd[0][1], 1) == -1)
+			error_rising(appdata, "dup2");
+	}
 	close_fds(cmd, exec_data, 0);
 	path = make_path(cmd);
 	if (!path)
