@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/12 19:29:14 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:18:10 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell: ");
 		if (input)
 			save_history(input);
+		if (!input)
+		{
+			appdata.should_exit = TRUE;
+			new_cycle_preparation(&appdata);
+		}
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
 		free(input);
