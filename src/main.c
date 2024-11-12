@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/08 19:03:37 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/12 20:18:10 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int		quit_sig;
 //TODO - clear memory
 void	save_history(char *cmd)
 {
@@ -69,9 +70,16 @@ int	main(int argc, char **argv, char **envp)
 		return (FAILURE);
 	while (1)
 	{
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell: ");
 		if (input)
 			save_history(input);
+		if (!input)
+		{
+			appdata.should_exit = TRUE;
+			new_cycle_preparation(&appdata);
+		}
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
 		free(input);
