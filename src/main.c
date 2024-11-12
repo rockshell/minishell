@@ -6,12 +6,13 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/11 18:47:39 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/12 19:29:14 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int		quit_sig;
 //TODO - clear memory
 void	save_history(char *cmd)
 {
@@ -70,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, sigquit_handler);
+		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell: ");
 		if (input)
 			save_history(input);
