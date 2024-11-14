@@ -52,6 +52,7 @@ utils/free_utils2.c \
 utils/get_next_line_utils.c \
 utils/get_next_line.c \
 utils/print_utils.c \
+utils/signals.c \
 env_init.c \
 init.c \
 main.c

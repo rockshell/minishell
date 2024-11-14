@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
 /*   Updated: 2024/11/14 18:57:31 by vkinsfat         ###   ########.fr       */
@@ -262,5 +262,9 @@ void		print_lists(t_appdata *appdata);
 
 //init
 int			initialization(t_appdata *appdata, char **envp);
+
+//signals
+void		sigint_handler(int signum);
+void		sigquit_handler(int signum);
 
 #endif
