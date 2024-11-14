@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:44:13 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 00:02:02 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/14 19:02:38 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	syntax_check(t_token *token)
 	if (or_check(token) == FALSE)
 		return (FALSE);
 	else if (and_check(token) == FALSE)
-		return (FALSE);	
+		return (FALSE);
 	else if (pipe_syntax_check(token) == FALSE)
 		return (FALSE);
 	else if (redirection_syntax_check(token) == FALSE)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
+#    By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/11/11 18:39:17 by akulikov         ###   ########.fr        #
+#    Updated: 2024/11/14 18:57:44 by vkinsfat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,9 @@ built-in/ft_unset.c \
 exec/children.c \
 exec/execution1.c \
 exec/execution2.c \
-exec/file_manager.c \
+exec/execution3.c \
+exec/file_manager1.c \
+exec/file_manager2.c \
 parsing/expand_utils1.c \
 parsing/expand_utils2.c \
 parsing/expand.c \

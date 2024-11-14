@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/08 18:55:33 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:59:13 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,18 @@ void	set_std_redirection(t_cmd *cmd, t_token *current, int *input_i, int *output
 {
 	if (current->type == STDIN)
 	{
+		if (*input_i >= cmd->num_of_infiles)
+			return ;
 		cmd->input_redir_type[*input_i] = STDIN;
 		cmd->infile_name[*input_i] = ft_strdup(current->next->value);
+		cmd->infile_name[*input_i + 1] = NULL;
 		(*input_i)++;
 	}
 	else if (current->type == STDOUT)
 	{
 		cmd->output_redir_type[*output_i] = STDOUT;
 		cmd->outfile_name[*output_i] = ft_strdup(current->next->value);
+		cmd->outfile_name[*output_i + 1] = NULL;
 		(*output_i)++;
 	}
 }
@@ -80,9 +84,9 @@ void	count_amount_of_redirections(t_cmd *cmd, t_token *current)
 		{
 			if (current->type == HEREDOC)
 				cmd->num_of_delims++;
-			cmd->num_of_infiles++;	
+			cmd->num_of_infiles++;
 		}
-		if (current->type == STDOUT || current->type == APPEND )
+		if (current->type == STDOUT || current->type == APPEND)
 			cmd->num_of_outfiles++;
 		current = current->next;
 	}
@@ -93,21 +97,15 @@ void	init_redirections_in_cmd(t_cmd *cmd)
 	if (cmd->num_of_infiles > 0)
 	{
 		cmd->input_redir_type = malloc(sizeof(int) * cmd->num_of_infiles);
-		cmd->infile_name = malloc((sizeof(char *) * cmd->num_of_infiles) + 1);
-		cmd->infile_name[cmd->num_of_infiles + 1] = NULL;
+		cmd->infile_name = malloc(sizeof(char *) * (cmd->num_of_infiles + 1));
 	}
 	if (cmd->num_of_outfiles > 0)
 	{
 		cmd->output_redir_type = malloc(sizeof(int) * cmd->num_of_outfiles);
-		cmd->outfile_name = malloc((sizeof(char *) * cmd->num_of_outfiles) + 1);
-		cmd->outfile_name[cmd->num_of_infiles + 1] = NULL;
+		cmd->outfile_name = malloc(sizeof(char *) * (cmd->num_of_outfiles + 1));
 	}
 	if (cmd->num_of_delims > 0)
-	{
-		cmd->delim = malloc((sizeof(char *) * cmd->num_of_delims) + 1);
-		cmd->delim[cmd->num_of_delims + 1] = NULL;	
-	}
-	
+		cmd->delim = malloc(sizeof(char *) * (cmd->num_of_delims + 1));
 }
 
 void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
@@ -131,6 +129,7 @@ void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 			{
 				cmd->input_redir_type[input_i] = HEREDOC;
 				cmd->delim[heredoc_i] = ft_strdup(current->next->value);
+				cmd->delim[heredoc_i + 1] = NULL;
 				input_i++;
 				heredoc_i++;
 			}

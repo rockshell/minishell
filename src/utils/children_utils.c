@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 15:23:38 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:16:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,89 +40,40 @@ char	*make_path(t_cmd *cmd)
 	return (NULL);
 }
 
-void	redirect_error(t_appdata *appdata, char *argument)
+int	io_redirection(t_cmd *cmd)
 {
-	if (errno == 14)
+	if (cmd->num_of_infiles != 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(argument, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
+		if (dup2(cmd->infile_fd, 0) == -1)
+			return (FAILURE);
 	}
-	else
+	if (cmd->num_of_outfiles != 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		perror(argument);
+		if (dup2(cmd->outfile_fd, 1) == -1)
+			return(FAILURE);
 	}
-	free_env(appdata->env);
-	free_envp_array(appdata->envp);
-	free_memory(appdata);
-	exit(1);
+	return (SUCCESS);
 }
 
-void	redirect_only_child(t_appdata *appdata, t_list *list)
-{
-	if (list->cmd[0].input_redir_type != 0)
-	{
-		if (list->exec_data->infile_fd == -1)
-			redirect_error(appdata, list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1]);
-		if (access(list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1], F_OK) == -1
-			|| access(list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1], R_OK) == -1)
-			redirect_error(appdata, list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1]);
-		if (dup2(list->exec_data->infile_fd, 0) == -1)
-			error_rising(appdata, list->cmd[0].infile_name[list->cmd[0].num_of_infiles - 1]);
-		close(list->exec_data->infile_fd);
-	}
-	if (list->cmd[0].output_redir_type != 0)
-	{
-		if (list->exec_data->outfile_fd == -1)
-			redirect_error(appdata, list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1]);
-		if (access(list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1], W_OK) == -1)
-			redirect_error(appdata, list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1]);
-		if (dup2(list->exec_data->outfile_fd, 1) == -1)
-			redirect_error(appdata, list->cmd[0].outfile_name[list->cmd[0].num_of_outfiles - 1]);
-		close(list->exec_data->outfile_fd);
-	}
-}
-
-void	io_redirection(t_appdata *appdata, t_list *list, int is_infile)
-{
-	if (is_infile == 1)
-	{
-		if (access(list->cmd[0].infile_name[0], F_OK) == -1
-			|| access(list->cmd[0].infile_name[0], R_OK) == -1)
-			redirect_error(appdata, list->cmd[0].infile_name[0]);
-		if (list->exec_data->infile_fd == -1)
-			redirect_error(appdata, list->cmd[0].infile_name[0]);
-		if (dup2(list->exec_data->infile_fd, 0) == -1)
-			error_rising(appdata, "dup2");
-	}
-	if (is_infile == 0)
-	{
-		if (access(list->cmd[list->size - 1].outfile_name[list->cmd[list->size - 1].num_of_outfiles - 1], W_OK) == -1)
-			redirect_error(appdata, list->cmd[list->size - 1].outfile_name[list->cmd[list->size - 1].num_of_outfiles - 1]);
-		if (list->exec_data->outfile_fd == -1)
-			redirect_error(appdata, list->cmd[list->size - 1].outfile_name[list->cmd[list->size - 1].num_of_outfiles - 1]);
-		if (dup2(list->exec_data->outfile_fd, 1) == -1)
-			error_rising(appdata, "dup2");
-	}
-}
-
-void	close_fds(t_list *list, int current_pipe)
+//TODO - make it ok!
+void	close_fds(t_cmd *cmd, t_exec_data *exec_data, int current_pipe)
 {
 	int	i;
+	int num_of_cmd;
 
 	i = -1;
-	while (++i < list->size - 1)
+	num_of_cmd = *exec_data->num_of_cmd;
+	while (++i < num_of_cmd - 1)
 	{
 		if (i != current_pipe - 1)
-			close(list->exec_data->fd[i][0]);
+			close(exec_data->fd[i][0]);
 		if (i != current_pipe)
-			close(list->exec_data->fd[i][1]);
+			close(exec_data->fd[i][1]);
 	}
-	if (current_pipe != 0 && list->exec_data->infile_fd != 0)
-		close(list->exec_data->infile_fd);
-	if (current_pipe != (list->size - 1) && list->exec_data->outfile_fd != 0)
-		close(list->exec_data->outfile_fd);
+	if (current_pipe != 0 && cmd->infile_fd != -1)
+		close(cmd->infile_fd);
+	if (current_pipe != (num_of_cmd - 1) && cmd->outfile_fd != -1)
+		close(cmd->outfile_fd);
 }
 
 void	print_child_error_message(char *cmd_name)

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:46:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/10 14:29:48 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/14 19:03:40 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int count_tokens(char *input)
+int	count_tokens(char *input)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int count_tokens(char *input)
 		while (ft_isspace(*input) && *input)
 			input++;
 		if (*input == '\0')
-			break;
+			break ;
 		while (!ft_isspace(*input) && *input)
 		{
 			if (*input == '"' || *input == '\'')
@@ -64,18 +64,18 @@ size_t	len_of_input_string(char *input)
 		else if (input[i] == '<' || input[i] == '>')
 		{
 			i = handle_len_redirs(input, i);
-			break;
+			break ;
 		}
 		else if (input[i] == '|')
 		{
 			i = handle_len_pipes(input, i);
-			break;
+			break ;
 		}
 		else
 		{
 			i++;
 			if (ft_isspace(input[i]) || is_operator(input + i))
-				break;
+				break ;
 		}
 	}
 	return (i);
@@ -109,5 +109,5 @@ char	*handle_pipe_tokens(char *input)
 	if (input[i + 1] && input[i + 1] == '|')
 		i++;
 	i++;
-	return(input + i);
+	return (input + i);
 }

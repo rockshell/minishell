@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/08 18:12:07 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:01:56 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
 	cmd->num_of_delims = 0;
 	cmd->is_pipe_before = 0;
 	cmd->is_pipe_after = 0;
+	cmd->infile_fd = -1;
+	cmd->outfile_fd = -1;
 	cmd->argv = NULL;
 	cmd->infile_name = NULL;
 	cmd->outfile_name = NULL;
@@ -149,7 +151,7 @@ int	make_lists(t_appdata *appdata)
 	return (SUCCESS);
 }
 
-int star_check(t_token *token)
+int	star_check(t_token *token)
 {
 	t_token	*temp;
 

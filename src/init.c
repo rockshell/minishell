@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:58:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 23:28:57 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/14 18:10:50 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_appdata(t_appdata *appdata)
 	appdata->exit_status = NULL;
 }
 
-int	increment_shlvl(t_appdata *appdata, t_env *env)
+int	increment_shlvl(t_env *env)
 {
 	t_env	*temp;
 	int		num_val;
@@ -44,7 +44,6 @@ int	increment_shlvl(t_appdata *appdata, t_env *env)
 			if (!temp->value)
 			{
 				ft_putstr_fd(ALLOC_ERROR, 2);
-				error_rising(appdata, "");
 				return (FAILURE);
 			}
 			break ;
@@ -61,7 +60,7 @@ int	initialization(t_appdata *appdata, char **envp)
 		return (FAILURE);
 	if (create_env_node(&appdata->exit_status, "?=0") == FAILURE)
 		return (FAILURE);
-	if (increment_shlvl(appdata, appdata->env) == FAILURE)
+	if (increment_shlvl(appdata->env) == FAILURE)
 		return (FAILURE);
 	if (init_envp_array(appdata, envp) == FAILURE)
 		return (FAILURE);

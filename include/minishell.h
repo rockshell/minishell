@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/12 19:27:55 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:57:31 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,6 @@ typedef struct s_cmd
 {
 	int		argc; //num of things in argv
 	int		is_builtin; //TODO
-	// int		input_redir_type;
-	// int		output_redir_type;
-	// TODO
 	int		*input_redir_type;
 	int		*output_redir_type;
 	int		num_of_infiles;
@@ -107,9 +104,9 @@ typedef struct s_cmd
 	int		num_of_delims;
 	int		is_pipe_after;
 	int		is_pipe_before;
+	int		infile_fd;
+	int 	outfile_fd;
 	char	**argv; //no redirects, command + args
-	// char	*infile_name;
-	// char	*outfile_name;
 	char	**infile_name;
 	char	**outfile_name;
 	char	**delim; //for HEREDOC use ONLY
@@ -117,8 +114,9 @@ typedef struct s_cmd
 
 typedef struct s_exec_data
 {
-	int		infile_fd;
-	int		outfile_fd;
+	// int		infile_fd;
+	// int		outfile_fd;
+	int		*num_of_cmd;
 	int		status;
 	int		**fd;
 	pid_t	*processes;
@@ -184,7 +182,12 @@ void		print_env(t_env *env, char *key);
 //execution
 void		start_execution(t_appdata *appdata);
 void		init_exec_data(t_list *list);
-void		execute_single(t_appdata *appdata, t_list *list);
+int			execute_single(t_appdata *appdata, t_list *list);
+int			open_files(char *filename, int redir_type, int is_input);
+int			rwr_heredoc(t_cmd *cmd, char *delim);
+int			wait_for_children(t_list *list);
+int			create_processes(t_appdata *appdata, t_list *list);
+int			prepare_pipes(t_list *list);
 
 //execution utils
 char		*get_next_line(int fd);
@@ -192,19 +195,18 @@ char		*gnl_strjoin(char const *s1, char const *s2);
 char		*make_path(t_cmd *cmd);
 int			check_if_builtin(t_cmd cmd);
 int			execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
-int 		file_manager(t_exec_data *exec_data, t_cmd *cmd);
+int 		file_manager(t_list *list);
+int			io_redirection(t_cmd *cmd);
 size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
-void		close_fds(t_list *list, int current_pipe);
-void		io_redirection(t_appdata *appdata, t_list *list, int is_infile);
+void		close_fds(t_cmd *cmd, t_exec_data *exec_data, int current_pipe);
 void		print_child_error_message(char *cmd_name);
-void		redirect_only_child(t_appdata *appdata, t_list *list);
 
 //children
-void		first_child(t_appdata *appdata, t_list *list);
-void		last_child(t_appdata *appdata, t_list *list, int i);
-void		mid_child(t_appdata *appdata, t_list *list, int i);
-void		only_child(t_appdata *appdata, t_list *list);
+void		first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd);
+void		last_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i);
+void		mid_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i);
+void		only_child(t_appdata *appdata, t_cmd *cmd);
 
 //utils for freeing
 void		free_env(t_env *env);
@@ -212,7 +214,7 @@ void		free_envp_array(char **envp);
 void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);
-void		error_rising(t_appdata *appdata, char *argument);
+void		error_rising(char *argument);
 
 //lexer - urils
 char		*handle_num_quotes(char *input);
