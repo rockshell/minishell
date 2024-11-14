@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 19:34:00 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:16:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,19 @@ char	*make_path(t_cmd *cmd)
 	return (NULL);
 }
 
-void	io_redirection(t_appdata *appdata, t_cmd *cmd, int is_infile)
+int	io_redirection(t_cmd *cmd)
 {
-	if (is_infile == 1 && cmd->infile_fd != -1)
+	if (cmd->num_of_infiles != 0)
 	{
 		if (dup2(cmd->infile_fd, 0) == -1)
-			error_rising(appdata, "dup2");
+			return (FAILURE);
 	}
-	if (is_infile == 0 && cmd->outfile_fd != -1)
+	if (cmd->num_of_outfiles != 0)
 	{
 		if (dup2(cmd->outfile_fd, 1) == -1)
-			error_rising(appdata, "dup2");
+			return(FAILURE);
 	}
+	return (SUCCESS);
 }
 
 //TODO - make it ok!

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:04:14 by arch              #+#    #+#             */
-/*   Updated: 2024/11/11 15:24:15 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:18:50 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,16 @@ void	print_lists(t_appdata *appdata)
 		while (j < list->size)
 		{
 			cmd = &list->cmd[j];
-			// printf("Input redirection type: %d\n", cmd->input_redir_type);
-			// printf("Output redirection type: %d\n", cmd->output_redir_type);
-			// printf("Infile name: %s\n", cmd->infile_name);
-			// printf("Outfile name: %s\n", cmd->outfile_name);
+			if (cmd->num_of_infiles > 0)
+			{
+				printf("Input redirection type: %d\n", cmd->input_redir_type[0]);
+				printf("Infile name: %s\n", cmd->infile_name[0]);
+			}
+			if (cmd->num_of_outfiles > 0)
+			{
+				printf("Output redirection type: %d\n", cmd->output_redir_type[0]);
+				printf("Outfile name: %s\n", cmd->outfile_name[0]);
+			}
 			printf("  Command %d (argc: %d):\n", j + 1, cmd->argc);
 			k = 0;
 			while (k < cmd->argc)

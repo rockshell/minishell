@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/11 18:09:25 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 19:01:56 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int	make_lists(t_appdata *appdata)
 	return (SUCCESS);
 }
 
-int star_check(t_token *token)
+int	star_check(t_token *token)
 {
 	t_token	*temp;
 

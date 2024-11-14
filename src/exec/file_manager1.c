@@ -1,69 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_manager.c                                     :+:      :+:    :+:   */
+/*   file_manager1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/23 16:01:07 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/12 19:06:03 by vitakinsfat      ###   ########.fr       */
+/*   Created: 2024/11/14 18:51:46 by vkinsfat          #+#    #+#             */
+/*   Updated: 2024/11/14 18:55:34 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	open_files(char *filename, int redir_type, int is_input)
-{
-	int	res;
-
-	res = 0;
-	if (is_input == 1 && redir_type == STDIN)
-		res = open(filename, O_RDONLY);
-	else if (is_input == 1 && redir_type == HEREDOC)
-		res = open("here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (is_input == 0 && redir_type == STDOUT)
-		res = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	else if (is_input == 0 && redir_type == APPEND)
-		res = open(filename, O_RDWR | O_CREAT | O_APPEND, 0644);
-	return (res);
-}
-
-static int	rwr_heredoc(t_cmd *cmd, char *delim)
-{
-	char	*line;
-
-	while (1)
-	{
-		ft_putstr_fd("> ", 1);
-		line = get_next_line(0);
-		if (!line || ft_strncmp(line, delim, ft_strlen(line)) == 0)
-			break ;
-		write(cmd->infile_fd, line, ft_strlen(line));
-		write(cmd->infile_fd, "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(cmd->infile_fd);
-	cmd->infile_fd = open("here_doc.txt", O_RDONLY, 0664);
-	if (cmd->infile_fd == -1)
-	{
-		unlink("here_doc.txt");
-		return (FAILURE);
-	}
-	return (SUCCESS);
-}
-
-void print_file_error(char *argument)
+static void	print_file_error(char *argument)
 {
 	ft_putstr_fd("minishell: ", 2);
 	perror(argument);
 }
 
-static int manage_infiles(t_cmd *cmd)
+static int	manage_infiles(t_cmd *cmd)
 {
-	int i;
-	int j;
-	
+	int	i;
+	int	j;
+
 	i = -1;
 	j = 0;
 	while (++i < cmd->num_of_infiles)
@@ -86,10 +45,10 @@ static int manage_infiles(t_cmd *cmd)
 }
 
 //TODO folder permission check
-static int manage_outfiles(t_cmd *cmd)
+static int	manage_outfiles(t_cmd *cmd)
 {
-	int i;
-	
+	int	i;
+
 	i = -1;
 	while (++i < cmd->num_of_outfiles)
 	{
@@ -102,7 +61,7 @@ static int manage_outfiles(t_cmd *cmd)
 	return (SUCCESS);
 }
 
-int file_manager(t_cmd *cmd)
+static int	run_manage_files(t_cmd *cmd)
 {
 	if (cmd->num_of_infiles != 0)
 	{
@@ -113,6 +72,29 @@ int file_manager(t_cmd *cmd)
 	{
 		if (manage_outfiles(cmd) == FAILURE)
 			return (FAILURE);
+	}
+	return (SUCCESS);
+}
+
+int	file_manager(t_list *list)
+{
+	int	i;
+
+	i = -1;
+	while (++i < list->size)
+	{
+		if (list->cmd[i].num_of_infiles != 0
+			|| list->cmd[i].num_of_outfiles != 0)
+		{
+			if (run_manage_files(&list->cmd[i]) == FAILURE)
+			{
+				if (i == (list->size - 1))
+				{
+					list->exec_data->status = 1;
+					return (FAILURE);
+				}
+			}
+		}
 	}
 	return (SUCCESS);
 }

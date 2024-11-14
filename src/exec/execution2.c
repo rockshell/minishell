@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:10 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 18:53:56 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:09:06 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
 	return (exit_status);
 }
 
-void	execute_single(t_appdata *appdata, t_list *list)
+int	execute_single(t_appdata *appdata, t_list *list)
 {
 	pid_t	pid;
 	int		status;
@@ -49,19 +49,17 @@ void	execute_single(t_appdata *appdata, t_list *list)
 	{
 		pid = fork();
 		if (pid == -1)
-			error_rising(appdata, "fork");
+			return (perror("minishell: waitpid"), FAILURE);
 		if (pid == 0)
 			only_child(appdata, &list->cmd[0]);
 		if (waitpid(pid, &status, 0) == -1)
-			error_rising(appdata, "waitpid");
+			return (perror("minishell: waitpid"), FAILURE);
 		if (WIFEXITED(status))
 			list->exec_data->status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			list->exec_data->status = WTERMSIG(status) + SIGNAL_EXIT;
 	}
 	else
-	{
 		list->exec_data->status = execute_a_builtin(appdata, &list->cmd[0]);
-		return ;
-	}
+	return (SUCCESS);
 }

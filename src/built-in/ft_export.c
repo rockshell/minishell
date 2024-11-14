@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:58 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 16:59:01 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:19:32 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,27 @@ static int	export_no_args(t_env *env)
 	return (SUCCESS);
 }
 
-static int	change_value(t_env *env, char *argument)
+static void	find_and_change(t_env *env, char *key, char *new_value)
 {
 	t_env	*temp;
+
+	temp = env;
+	while (temp)
+	{
+		if (ft_strcmp(temp->key, key) == 0)
+		{
+			free(temp->value);
+			temp->value = new_value;
+			free(key);
+		}
+		temp = temp->next;
+	}
+	free(key);
+	free(new_value);
+}
+
+static int	change_value(t_env *env, char *argument)
+{
 	char	*key;
 	char	*new_value;
 
@@ -56,20 +74,7 @@ static int	change_value(t_env *env, char *argument)
 		if (!new_value && ft_strchr(argument, '=') != NULL)
 			return (free(key), FAILURE);
 	}
-	temp = env;
-	while (temp)
-	{
-		if (ft_strcmp(temp->key, key) == 0)
-		{
-			free(temp->value);
-			temp->value = new_value;
-			free(key);
-			return (SUCCESS);
-		}
-		temp = temp->next;
-	}
-	free(key);
-	free(new_value);
+	find_and_change(env, key, new_value);
 	return (SUCCESS);
 }
 

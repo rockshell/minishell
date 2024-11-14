@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 17:53:27 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:59:13 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ void	count_amount_of_redirections(t_cmd *cmd, t_token *current)
 		{
 			if (current->type == HEREDOC)
 				cmd->num_of_delims++;
-			cmd->num_of_infiles++;	
+			cmd->num_of_infiles++;
 		}
-		if (current->type == STDOUT || current->type == APPEND )
+		if (current->type == STDOUT || current->type == APPEND)
 			cmd->num_of_outfiles++;
 		current = current->next;
 	}
