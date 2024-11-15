@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 15:42:20 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:28:02 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	free_memory(t_appdata *appdata)
 		while (++i < appdata->lists_num)
 			free_lists(&appdata->lists[i]);
 		free(appdata->lists);
+		appdata->lists_num = 0;
 	}
 	if (appdata->tokens && appdata->tokens_num > 0)
 	{
@@ -34,6 +35,7 @@ void	free_memory(t_appdata *appdata)
 				free(appdata->tokens[i].value);
 		}
 		free(appdata->tokens);
+		appdata->first_token = NULL;
 	}
 }
 

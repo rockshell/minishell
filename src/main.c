@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/14 16:00:58 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:21:58 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	update_exit_code(t_appdata *appdata)
 	int	exit_code;
 
 	last_index = appdata->lists_num - 1;
-	if (appdata->lists)
+	if (appdata->lists && appdata->lists_num > 0)
 	{
 		exit_code = appdata->lists[last_index].exec_data->status;
 		free(appdata->exit_status->value);
@@ -84,7 +84,8 @@ int	main(int argc, char **argv, char **envp)
 		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		// print_lists(&appdata);
+		// if (appdata.lists_num > 0)
+		// 	print_lists(&appdata);
 		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
