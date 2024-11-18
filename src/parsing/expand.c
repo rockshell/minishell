@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 20:01:33 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/18 18:25:37 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ int	complex_expanding(t_token *token, t_env *env, t_env *exit_status)
 			i++;
 		i++;
 		temp = get_expanded_str(value, &i, env, exit_status);
-		new_value = gnl_strjoin(new_value, temp);
-		if (!new_value)
-			return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-		free(temp);
+		if (temp)
+		{
+			new_value = gnl_strjoin(new_value, temp);
+			free(temp);
+		}
 	}
 	free(token->value);
 	token->value = ft_strdup(new_value);
