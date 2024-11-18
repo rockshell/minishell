@@ -6,13 +6,13 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/15 17:21:58 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/18 21:50:49 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		quit_sig;
+int		g_sig_received;
 //TODO - clear memory
 void	save_history(char *cmd)
 {
@@ -66,6 +66,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	g_sig_received = 0;
 	if (initialization(&appdata, envp) == FAILURE)
 		return (FAILURE);
 	while (1)
@@ -74,11 +75,24 @@ int	main(int argc, char **argv, char **envp)
 		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell: ");
 		if (input)
+		{
+			printf("test one\n");
 			save_history(input);
+		}
 		if (!input)
 		{
+			printf("test two\n");
 			appdata.should_exit = TRUE;
 			new_cycle_preparation(&appdata);
+		}
+		if (g_sig_received == 1)
+		{
+			if (input)
+				free(input);
+			new_cycle_preparation(&appdata);
+			g_sig_received = 0;
+			printf("test three\n");
+			continue;
 		}
 		run_parsing(input, &appdata);
 		// print_tokens(&appdata);
