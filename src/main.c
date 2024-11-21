@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 15:32:59 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:43:29 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,24 @@ void	new_cycle_preparation(t_appdata *appdata)
 	free_memory(appdata);
 }
 
+char *get_the_input(t_appdata *appdata)
+{
+	char *input;
+	
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+	input = readline("minishell: ");
+	if (input == NULL)
+	{
+		write(STDOUT_FILENO, "exit\n", 5);
+		appdata->should_exit = TRUE;
+		new_cycle_preparation(appdata);
+	}
+	if (input)
+		save_history(input);
+	return (input);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -68,27 +86,17 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_sig_received = 0;
 	// rl_catch_signals = 0;
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
 	if (initialization(&appdata, envp) == FAILURE)
 		return (FAILURE);
 	while (1)
 	{
-		input = readline("minishell: ");
-		if (input == NULL)
-		{
-			write(STDOUT_FILENO, "exit\n", 5);
-			appdata.should_exit = TRUE;
-			new_cycle_preparation(&appdata);
-		}
-		if (g_sig_received)
-		{
-			new_cycle_preparation(&appdata);
-			g_sig_received = 0;
-			continue;
-		}
-		if (input)
-			save_history(input);
+		// if (g_sig_received)
+		// {
+		// 	new_cycle_preparation(&appdata);
+		// 	g_sig_received = 0;
+		// 	continue;
+		// }
+		input = get_the_input(&appdata);
 		run_parsing(input, &appdata);
 		free(input);
 		run_lexer(&appdata);
