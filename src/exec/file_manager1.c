@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:46 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/14 18:55:34 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:17:13 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,17 @@ static int	manage_infiles(t_cmd *cmd)
 	j = 0;
 	while (++i < cmd->num_of_infiles)
 	{
-		if (access(cmd->infile_name[i], F_OK) == -1)
-			return (print_file_error(cmd->infile_name[i]), FAILURE);
-		cmd->infile_fd = open_files(cmd->infile_name[i], cmd->input_redir_type[i], 1);
-		if (access(cmd->infile_name[i], R_OK) == -1)
-			return (print_file_error(cmd->infile_name[i]), FAILURE);
+		if (cmd->input_redir_type[i] == STDIN)
+		{
+			if (access(cmd->infile_name[i], F_OK) == -1)
+				return (print_file_error(cmd->infile_name[i]), FAILURE);
+			cmd->infile_fd = open_files(cmd->infile_name[i], cmd->input_redir_type[i], 1);
+			if (access(cmd->infile_name[i], R_OK) == -1)
+				return (print_file_error(cmd->infile_name[i]), FAILURE);
+		}
 		if (cmd->input_redir_type[i] == HEREDOC)
 		{
+			cmd->infile_fd = open_files("here_doc.txt", HEREDOC, 1);
 			if (rwr_heredoc(cmd, cmd->delim[j]) == FAILURE)
 				return (FAILURE);
 			j++;

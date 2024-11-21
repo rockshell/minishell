@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:15 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/14 18:54:28 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:16:25 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	open_files(char *filename, int redir_type, int is_input)
 
 	res = 0;
 	if (is_input == 1 && redir_type == STDIN)
-		res = open(filename, O_RDONLY);
+		res = open(filename, O_RDONLY, 0644);
 	else if (is_input == 1 && redir_type == HEREDOC)
-		res = open("here_doc.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		res = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	else if (is_input == 0 && redir_type == STDOUT)
 		res = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	else if (is_input == 0 && redir_type == APPEND)
@@ -36,7 +36,7 @@ int	rwr_heredoc(t_cmd *cmd, char *delim)
 	{
 		ft_putstr_fd("> ", 1);
 		line = get_next_line(0);
-		if (!line || ft_strncmp(line, delim, ft_strlen(line)) == 0)
+		if (!line || ft_strcmp(line, delim) == 0)
 			break ;
 		write(cmd->infile_fd, line, ft_strlen(line));
 		write(cmd->infile_fd, "\n", 1);
