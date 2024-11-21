@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/18 21:50:49 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:32:59 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,39 +67,31 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	g_sig_received = 0;
+	// rl_catch_signals = 0;
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	if (initialization(&appdata, envp) == FAILURE)
 		return (FAILURE);
 	while (1)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell: ");
-		if (input)
+		if (input == NULL)
 		{
-			printf("test one\n");
-			save_history(input);
-		}
-		if (!input)
-		{
-			printf("test two\n");
+			write(STDOUT_FILENO, "exit\n", 5);
 			appdata.should_exit = TRUE;
 			new_cycle_preparation(&appdata);
 		}
-		if (g_sig_received == 1)
+		if (g_sig_received)
 		{
-			if (input)
-				free(input);
 			new_cycle_preparation(&appdata);
 			g_sig_received = 0;
-			printf("test three\n");
 			continue;
 		}
+		if (input)
+			save_history(input);
 		run_parsing(input, &appdata);
-		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		// if (appdata.lists_num > 0)
-		// 	print_lists(&appdata);
 		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
