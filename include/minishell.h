@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/14 18:57:31 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:58:38 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ void		free_envp_array(char **envp);
 void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);
-void		error_rising(char *argument);
+void		exec_error(char *argument);
 
 //lexer - urils
 char		*handle_num_quotes(char *input);

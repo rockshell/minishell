@@ -6,13 +6,13 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/21 18:53:21 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/21 18:58:38 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	error_rising(char *argument)
+void	exec_error(char *argument)
 {
 	int			exit_code;
 	struct stat	path_stat;
@@ -63,7 +63,7 @@ void	first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd)
 	if (!path)
 		print_child_error_message(cmd->argv[0]);
 	if (execve(path, cmd->argv, appdata->envp) == -1)
-		error_rising(cmd->argv[0]);
+		exec_error(cmd->argv[0]);
 }
 
 void	last_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i)
@@ -89,7 +89,7 @@ void	last_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i)
 	if (!path)
 		print_child_error_message(cmd->argv[0]);
 	if (execve(path, cmd->argv, appdata->envp) == -1)
-		error_rising(cmd->argv[0]);
+		exec_error(cmd->argv[0]);
 }
 
 void	mid_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i)
@@ -118,7 +118,7 @@ void	mid_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i)
 	if (!path)
 		print_child_error_message(cmd->argv[0]);
 	if (execve(path, cmd->argv, appdata->envp) == -1)
-		error_rising(cmd->argv[0]);
+		exec_error(cmd->argv[0]);
 }
 
 void	only_child(t_appdata *appdata, t_cmd *cmd)
@@ -141,5 +141,5 @@ void	only_child(t_appdata *appdata, t_cmd *cmd)
 	if (!path)
 		print_child_error_message(cmd->argv[0]);
 	if (execve(path, cmd->argv, appdata->envp) == -1)
-		error_rising(cmd->argv[0]);
+		exec_error(cmd->argv[0]);
 }

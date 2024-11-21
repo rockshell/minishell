@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:58:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/31 20:58:39 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/21 19:17:43 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ char	*expand_env_var(char *key, t_env *env, t_env *exit_status)
 	}
 	else
 	{
+		if (is_in_var(env, key) == FALSE)
+			return (ft_strdup(""));
 		env_var = ft_get_env(env, key);
 		if (!env_var)
 			return (NULL);

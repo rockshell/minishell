@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/14 19:01:56 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:32:25 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,32 @@ int	star_check(t_token *token)
 	return (TRUE);
 }
 
+int expand_exec(t_appdata *appdata, t_env *env)
+{
+	int i;
+	int j;
+	char *result;
+	char *value;
+
+	i = 0;
+	while (i < appdata->lists_num)
+	{
+		j = 0;
+		while (j < appdata->lists[i].size)
+		{
+			if (ft_strncmp(appdata->lists[i].cmd[j].argv[0], "./", 2) == 0)
+			{
+				value = appdata->lists[i].cmd[j].argv[0];
+				value += 2;
+				result = ft_get_env(env, "PWD");
+				free(appdata->lists[i].cmd[j].argv[0]);
+				appdata->lists[i].cmd[j].argv[0] = gnl_strjoin(result, value);
+			}
+		}
+	}
+	return (SUCCESS);
+}
+
 int	run_lexer(t_appdata *appdata)
 {
 	if (!appdata->first_token)
@@ -194,6 +220,8 @@ int	run_lexer(t_appdata *appdata)
 	if (!appdata->lists)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	if (make_lists(appdata) == FAILURE)
+		return (FAILURE);
+	if (expand_exec(appdata, appdata->env) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }
