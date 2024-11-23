@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/15 17:21:58 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:01:18 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		quit_sig;
+int		g_sig_received;
 //TODO - clear memory
 void	save_history(char *cmd)
 {
@@ -59,6 +59,24 @@ void	new_cycle_preparation(t_appdata *appdata)
 	free_memory(appdata);
 }
 
+char *get_the_input(t_appdata *appdata)
+{
+	char *input;
+	
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+	input = readline("minishell: ");
+	if (input == NULL)
+	{
+		write(STDOUT_FILENO, "exit\n", 5);
+		appdata->should_exit = TRUE;
+		new_cycle_preparation(appdata);
+	}
+	if (input)
+		save_history(input);
+	return (input);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -66,26 +84,15 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	g_sig_received = 0;
 	if (initialization(&appdata, envp) == FAILURE)
 		return (FAILURE);
 	while (1)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
-		input = readline("minishell: ");
-		if (input)
-			save_history(input);
-		if (!input)
-		{
-			appdata.should_exit = TRUE;
-			new_cycle_preparation(&appdata);
-		}
+		input = get_the_input(&appdata);
 		run_parsing(input, &appdata);
-		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		// if (appdata.lists_num > 0)
-		// 	print_lists(&appdata);
 		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);

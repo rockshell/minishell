@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 18:56:27 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:44:03 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	start_execution(t_appdata *appdata)
 	int	i;
 
 	i = 1;
+	signal(SIGINT, func_int);
 	execute_a_list(appdata, &appdata->lists[0]);
 	while (i < appdata->lists_num)
 	{
