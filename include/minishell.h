@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 16:24:28 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:57:31 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@
 # define COMMAND_NOT_FOUND 127
 # define INVALID_ARGUMENT 128
 # define SIGNAL_EXIT 128
-
-extern int		g_sig_received;
 
 typedef struct s_env
 {
@@ -268,6 +266,5 @@ int			initialization(t_appdata *appdata, char **envp);
 //signals
 void		sigint_handler(int signum);
 void		sigquit_handler(int signum);
-void func_int(int signum);
 
 #endif
