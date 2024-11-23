@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 16:43:29 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/23 17:01:18 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	g_sig_received = 0;
-	// rl_catch_signals = 0;
 	if (initialization(&appdata, envp) == FAILURE)
 		return (FAILURE);
 	while (1)
 	{
-		// if (g_sig_received)
-		// {
-		// 	new_cycle_preparation(&appdata);
-		// 	g_sig_received = 0;
-		// 	continue;
-		// }
 		input = get_the_input(&appdata);
 		run_parsing(input, &appdata);
 		free(input);
