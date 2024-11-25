@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/21 19:32:25 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/25 17:21:06 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ int	init_the_list(t_list *list, int start, int end)
 	list->and_after = 0;
 	list->or_after = 0;
 	list->end_after = 0;
-	list->cmd = malloc(sizeof(t_cmd) * (end - start));
+	if (end - start > 0)
+		list->cmd = malloc(sizeof(t_cmd) * (end - start));
+	else
+		list->cmd = malloc(sizeof(t_cmd) * 1);
 	if (!list->cmd)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	list->exec_data = malloc(sizeof(t_exec_data));
@@ -171,12 +174,35 @@ int	star_check(t_token *token)
 	return (TRUE);
 }
 
+int expand_argument(t_cmd *cmd, t_env *env)
+{
+	int i;
+	char *result;
+	char *value;
+
+	i = 0;
+	while (i < cmd->argc)
+	{
+		if (ft_strncmp(cmd->argv[i], "./", 2) == 0)
+		{
+			value = ft_strdup(cmd->argv[i] + 1);
+			if (!value)
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+			result = ft_get_env(env, "PWD");
+			free(cmd->argv[i]);
+			cmd->argv[i] = gnl_strjoin(result, value);
+			if (!cmd->argv[i])
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+		}
+		i++;
+	}
+	return(SUCCESS);
+}
+
 int expand_exec(t_appdata *appdata, t_env *env)
 {
 	int i;
 	int j;
-	char *result;
-	char *value;
 
 	i = 0;
 	while (i < appdata->lists_num)
@@ -184,15 +210,11 @@ int expand_exec(t_appdata *appdata, t_env *env)
 		j = 0;
 		while (j < appdata->lists[i].size)
 		{
-			if (ft_strncmp(appdata->lists[i].cmd[j].argv[0], "./", 2) == 0)
-			{
-				value = appdata->lists[i].cmd[j].argv[0];
-				value += 2;
-				result = ft_get_env(env, "PWD");
-				free(appdata->lists[i].cmd[j].argv[0]);
-				appdata->lists[i].cmd[j].argv[0] = gnl_strjoin(result, value);
-			}
+			if (expand_argument(&appdata->lists[i].cmd[j], env) == FAILURE)
+				return (FAILURE);
+			j++;
 		}
+		i++;
 	}
 	return (SUCCESS);
 }

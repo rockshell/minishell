@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 18:59:13 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/25 17:21:39 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	set_the_command_itself(t_cmd *cmd, t_token *first)
 		if (current->type == WORD && current->is_parsed == 0)
 		{
 			cmd->argv[i] = ft_strdup(current->value);
+			if (!cmd->argv[i])
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 			current->is_parsed = 1;
 			i++;
 		}
