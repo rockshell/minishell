@@ -1,6 +1,6 @@
 # minishell
 
-To-do list:
+(old)To-do list:
 1) Divide on logical groups/tokens (lexer thing);
 2) Check for errors in logical groups (for example syntax error, ”/’/) missing);
 3) Check tokens and word expansion (“...”, $VAR) (parser thing);

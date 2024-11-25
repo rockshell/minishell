@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/25 17:21:06 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:45:52 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
 	return (SUCCESS);
 }
 
-//TODO - deal with overallocate
 int	init_the_list(t_list *list, int start, int end)
 {
 	list->size = 0;

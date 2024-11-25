@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/25 17:19:43 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:45:45 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		g_sig_received;
-//TODO - clear memory
+
 void	save_history(char *cmd)
 {
 	if (cmd && *cmd)
@@ -53,6 +53,14 @@ void	new_cycle_preparation(t_appdata *appdata)
 		free_env(appdata->env);
 		free_envp_array(appdata->envp);
 		free_memory(appdata);
+		if (appdata->exit_status)
+		{
+			if (appdata->exit_status->value)
+				free(appdata->exit_status->value);
+			if (appdata->exit_status->key)
+				free(appdata->exit_status->key);
+			free(appdata->exit_status);	
+		}
 		exit(exit_code);
 	}
 	update_exit_code(appdata);
