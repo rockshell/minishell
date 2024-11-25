@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/23 17:01:18 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/25 15:37:36 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input = get_the_input(&appdata);
 		run_parsing(input, &appdata);
+		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
 		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
