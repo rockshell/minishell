@@ -56,6 +56,7 @@ void	start_execution(t_appdata *appdata)
 	int	i;
 
 	i = 1;
+	signal(SIGINT, func_int);
 	execute_a_list(appdata, &appdata->lists[0]);
 	while (i < appdata->lists_num)
 	{

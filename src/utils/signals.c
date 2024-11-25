@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:38:36 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/12 19:28:30 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:44:17 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 void	sigint_handler(int signum)
 {
 	(void) signum;
-	printf("\nminishell: ");
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	g_sig_received = 1;
 }
 
-void	sigquit_handler(int signum)
+void func_int(int signum)
 {
-	(void) signum;
-	printf("minishell: ");
-	// printf("\n\033[1A\033[6Cexit\n");
-	// exit(EXIT_SUCCESS);
+	(void)signum;
+	write(1, "\n", 1);
 }

@@ -62,6 +62,8 @@
 # define INVALID_ARGUMENT 128
 # define SIGNAL_EXIT 128
 
+extern int		g_sig_received;
+
 typedef struct s_env
 {
 	char			*key;
@@ -266,5 +268,6 @@ int			initialization(t_appdata *appdata, char **envp);
 //signals
 void		sigint_handler(int signum);
 void		sigquit_handler(int signum);
+void func_int(int signum);
 
 #endif
