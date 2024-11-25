@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:06:01 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/15 16:24:13 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/21 19:18:48 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	check_if_env(t_token *token)
 	while (temp)
 	{
 		check = ft_strchr(temp->value, '$');
-		if (check && ft_isspace(check[i + 1]) == FALSE)
+		if (check && check[i + 1] && check[i + 1] != '"'
+			&& ft_isspace(check[i + 1]) == FALSE)
 		{
 			if (ft_strlen(temp->value) >= 1)
 				temp->needs_expanding = 1;
