@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 18:41:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/11 18:48:06 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:49:00 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ void	close_pipes_in_parent(t_list *list)
 
 void	init_exec_data(t_list *list)
 {
-	// list->exec_data->infile_fd = -1;
-	// list->exec_data->outfile_fd = -1;
 	list->exec_data->num_of_cmd = &list->size;
 	list->exec_data->status = 0;
 	list->exec_data->fd = NULL;

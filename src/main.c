@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/25 20:45:45 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:08:07 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	new_cycle_preparation(t_appdata *appdata)
 				free(appdata->exit_status->value);
 			if (appdata->exit_status->key)
 				free(appdata->exit_status->key);
-			free(appdata->exit_status);	
+			free(appdata->exit_status);
 		}
 		exit(exit_code);
 	}
@@ -67,10 +67,10 @@ void	new_cycle_preparation(t_appdata *appdata)
 	free_memory(appdata);
 }
 
-char *get_the_input(t_appdata *appdata)
+char	*get_the_input(t_appdata *appdata)
 {
-	char *input;
-	
+	char	*input;
+
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	input = readline("minishell: ");
@@ -99,12 +99,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input = get_the_input(&appdata);
 		run_parsing(input, &appdata);
-		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
+		if (appdata.exit_code == 0 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}
 	return (appdata.exit_code);
 }
+// print_tokens(&appdata);

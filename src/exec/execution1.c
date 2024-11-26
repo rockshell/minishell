@@ -6,13 +6,13 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/21 19:21:04 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:01:06 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execute_multiple(t_appdata *appdata, t_list *list)
+static int	execute_multiple(t_appdata *appdata, t_list *list)
 {
 	if (prepare_pipes(list) == FAILURE)
 	{
@@ -61,12 +61,7 @@ void	start_execution(t_appdata *appdata)
 	while (i < appdata->lists_num)
 	{
 		if (appdata->should_exit == TRUE)
-		{
-			free_env(appdata->env);
-			free_envp_array(appdata->envp);
-			free_memory(appdata);
-			exit(appdata->exit_code);
-		}
+			new_cycle_preparation(appdata);
 		if (appdata->lists[i - 1].and_after == TRUE)
 		{
 			if (appdata->lists[i - 1].exec_data->status == SUCCESS)

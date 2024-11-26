@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:38:36 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/21 16:44:17 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:49:51 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	sigint_handler(int signum)
 	g_sig_received = 1;
 }
 
-void func_int(int signum)
+void	func_int(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);

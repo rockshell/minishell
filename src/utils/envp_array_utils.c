@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:31:13 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 17:00:41 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:51:40 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ static int	renew_envp_array(t_appdata *appdata, t_env *env)
 		{
 			appdata->envp[i] = gnl_strjoin(appdata->envp[i], temp->value);
 			if (!appdata->envp[i])
-				return (error_free(appdata, i), ft_putstr_fd(ALLOC_ERROR, 2), 1);
+			{
+				error_free(appdata, i);
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+			}
 		}
 		temp = temp->next;
 		i++;

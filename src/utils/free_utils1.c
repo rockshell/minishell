@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/25 18:33:49 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:50:24 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ void	close_exec_data_fd(t_list *list)
 		}
 		free(list->exec_data->fd);
 	}
-	// if (list->exec_data->infile_fd != -1)
-	// 	close(list->exec_data->infile_fd);
-	// if (list->exec_data->outfile_fd != -1)
-	// 	close(list->exec_data->outfile_fd);
 }
 
 //TODO unlink heredok ok?
@@ -46,8 +42,6 @@ void	free_exec_data(t_list *list)
 	if (list->exec_data->processes)
 		free(list->exec_data->processes);
 	close_exec_data_fd(list);
-	// if (list->cmd && list->cmd[0].input_redir_type == HEREDOC)
-	// 	unlink("here_doc.txt");
 	free(list->exec_data);
 }
 

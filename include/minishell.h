@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 18:58:38 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:59:28 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@
 # include "libft.h"
 
 # define ALLOC_ERROR "Error! The program failed to allocate memory!\n"
-# define BAD_INPUT "Syntax error somewhere. \n"
 # define BUFFER_SIZE 42
-# define CD_ONE_ARG_ERROR "minishell: cd: no absolute or relative path specified\n"
+# define CD_ONE_ARG "minishell: cd: no absolute or relative path specified\n"
 # define CD_TOO_MANY_ARG_ERROR "minishell: cd: too many arguments\n"
 # define EXIT_TOO_MANY_ARG_ERROR "minishell: exit: too many arguments\n"
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token `"
@@ -107,7 +106,7 @@ typedef struct s_cmd
 	int		is_pipe_after;
 	int		is_pipe_before;
 	int		infile_fd;
-	int 	outfile_fd;
+	int		outfile_fd;
 	char	**argv; //no redirects, command + args
 	char	**infile_name;
 	char	**outfile_name;
@@ -197,7 +196,7 @@ char		*gnl_strjoin(char const *s1, char const *s2);
 char		*make_path(t_cmd *cmd);
 int			check_if_builtin(t_cmd cmd);
 int			execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
-int 		file_manager(t_list *list);
+int			file_manager(t_list *list);
 int			io_redirection(t_cmd *cmd);
 size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
@@ -206,8 +205,10 @@ void		print_child_error_message(char *cmd_name);
 
 //children
 void		first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd);
-void		last_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i);
-void		mid_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i);
+void		last_child(t_appdata *appdata,
+				t_exec_data *exec_data, t_cmd *cmd, int i);
+void		mid_child(t_appdata *appdata,
+				t_exec_data *exec_data, t_cmd *cmd, int i);
 void		only_child(t_appdata *appdata, t_cmd *cmd);
 
 //utils for freeing
@@ -217,6 +218,7 @@ void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);
 void		exec_error(char *argument);
+void		new_cycle_preparation(t_appdata *appdata);
 
 //lexer - urils
 char		*handle_num_quotes(char *input);
@@ -251,7 +253,8 @@ void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 
 //expand - utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
-char		*get_expanded_str(char *value, int *i, t_env *env, t_env *exit_status);
+char		*get_expanded_str(char *value, int *i,
+				t_env *env, t_env *exit_status);
 char		*get_no_env_string(char *value, int i);
 char		*update_result(char *temp, char *new_value);
 int			count_expandables(char *value);
@@ -261,6 +264,7 @@ int			no_sep(char *value);
 //printing - utils
 void		print_tokens(t_appdata *appdata);
 void		print_lists(t_appdata *appdata);
+void		print_file_error(char *argument);
 
 //init
 int			initialization(t_appdata *appdata, char **envp);
@@ -268,6 +272,6 @@ int			initialization(t_appdata *appdata, char **envp);
 //signals
 void		sigint_handler(int signum);
 void		sigquit_handler(int signum);
-void func_int(int signum);
+void		func_int(int signum);
 
 #endif

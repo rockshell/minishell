@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built-in_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:31:12 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 18:34:32 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/26 16:48:30 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int	is_valid_var(char *argument)
 
 	i = 1;
 	key = get_key(argument);
-	// printf("Key is: %s\n", key);
 	if (!key)
 		return (-1);
 	if (ft_isalpha(key[0]) == FALSE && key[0] != '_')
