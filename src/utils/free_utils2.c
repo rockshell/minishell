@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 16:49:14 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	free_env(t_env *env)
 	env = NULL;
 }
 
-void	free_envp_array(char **envp)
+void	free_char_array(char **envp)
 {
 	int	i;
 
@@ -67,9 +67,9 @@ void	free_envp_array(char **envp)
 		return ;
 	while (envp[i])
 	{
-		if (envp[i])
-			free(envp[i]);
+		free(envp[i]);
 		i++;
 	}
 	free(envp);
+	envp = NULL;
 }

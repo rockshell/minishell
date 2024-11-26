@@ -6,13 +6,12 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 16:52:30 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//TODO - free an array "paths"
 char	*make_path(t_cmd *cmd)
 {
 	int		i;
@@ -33,10 +32,11 @@ char	*make_path(t_cmd *cmd)
 		current_path = ft_strjoin(paths[i], cmd_with_slash);
 		free(cmd_with_slash);
 		if (access(current_path, F_OK) == 0)
-			return (current_path);
+			return (free_char_array(paths), current_path);
 		free(current_path);
 		i++;
 	}
+	free_char_array(paths);
 	return (NULL);
 }
 

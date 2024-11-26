@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 16:44:21 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:58:57 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,5 +142,8 @@ void	only_child(t_appdata *appdata, t_cmd *cmd)
 	if (!path)
 		print_child_error_message(cmd->argv[0]);
 	if (execve(path, cmd->argv, appdata->envp) == -1)
+	{
+		free(path);
 		exec_error(cmd->argv[0]);
+	}
 }

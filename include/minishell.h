@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/26 16:59:28 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ void		only_child(t_appdata *appdata, t_cmd *cmd);
 
 //utils for freeing
 void		free_env(t_env *env);
-void		free_envp_array(char **envp);
+void		free_char_array(char **envp);
 void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);

@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/26 17:08:07 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,9 @@ void	new_cycle_preparation(t_appdata *appdata)
 	{
 		exit_code = appdata->exit_code;
 		free_env(appdata->env);
-		free_envp_array(appdata->envp);
+		free_env(appdata->exit_status);
+		free_char_array(appdata->envp);
 		free_memory(appdata);
-		if (appdata->exit_status)
-		{
-			if (appdata->exit_status->value)
-				free(appdata->exit_status->value);
-			if (appdata->exit_status->key)
-				free(appdata->exit_status->key);
-			free(appdata->exit_status);
-		}
 		exit(exit_code);
 	}
 	update_exit_code(appdata);
