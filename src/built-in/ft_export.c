@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:58 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 18:19:32 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:13:08 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void	find_and_change(t_env *env, char *key, char *new_value)
 			free(temp->value);
 			temp->value = new_value;
 			free(key);
+			return ;
 		}
 		temp = temp->next;
 	}
@@ -87,7 +88,7 @@ static int	export_with_args(t_cmd *cmd, t_env *env)
 	exit = 0;
 	while (i < cmd->argc)
 	{
-		if (is_valid_var(cmd->argv[i]) == 0)
+		if (is_valid_var(cmd->argv[i]) == FALSE)
 		{
 			ft_putstr_fd("minishell: export: '", 2);
 			ft_putstr_fd(cmd->argv[i], 2);
@@ -96,7 +97,7 @@ static int	export_with_args(t_cmd *cmd, t_env *env)
 		}
 		else
 		{
-			if (is_in_var(env, cmd->argv[i]) == 0)
+			if (is_in_var(env, cmd->argv[i]) == FALSE)
 				create_env_node(&env, cmd->argv[i]);
 			else
 				change_value(env, cmd->argv[i]);
