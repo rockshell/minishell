@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:15 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 15:16:25 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:47:34 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,10 @@ int	rwr_heredoc(t_cmd *cmd, char *delim)
 		return (FAILURE);
 	}
 	return (SUCCESS);
+}
+
+void	print_file_error(char *argument)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(argument);
 }

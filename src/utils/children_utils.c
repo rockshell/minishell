@@ -6,13 +6,12 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 17:16:05 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//TODO - free an array "paths"
 char	*make_path(t_cmd *cmd)
 {
 	int		i;
@@ -33,10 +32,11 @@ char	*make_path(t_cmd *cmd)
 		current_path = ft_strjoin(paths[i], cmd_with_slash);
 		free(cmd_with_slash);
 		if (access(current_path, F_OK) == 0)
-			return (current_path);
+			return (free_char_array(paths), current_path);
 		free(current_path);
 		i++;
 	}
+	free_char_array(paths);
 	return (NULL);
 }
 
@@ -50,7 +50,7 @@ int	io_redirection(t_cmd *cmd)
 	if (cmd->num_of_outfiles != 0)
 	{
 		if (dup2(cmd->outfile_fd, 1) == -1)
-			return(FAILURE);
+			return (FAILURE);
 	}
 	return (SUCCESS);
 }
@@ -59,7 +59,7 @@ int	io_redirection(t_cmd *cmd)
 void	close_fds(t_cmd *cmd, t_exec_data *exec_data, int current_pipe)
 {
 	int	i;
-	int num_of_cmd;
+	int	num_of_cmd;
 
 	i = -1;
 	num_of_cmd = *exec_data->num_of_cmd;
@@ -80,6 +80,5 @@ void	print_child_error_message(char *cmd_name)
 {
 	ft_putstr_fd(cmd_name, 2);
 	ft_putstr_fd(": command not found\n", 2);
-	// error_rising(appdata);
 	exit(127);
 }

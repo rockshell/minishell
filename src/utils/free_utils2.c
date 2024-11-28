@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/25 20:21:13 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:52:04 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,13 @@ void	free_memory(t_appdata *appdata)
 		while (++i < appdata->tokens_num)
 		{
 			if (appdata->tokens[i].value)
+			{
 				free(appdata->tokens[i].value);
+				appdata->tokens[i].value = NULL;
+			}
 		}
 		free(appdata->tokens);
+		appdata->tokens = NULL;
 		appdata->first_token = NULL;
 	}
 }
@@ -58,7 +62,7 @@ void	free_env(t_env *env)
 	env = NULL;
 }
 
-void	free_envp_array(char **envp)
+void	free_char_array(char **envp)
 {
 	int	i;
 
@@ -67,11 +71,9 @@ void	free_envp_array(char **envp)
 		return ;
 	while (envp[i])
 	{
-		if (envp[i])
-			free(envp[i]);
+		free(envp[i]);
 		i++;
 	}
 	free(envp);
+	envp = NULL;
 }
-
-

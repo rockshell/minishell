@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:13:45 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/21 15:33:36 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:34:33 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,9 @@ int	ft_echo(t_cmd *cmd)
 	i = 1;
 	is_new_line = 1;
 	if (cmd->argc == 1)
-	{
-		printf("\n");
-		return (SUCCESS);
-	}
-	while (i < cmd->argc && cmd->argv[i] != NULL && ft_strcmp(cmd->argv[i], "-n") == 0)
+		return (printf("\n"), SUCCESS);
+	while (i < cmd->argc && cmd->argv[i] != NULL
+		&& ft_strcmp(cmd->argv[i], "-n") == 0)
 	{
 		is_new_line = 0;
 		i++;

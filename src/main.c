@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/25 20:45:45 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:51:38 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,34 +51,34 @@ void	new_cycle_preparation(t_appdata *appdata)
 	{
 		exit_code = appdata->exit_code;
 		free_env(appdata->env);
-		free_envp_array(appdata->envp);
+		free_env(appdata->exit_status);
+		free_char_array(appdata->envp);
 		free_memory(appdata);
-		if (appdata->exit_status)
-		{
-			if (appdata->exit_status->value)
-				free(appdata->exit_status->value);
-			if (appdata->exit_status->key)
-				free(appdata->exit_status->key);
-			free(appdata->exit_status);	
-		}
 		exit(exit_code);
 	}
 	update_exit_code(appdata);
 	free_memory(appdata);
 }
 
-char *get_the_input(t_appdata *appdata)
+char	*get_the_input(t_appdata *appdata)
 {
-	char *input;
-	
+	char	*input;
+	int		exit_code;
+
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	input = readline("minishell: ");
 	if (input == NULL)
 	{
 		write(STDOUT_FILENO, "exit\n", 5);
-		appdata->should_exit = TRUE;
-		new_cycle_preparation(appdata);
+		input = ft_get_env(appdata->exit_status, "?");
+		exit_code = ft_atoi(input);
+		free_env(appdata->env);
+		free_env(appdata->exit_status);
+		free_char_array(appdata->envp);
+		free_memory(appdata);
+		free(input);
+		exit(exit_code);
 	}
 	if (input)
 		save_history(input);
@@ -99,12 +99,12 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input = get_the_input(&appdata);
 		run_parsing(input, &appdata);
-		// print_tokens(&appdata);
 		free(input);
 		run_lexer(&appdata);
-		if (appdata.exit_code != 2 && appdata.exit_code != 1 && appdata.first_token)
+		if (appdata.exit_code == 0 && appdata.first_token)
 			start_execution(&appdata);
 		new_cycle_preparation(&appdata);
 	}
 	return (appdata.exit_code);
 }
+// print_tokens(&appdata);

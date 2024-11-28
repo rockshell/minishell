@@ -6,16 +6,21 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:46 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 15:17:13 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:02:22 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_file_error(char *argument)
+static int	stdin_processing(t_cmd *cmd, int i)
 {
-	ft_putstr_fd("minishell: ", 2);
-	perror(argument);
+	if (access(cmd->infile_name[i], F_OK) == -1)
+		return (print_file_error(cmd->infile_name[i]), FAILURE);
+	cmd->infile_fd = open_files(cmd->infile_name[i],
+			cmd->input_redir_type[i], 1);
+	if (access(cmd->infile_name[i], R_OK) == -1)
+		return (print_file_error(cmd->infile_name[i]), FAILURE);
+	return (SUCCESS);
 }
 
 static int	manage_infiles(t_cmd *cmd)
@@ -29,11 +34,8 @@ static int	manage_infiles(t_cmd *cmd)
 	{
 		if (cmd->input_redir_type[i] == STDIN)
 		{
-			if (access(cmd->infile_name[i], F_OK) == -1)
-				return (print_file_error(cmd->infile_name[i]), FAILURE);
-			cmd->infile_fd = open_files(cmd->infile_name[i], cmd->input_redir_type[i], 1);
-			if (access(cmd->infile_name[i], R_OK) == -1)
-				return (print_file_error(cmd->infile_name[i]), FAILURE);
+			if (stdin_processing(cmd, i) == FAILURE)
+				return (FAILURE);
 		}
 		if (cmd->input_redir_type[i] == HEREDOC)
 		{
@@ -56,7 +58,8 @@ static int	manage_outfiles(t_cmd *cmd)
 	i = -1;
 	while (++i < cmd->num_of_outfiles)
 	{
-		cmd->outfile_fd = open_files(cmd->outfile_name[i], cmd->output_redir_type[i], 0);
+		cmd->outfile_fd = open_files(cmd->outfile_name[i],
+				cmd->output_redir_type[i], 0);
 		if (access(cmd->outfile_name[i], W_OK) == -1)
 			return (print_file_error(cmd->outfile_name[i]), FAILURE);
 		if (i < cmd->num_of_outfiles - 1)

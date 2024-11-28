@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:10 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/18 18:25:02 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:01:37 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	execute_a_builtin(t_appdata *appdata, t_cmd *cmd)
 	return (exit_status);
 }
 
-void close_fd_builtin(int in, int out)
+static void	close_fd_builtin(int in, int out)
 {
 	if (in != -1)
 	{
@@ -54,12 +54,12 @@ void close_fd_builtin(int in, int out)
 	}
 }
 
-void redir_error(int in_backup, int out_backup, int is_stdin_error)
+static void	redir_error(int in_backup, int out_backup, int is_stdin_error)
 {
 	if (is_stdin_error == 1)
 	{
 		if (in_backup != -1)
-            close(in_backup);
+			close(in_backup);
 	}
 	if (is_stdin_error == 0)
 	{
@@ -73,11 +73,11 @@ void redir_error(int in_backup, int out_backup, int is_stdin_error)
 	}
 }
 
-int execute_single_builtin(t_appdata *appdata, t_list *list)
+static int	execute_single_builtin(t_appdata *appdata, t_list *list)
 {
-	int exit_code;
-	int in_backup;
-	int out_backup;
+	int	exit_code;
+	int	in_backup;
+	int	out_backup;
 
 	exit_code = 0;
 	in_backup = -1;

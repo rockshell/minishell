@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:11 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/10/28 16:27:50 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/26 16:58:37 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	ft_cd(t_cmd *cmd, t_env *env)
 
 	path = NULL;
 	if (cmd->argc == 1)
-		return (ft_putstr_fd(CD_ONE_ARG_ERROR, 2), FAILURE);
+		return (ft_putstr_fd(CD_ONE_ARG, 2), FAILURE);
 	else if (cmd->argc > 2)
 		return (ft_putstr_fd(CD_TOO_MANY_ARG_ERROR, 2), FAILURE);
 	if (getcwd(cwd, 1024) == NULL)
