@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:52:04 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,13 @@ void	free_memory(t_appdata *appdata)
 		while (++i < appdata->tokens_num)
 		{
 			if (appdata->tokens[i].value)
+			{
 				free(appdata->tokens[i].value);
+				appdata->tokens[i].value = NULL;
+			}
 		}
 		free(appdata->tokens);
+		appdata->tokens = NULL;
 		appdata->first_token = NULL;
 	}
 }

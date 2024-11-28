@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:51:38 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	new_cycle_preparation(t_appdata *appdata)
 char	*get_the_input(t_appdata *appdata)
 {
 	char	*input;
+	int		exit_code;
 
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
@@ -70,8 +71,14 @@ char	*get_the_input(t_appdata *appdata)
 	if (input == NULL)
 	{
 		write(STDOUT_FILENO, "exit\n", 5);
-		appdata->should_exit = TRUE;
-		new_cycle_preparation(appdata);
+		input = ft_get_env(appdata->exit_status, "?");
+		exit_code = ft_atoi(input);
+		free_env(appdata->env);
+		free_env(appdata->exit_status);
+		free_char_array(appdata->envp);
+		free_memory(appdata);
+		free(input);
+		exit(exit_code);
 	}
 	if (input)
 		save_history(input);
