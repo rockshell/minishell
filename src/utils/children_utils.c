@@ -6,13 +6,37 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:52:04 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*make_path(t_cmd *cmd)
+char **find_paths(char **envp)
+{
+	int	i;
+	char *path;
+	char **paths;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strnstr(envp[i], "PATH=", 5))
+		{
+			path = ft_strdup(envp[i] + 5);
+			if (!path)
+				return (ft_putstr_fd(ALLOC_ERROR, 2), NULL);
+			paths = ft_split(path, ':');
+			if (!path)
+				return (free(path), ft_putstr_fd(ALLOC_ERROR, 2), NULL);
+			return (free(path), paths);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+char	*make_path(t_cmd *cmd, char **envp)
 {
 	int		i;
 	char	**paths;
@@ -25,7 +49,9 @@ char	*make_path(t_cmd *cmd)
 		return (current_path);
 	}
 	i = 0;
-	paths = ft_split(getenv("PATH"), ':');
+	paths = find_paths(envp);
+	if (!paths)
+		return (NULL);
 	while (paths[i])
 	{
 		cmd_with_slash = ft_strjoin("/", cmd->argv[0]);

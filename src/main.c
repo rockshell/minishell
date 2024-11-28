@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/28 16:51:38 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:31:18 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ char	*get_the_input(t_appdata *appdata)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 	input = readline("minishell: ");
+	if (g_sig_received)
+	{
+		appdata->exit_code = SIGNAL_EXIT + 2;
+		update_exit_code(appdata);
+		g_sig_received = 0;
+	}
 	if (input == NULL)
 	{
 		write(STDOUT_FILENO, "exit\n", 5);
