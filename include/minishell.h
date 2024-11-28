@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/26 18:58:05 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:46:48 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int			prepare_pipes(t_list *list);
 //execution utils
 char		*get_next_line(int fd);
 char		*gnl_strjoin(char const *s1, char const *s2);
-char		*make_path(t_cmd *cmd);
+char		*make_path(t_cmd *cmd, char **envp);
 int			check_if_builtin(t_cmd cmd);
 int			execute_a_builtin(t_appdata *appdata, t_cmd *cmd);
 int			file_manager(t_list *list);
