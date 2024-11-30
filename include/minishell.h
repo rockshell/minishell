@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/30 16:48:44 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/30 16:57:31 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,16 +236,8 @@ void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 
 //expand - utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
-char		*get_expanded_str(char *value, int *i,
-				t_env *env, t_env *exit_status);
-char		*get_no_env_string(char *value, int i);
-char		*update_result(char *temp, char *new_value);
-int			count_expandables(char *value);
-int			expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
 int			new_expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
-int			no_sep(char *value);
 int			is_valid_env_var_first_symbol(int c);
-void		switch_quotes_flag(int *flag);
 char		*expand_strjoin(char *s1, char *s2);
 int			is_valid_symbol_for_env_var_name(int c);
 char		*append_char(char *s, char c);
@@ -260,7 +252,6 @@ int			initialization(t_appdata *appdata, char **envp);
 
 //signals
 void		sigint_handler(int signum);
-void		sigquit_handler(int signum);
 void		func_int(int signum);
 
 #endif

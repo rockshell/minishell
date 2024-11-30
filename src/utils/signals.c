@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:38:36 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/26 20:55:47 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:12:24 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	sigint_handler(int signum)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
-	g_sig_received = 1;
+	g_sig_received = 2;
 }
 
 void	func_int(int signum)

@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 16:48:46 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/30 16:59:13 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,6 @@ int	expand_token(t_token *current, t_env *env, t_env *exit_status)
 		if (current->value[i] == '$' && current->value[i + 1] && 
 			is_valid_env_var_first_symbol(current->value[i + 1]) && !quotes_flag)
 		{
-			// printf("Current j is %d and i is %d\n", j, i);
-			// temp = ft_substr(current->value, j, i - j);
-			// new_value = expand_strjoin(new_value, temp);
-			// printf("Temp: %s\n", temp);
-			// printf("New value: %s\n", new_value);
-			// free(temp);
 			j = i;
 			i++;
 			while (current->value[i] && 
@@ -55,9 +49,6 @@ int	expand_token(t_token *current, t_env *env, t_env *exit_status)
 			key = ft_substr(current->value, j, i - j);
 			temp = expand_env_var(key, env, exit_status);
 			new_value = expand_strjoin(new_value, temp);
-			// printf("Key: %s\n", key);
-			// printf("Current temp: %s\n", temp);
-			// printf("Current new value: %s\n", new_value);
 			free(key);
 			free(temp);
 			j = i;
@@ -65,7 +56,6 @@ int	expand_token(t_token *current, t_env *env, t_env *exit_status)
 		else
 		{
 			new_value = append_char(new_value, current->value[i]);
-			// printf("New value: %s\n", new_value);
 			i++;
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   children_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/28 17:52:04 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:04:16 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	io_redirection(t_cmd *cmd)
 	return (SUCCESS);
 }
 
-//TODO - make it ok!
 void	close_fds(t_cmd *cmd, t_exec_data *exec_data, int current_pipe)
 {
 	int	i;
