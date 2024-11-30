@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/25 20:45:52 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:48:45 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,10 +232,9 @@ int	run_lexer(t_appdata *appdata)
 		appdata->exit_code = 1;
 		return (FAILURE);
 	}
-	check_if_env(appdata->first_token);
+	new_expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
 	if (clean_the_quotes(appdata->first_token) == FAILURE)
 		return (FAILURE);
-	expand_tokens(appdata->first_token, appdata->env, appdata->exit_status);
 	appdata->lists_num = count_lists(appdata);
 	appdata->lists = malloc(sizeof(t_list) * appdata->lists_num);
 	if (!appdata->lists)

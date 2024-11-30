@@ -3,49 +3,106 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:58:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/21 19:17:43 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/29 21:55:27 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_expandables(char *value)
+char	*append_char(char *s, char c)
 {
-	int	i;
-	int	counter;
+	char	*res;
+	size_t	len;
 
-	i = 0;
-	counter = 0;
-	while (value[i])
+	if (s)
+		len = ft_strlen(s);
+	else
+		len = 0;
+	res = (char *)malloc(sizeof(char) * (len + 2));
+	if (!res)
+		return (NULL);
+	if (s)
 	{
-		if (value[i] == '$')
-			counter++;
-		i++;
+		ft_strlcpy(res, s, len + 1);
+		free(s);
 	}
-	return (counter);
+	else
+		res[0] = '\0';
+	res[len] = c;
+	res[len + 1] = '\0';
+	// printf("Current len: %ld\n", len);
+	// printf("Current res: %s\n", res);
+	return (res);
 }
 
-int	no_sep(char *value)
+char	*expand_strjoin(char *s1, char *s2)
 {
-	int	i;
+	char	*res;
+	size_t	len1;
+	size_t	len2;
 
-	i = 0;
-	while (value[i])
+	if (s1)
+		len1 = ft_strlen(s1);
+	else
+		len1 = 0;
+	if (s2)
+		len2 = ft_strlen(s2);
+	else
+		len2 = 0;
+	res = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!res)
+		return (NULL);
+	if (s1)
 	{
-		if (ft_isspace(value[i]) == TRUE)
-			return (FALSE);
-		i++;
+		ft_strlcpy(res, s1, len1 + 1);
+		free((char *)s1);
 	}
-	return (TRUE);
+	else
+		res[0] = '\0';
+	if (s2)
+		ft_strlcat(res, s2, len1 + len2 + 1);
+	return (res);
+}
+
+void	switch_quotes_flag(int *flag)
+{
+	if (*flag == 0)
+		*flag = 1;
+	else
+		*flag = 0;
+}
+
+int	is_valid_symbol_for_env_var_name(int c)
+{
+	if (ft_isalnum(c))
+		return (TRUE);
+	if (c == 95)
+		return (TRUE);
+	if (c == 63)
+		return (TRUE);
+	return (FALSE);
+}
+
+int	is_valid_env_var_first_symbol(int c)
+{
+	if (ft_isalpha(c))
+		return (TRUE);
+	if (c == 95)
+		return (TRUE);
+	if (c == 63)
+		return (TRUE);
+	return (FALSE);
 }
 
 char	*expand_env_var(char *key, t_env *env, t_env *exit_status)
 {
 	char	*env_var;
 
+	if (*key == '$')
+		key++;
 	if (ft_strcmp(key, "?") == 0)
 	{
 		env_var = ft_get_env(exit_status, key);
@@ -62,3 +119,33 @@ char	*expand_env_var(char *key, t_env *env, t_env *exit_status)
 	}
 	return (env_var);
 }
+
+// int	count_expandables(char *value)
+// {
+// 	int	i;
+// 	int	counter;
+
+// 	i = 0;
+// 	counter = 0;
+// 	while (value[i])
+// 	{
+// 		if (value[i] == '$')
+// 			counter++;
+// 		i++;
+// 	}
+// 	return (counter);
+// }
+
+// int	no_sep(char *value)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (value[i])
+// 	{
+// 		if (ft_isspace(value[i]) == TRUE)
+// 			return (FALSE);
+// 		i++;
+// 	}
+// 	return (TRUE);
+// }
