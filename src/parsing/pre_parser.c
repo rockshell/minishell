@@ -3,42 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/25 18:23:40 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:59:26 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// int	is_operator(char *input)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (input[i] == '|')
+// 	{
+// 		if (input[i + 1] && input[i + 1] == '|')
+// 			return (LOGICAL_OR);
+// 		else
+// 			return (PIPE);
+// 	}
+// 	else if (input[i] == '<')
+// 	{
+// 		if (input[i + 1] && input[i + 1] == '<')
+// 			return (HEREDOC);
+// 		else
+// 			return (STDIN);
+// 	}
+// 	else if (input[i] == '>')
+// 	{
+// 		if (input[i + 1] && input[i + 1] == '>')
+// 			return (APPEND);
+// 		else
+// 			return (STDOUT);
+// 	}
+// 	else if (input[i] == '&' && input[i + 1] && input[i + 1] == '&')
+// 		return (LOGICAL_AND);
+// 	return (WORD);
+// }
+
 int	is_operator(char *input)
 {
-	int	i;
-
-	i = 0;
-	if (input[i] == '|')
+	if (*input == '|')
 	{
-		if (input[i + 1] && input[i + 1] == '|')
+		if (*input + 1 && *input + 1 == '|')
 			return (LOGICAL_OR);
 		else
 			return (PIPE);
 	}
-	else if (input[i] == '<')
+	else if (*input == '<')
 	{
-		if (input[i + 1] && input[i + 1] == '<')
+		if (*input + 1 && *input + 1 == '<')
 			return (HEREDOC);
 		else
 			return (STDIN);
 	}
-	else if (input[i] == '>')
+	else if (*input == '>')
 	{
-		if (input[i + 1] && input[i + 1] == '>')
+		if (*input + 1 && *input + 1 == '>')
 			return (APPEND);
 		else
 			return (STDOUT);
 	}
-	else if (input[i] == '&' && input[i + 1] && input[i + 1] == '&')
+	else if (*input == '&' && *input + 1 && *input + 1 == '&')
 		return (LOGICAL_AND);
 	return (WORD);
 }
@@ -47,7 +75,7 @@ int	make_token(char *input, int *start, int token_pos, t_token *current)
 {
 	size_t	len;
 	char	*value;
-	
+
 	init_token(token_pos, current);
 	while (ft_isspace(input[*start]))
 		(*start)++;
@@ -60,7 +88,6 @@ int	make_token(char *input, int *start, int token_pos, t_token *current)
 	if (!current->value)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	current->type = is_operator(value);
-	// printf("Value: %s\n", value);
 	free(value);
 	*start += (int)len;
 	return (SUCCESS);

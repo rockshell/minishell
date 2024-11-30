@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/30 16:57:31 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/30 22:05:51 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,64 +72,64 @@ typedef struct s_env
 
 typedef struct s_token
 {
-	int		pos;
-	int		type;
-	int		is_parsed;
-	char	*value;
+	int				pos;
+	int				type;
+	int				is_parsed;
+	char			*value;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
 
 typedef struct s_cmd
 {
-	int		argc;
-	int		is_builtin;
-	int		*input_redir_type;
-	int		*output_redir_type;
-	int		num_of_infiles;
-	int		num_of_outfiles;
-	int		num_of_delims;
-	int		is_pipe_after;
-	int		is_pipe_before;
-	int		infile_fd;
-	int		outfile_fd;
-	char	**argv;
-	char	**infile_name;
-	char	**outfile_name;
-	char	**delim;
+	int				argc;
+	int				is_builtin;
+	int				*input_redir_type;
+	int				*output_redir_type;
+	int				num_of_infiles;
+	int				num_of_outfiles;
+	int				num_of_delims;
+	int				is_pipe_after;
+	int				is_pipe_before;
+	int				infile_fd;
+	int				outfile_fd;
+	char			**argv;
+	char			**infile_name;
+	char			**outfile_name;
+	char			**delim;
 }	t_cmd;
 
 typedef struct s_exec_data
 {
-	int		*num_of_cmd;
-	int		status;
-	int		**fd;
-	pid_t	*processes;
+	int				*num_of_cmd;
+	int				status;
+	int				**fd;
+	pid_t			*processes;
 }	t_exec_data;
 
 typedef struct s_list
 {
-	int			and_after;
-	int			or_after;
-	int			end_after;
-	int			size;
-	t_cmd		*cmd;
-	t_exec_data	*exec_data; 
+	int				and_after;
+	int				or_after;
+	int				end_after;
+	int				size;
+	t_cmd			*cmd;
+	t_exec_data		*exec_data;
 }	t_list;
 
 typedef struct s_appdata
 {
-	int		tokens_num;
-	int		lists_num;
-	int		exit_code;
-	int		should_exit;
-	int		envp_needs_update;
-	char	**envp;
-	t_token	*tokens;
-	t_token	*first_token;
-	t_list	*lists;
-	t_env	*env;
-	t_env	*exit_status;
+	int			tokens_num;
+	int			lists_num;
+	int			exit_code;
+	int			should_exit;
+	int			envp_needs_update;
+	char		**envp;
+	t_token		*tokens;
+	t_token		*first_token;
+	t_list		*lists;
+	t_env		*env;
+	t_env		*exit_status;
 }	t_appdata;
 
 //built-in
@@ -236,10 +236,11 @@ void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
 
 //expand - utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);
-int			new_expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
-int			is_valid_env_var_first_symbol(int c);
+int			new_expand_tokens(t_token *first_token,
+				t_env *env, t_env *exit_status);
+int			ef(int c);
 char		*expand_strjoin(char *s1, char *s2);
-int			is_valid_symbol_for_env_var_name(int c);
+int			is_env_symbol(int c);
 char		*append_char(char *s, char c);
 
 //printing - utils

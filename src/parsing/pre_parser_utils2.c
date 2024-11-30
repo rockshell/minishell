@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:46:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 19:03:40 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 22:23:18 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,13 @@ char	*handle_pipe_tokens(char *input)
 		i++;
 	i++;
 	return (input + i);
+}
+
+void	init_token(int i, t_token *current)
+{
+	current->pos = i;
+	current->is_parsed = 0;
+	current->type = 0;
+	current->prev = NULL;
+	current->next = NULL;
 }

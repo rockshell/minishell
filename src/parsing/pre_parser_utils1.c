@@ -6,20 +6,11 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:46:08 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 16:48:50 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/30 17:49:28 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	init_token(int i, t_token *current)
-{
-	current->pos = i;
-	current->is_parsed = 0;
-	current->type = 0;
-	current->prev = NULL;
-	current->next = NULL;
-}
 
 int	ft_isspace(char c)
 {
