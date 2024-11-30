@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:56:02 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/21 18:52:08 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:04:15 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	wait_for_children(t_list *list)
 	return (SUCCESS);
 }
 
-//TODO fork error handling
 int	create_processes(t_appdata *appdata, t_list *list)
 {
 	int	i;

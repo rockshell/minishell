@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/28 18:31:18 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:12:38 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*get_the_input(t_appdata *appdata)
 	input = readline("minishell: ");
 	if (g_sig_received)
 	{
-		appdata->exit_code = SIGNAL_EXIT + 2;
+		appdata->exit_code = SIGNAL_EXIT + g_sig_received;
 		update_exit_code(appdata);
 		g_sig_received = 0;
 	}

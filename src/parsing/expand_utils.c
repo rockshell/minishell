@@ -6,7 +6,7 @@
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:58:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/29 21:55:27 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/30 16:55:42 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ char	*append_char(char *s, char c)
 		res[0] = '\0';
 	res[len] = c;
 	res[len + 1] = '\0';
-	// printf("Current len: %ld\n", len);
-	// printf("Current res: %s\n", res);
 	return (res);
 }
 
@@ -65,14 +63,6 @@ char	*expand_strjoin(char *s1, char *s2)
 	if (s2)
 		ft_strlcat(res, s2, len1 + len2 + 1);
 	return (res);
-}
-
-void	switch_quotes_flag(int *flag)
-{
-	if (*flag == 0)
-		*flag = 1;
-	else
-		*flag = 0;
 }
 
 int	is_valid_symbol_for_env_var_name(int c)
@@ -119,33 +109,3 @@ char	*expand_env_var(char *key, t_env *env, t_env *exit_status)
 	}
 	return (env_var);
 }
-
-// int	count_expandables(char *value)
-// {
-// 	int	i;
-// 	int	counter;
-
-// 	i = 0;
-// 	counter = 0;
-// 	while (value[i])
-// 	{
-// 		if (value[i] == '$')
-// 			counter++;
-// 		i++;
-// 	}
-// 	return (counter);
-// }
-
-// int	no_sep(char *value)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (value[i])
-// 	{
-// 		if (ft_isspace(value[i]) == TRUE)
-// 			return (FALSE);
-// 		i++;
-// 	}
-// 	return (TRUE);
-// }
