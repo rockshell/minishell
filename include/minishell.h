@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/28 17:46:48 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:48:44 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,34 +70,20 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_token	t_token;
-/**
- *
- * This structure stores the necessary information for each token parsed
- * from the user input in the minishell project, including its position,
- * content, and type. It can also be part of a linked list for sequential
- * token processing.
- * 
- * @var pos The position of the token in the command line.
- * @var content The actual string value of the token (e.g., command, argument).
- * @var type The type of the token (e.g., COMMAND, ARGUMENT, OPERATOR).
- * @var next Pointer to the next token in the list (for linked list structure).
- */
 typedef struct s_token
 {
 	int		pos;
 	int		type;
 	int		is_parsed;
-	int		needs_expanding;
 	char	*value;
-	t_token	*prev;
-	t_token	*next;
+	struct s_token	*prev;
+	struct s_token	*next;
 }	t_token;
 
 typedef struct s_cmd
 {
-	int		argc; //num of things in argv
-	int		is_builtin; //TODO
+	int		argc;
+	int		is_builtin;
 	int		*input_redir_type;
 	int		*output_redir_type;
 	int		num_of_infiles;
@@ -107,16 +93,14 @@ typedef struct s_cmd
 	int		is_pipe_before;
 	int		infile_fd;
 	int		outfile_fd;
-	char	**argv; //no redirects, command + args
+	char	**argv;
 	char	**infile_name;
 	char	**outfile_name;
-	char	**delim; //for HEREDOC use ONLY
+	char	**delim;
 }	t_cmd;
 
 typedef struct s_exec_data
 {
-	// int		infile_fd;
-	// int		outfile_fd;
 	int		*num_of_cmd;
 	int		status;
 	int		**fd;
@@ -130,7 +114,7 @@ typedef struct s_list
 	int			end_after;
 	int			size;
 	t_cmd		*cmd;
-	t_exec_data	*exec_data; //for Vita's use
+	t_exec_data	*exec_data; 
 }	t_list;
 
 typedef struct s_appdata
@@ -246,7 +230,6 @@ int			is_operator(char *input);
 int			run_lexer(t_appdata *appdata);
 int			set_the_command_itself(t_cmd *cmd, t_token *first);
 int			syntax_check(t_token *token);
-void		check_if_env(t_token *token);
 void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
@@ -259,7 +242,13 @@ char		*get_no_env_string(char *value, int i);
 char		*update_result(char *temp, char *new_value);
 int			count_expandables(char *value);
 int			expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
+int			new_expand_tokens(t_token *first_token, t_env *env, t_env *exit_status);
 int			no_sep(char *value);
+int			is_valid_env_var_first_symbol(int c);
+void		switch_quotes_flag(int *flag);
+char		*expand_strjoin(char *s1, char *s2);
+int			is_valid_symbol_for_env_var_name(int c);
+char		*append_char(char *s, char c);
 
 //printing - utils
 void		print_tokens(t_appdata *appdata);

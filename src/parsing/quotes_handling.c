@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:38:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/04 23:24:45 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/11/30 16:50:33 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,8 @@ int	handle_env_quotes(t_token *token)
 {
 	char	*unquoted_value;
 	int		len;
-	int		is_double;
 
 	len = count_quoted_len(token);
-	is_double = is_quotes_double(token);
 	unquoted_value = malloc(sizeof(char) * (len + 1));
 	if (!unquoted_value)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
@@ -100,7 +98,5 @@ int	handle_env_quotes(t_token *token)
 	if (!token->value)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	free(unquoted_value);
-	if (is_double == FALSE)
-		token->needs_expanding = 0;
 	return (SUCCESS);
 }

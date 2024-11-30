@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:04:14 by arch              #+#    #+#             */
-/*   Updated: 2024/11/14 15:18:50 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:46:46 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@ void	print_tokens(t_appdata *appdata)
 		printf("Value: %s\n", current->value);
 		printf("Type: %i\n", current->type);
 		printf("Position: %i\n", current->pos);
-		printf("Is expandable: ");
-		if (current->needs_expanding == 1)
-			printf("YES\n");
-		else
-			printf("NO\n");
-		
 		printf("=====================\n");
 		current = current->next;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:06:01 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/21 19:18:48 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:49:07 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,3 @@ int	count_lists(t_appdata *appdata)
 	return (res);
 }
 
-void	check_if_env(t_token *token)
-{
-	t_token	*temp;
-	char	*check;
-	int		i;
-
-	i = 0;
-	temp = token;
-	while (temp)
-	{
-		check = ft_strchr(temp->value, '$');
-		if (check && check[i + 1] && check[i + 1] != '"'
-			&& ft_isspace(check[i + 1]) == FALSE)
-		{
-			if (ft_strlen(temp->value) >= 1)
-				temp->needs_expanding = 1;
-		}
-		temp = temp->next;
-	}
-}
