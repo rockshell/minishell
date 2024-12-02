@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/30 22:05:51 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/02 17:23:11 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,8 @@ void		new_cycle_preparation(t_appdata *appdata);
 
 //lexer - urils
 char		*handle_num_quotes(char *input);
-char		*handle_redirection_tokens(char *input);
-char		*handle_pipe_tokens(char *input);
+// char		*handle_redirection_tokens(char *input);
+// char		*handle_pipe_tokens(char *input);
 int			ft_isspace(char c);
 int			count_tokens(char *input);
 int			run_parsing(char *input, t_appdata *appdata);
