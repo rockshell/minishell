@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:38:25 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 16:50:33 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/02 19:51:15 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_contain_quotes(t_token *token)
-{
-	if (ft_strchr(token->value, '"') != NULL)
-		return (TRUE);
-	else if (ft_strchr(token->value, '\'') != NULL)
-		return (TRUE);
-	else
-		return (FALSE);
-}
 
 int	is_quotes_double(t_token *token)
 {
@@ -98,5 +88,32 @@ int	handle_env_quotes(t_token *token)
 	if (!token->value)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 	free(unquoted_value);
+	return (SUCCESS);
+}
+
+int	clean_the_quotes(t_token *token)
+{
+	char	*unquoted_value;
+	int		len;
+
+	while (token)
+	{
+		if (ft_strchr(token->value, '$'))
+			handle_env_quotes(token);
+		else
+		{
+			len = count_quoted_len(token);
+			unquoted_value = malloc(sizeof(char) * (len + 1));
+			if (!unquoted_value)
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+			no_quote_copy(token, unquoted_value);
+			free(token->value);
+			token->value = ft_strdup(unquoted_value);
+			if (!token->value)
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+			free(unquoted_value);
+		}
+		token = token->next;
+	}
 	return (SUCCESS);
 }

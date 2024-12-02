@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: arch <arch@student.42.fr>                  +#+  +:+       +#+         #
+#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/11/30 17:59:55 by arch             ###   ########.fr        #
+#    Updated: 2024/12/02 19:54:41 by akulikov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,9 +34,11 @@ parsing/expand_utils.c \
 parsing/expand.c \
 parsing/lexer_utils1.c \
 parsing/lexer_utils2.c \
+parsing/lexer_utils3.c \
 parsing/lexer.c \
 parsing/pre_parser_utils1.c \
 parsing/pre_parser_utils2.c \
+parsing/pre_parser_utils3.c \
 parsing/pre_parser.c \
 parsing/quotes_handling.c \
 parsing/syntax_check.c \

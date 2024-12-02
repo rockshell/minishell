@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/02 17:23:11 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:56:11 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,11 +206,15 @@ void		new_cycle_preparation(t_appdata *appdata);
 
 //lexer - urils
 char		*handle_num_quotes(char *input);
+int			init_the_list(t_list *list, int start, int end);
+int			expand_argument(t_cmd *cmd, t_env *env);
+int			expand_exec(t_appdata *appdata, t_env *env);
 // char		*handle_redirection_tokens(char *input);
 // char		*handle_pipe_tokens(char *input);
 int			ft_isspace(char c);
 int			count_tokens(char *input);
 int			run_parsing(char *input, t_appdata *appdata);
+int			init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before);
 size_t		handle_len_quotes(char *input, size_t i);
 size_t		handle_len_redirs(char *input, size_t i);
 size_t		handle_len_pipes(char *input, size_t i);
@@ -218,11 +222,11 @@ size_t		len_of_input_string(char *input);
 void		init_token(int i, t_token *current);
 
 //parser - utils
+int			clean_the_quotes(t_token *token);
 int			count_lists(t_appdata *appdata);
 int			count_quoted_len(t_token *token);
 int			handle_env_quotes(t_token *token);
 int			is_cmd_end(t_token *token);
-int			is_contain_quotes(t_token *token);
 int			is_list_end(t_token *token);
 int			is_token_redirection(t_token *token);
 int			is_quotes_double(t_token *token);

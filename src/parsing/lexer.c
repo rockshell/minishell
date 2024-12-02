@@ -3,114 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/30 16:48:45 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/02 19:55:39 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before)
-{
-	cmd->argc = 0;
-	cmd->input_redir_type = 0;
-	cmd->output_redir_type = 0;
-	cmd->num_of_infiles = 0;
-	cmd->num_of_outfiles = 0;
-	cmd->num_of_delims = 0;
-	cmd->is_pipe_before = 0;
-	cmd->is_pipe_after = 0;
-	cmd->infile_fd = -1;
-	cmd->outfile_fd = -1;
-	cmd->argv = NULL;
-	cmd->infile_name = NULL;
-	cmd->outfile_name = NULL;
-	cmd->delim = NULL;
-	set_pipes_in_cmd(cmd, is_pipe_before, last);
-	set_redirections_in_cmd(cmd, first);
-	if (set_the_command_itself(cmd, first) == FAILURE)
-		return (FAILURE);
-	return (SUCCESS);
-}
-
-int	init_the_list(t_list *list, int start, int end)
-{
-	list->size = 0;
-	list->and_after = 0;
-	list->or_after = 0;
-	list->end_after = 0;
-	if (end - start > 0)
-		list->cmd = malloc(sizeof(t_cmd) * (end - start));
-	else
-		list->cmd = malloc(sizeof(t_cmd) * 1);
-	if (!list->cmd)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-	list->exec_data = malloc(sizeof(t_exec_data));
-	if (!list->exec_data)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-	init_exec_data(list);
-	return (SUCCESS);
-}
-
-int	clean_the_quotes(t_token *token)
-{
-	char	*unquoted_value;
-	int		len;
-
-	while (token)
-	{
-		if (is_contain_quotes(token) == TRUE)
-		{
-			if (ft_strchr(token->value, '$'))
-				handle_env_quotes(token);
-			else
-			{
-				len = count_quoted_len(token);
-				unquoted_value = malloc(sizeof(char) * (len + 1));
-				if (!unquoted_value)
-					return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-				no_quote_copy(token, unquoted_value);
-				free(token->value);
-				token->value = ft_strdup(unquoted_value);
-				if (!token->value)
-					return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-				free(unquoted_value);
-			}
-		}
-		token = token->next;
-	}
-	return (SUCCESS);
-}
-
 int	make_commands(t_appdata *appdata, t_list *list, int start, int end)
 {
 	int		j;
-	int		is_pipe_before_flag;
+	int		pflag;
 	t_token	*cmd_start;
 	t_token	*cmd_end;
 
 	j = 0;
-	is_pipe_before_flag = 0;
+	pflag = 0;
 	cmd_start = &appdata->tokens[start];
 	cmd_end = cmd_start;
 	while (cmd_end && cmd_end->pos <= end)
 	{
 		while (is_cmd_end(cmd_end) == 0 && cmd_end->next != NULL)
 			cmd_end = cmd_end->next;
-		if (init_cmd(&list->cmd[j++], cmd_start, cmd_end, is_pipe_before_flag) == FAILURE)
+		if (init_cmd(&list->cmd[j++], cmd_start, cmd_end, pflag) == FAILURE)
 			return (FAILURE);
 		if (cmd_end->type == PIPE)
-			is_pipe_before_flag = 1;
+			pflag = 1;
 		list->size++;
-		if (cmd_end->next)
-		{
-			cmd_start = cmd_end->next;
-			cmd_end = cmd_start;
-		}
-		else
+		if (cmd_end->next == NULL)
 			break ;
+		cmd_start = cmd_end->next;
+		cmd_end = cmd_start;
 	}
 	return (SUCCESS);
 }
@@ -171,51 +96,6 @@ int	star_check(t_token *token)
 		temp = temp->next;
 	}
 	return (TRUE);
-}
-
-int expand_argument(t_cmd *cmd, t_env *env)
-{
-	int i;
-	char *result;
-	char *value;
-
-	i = 0;
-	while (i < cmd->argc)
-	{
-		if (ft_strncmp(cmd->argv[i], "./", 2) == 0)
-		{
-			value = ft_strdup(cmd->argv[i] + 1);
-			if (!value)
-				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-			result = ft_get_env(env, "PWD");
-			free(cmd->argv[i]);
-			cmd->argv[i] = gnl_strjoin(result, value);
-			if (!cmd->argv[i])
-				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-		}
-		i++;
-	}
-	return(SUCCESS);
-}
-
-int expand_exec(t_appdata *appdata, t_env *env)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < appdata->lists_num)
-	{
-		j = 0;
-		while (j < appdata->lists[i].size)
-		{
-			if (expand_argument(&appdata->lists[i].cmd[j], env) == FAILURE)
-				return (FAILURE);
-			j++;
-		}
-		i++;
-	}
-	return (SUCCESS);
 }
 
 int	run_lexer(t_appdata *appdata)
