@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:58:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 18:10:50 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:28:04 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	initialization(t_appdata *appdata, char **envp)
 		return (FAILURE);
 	if (increment_shlvl(appdata->env) == FAILURE)
 		return (FAILURE);
-	if (init_envp_array(appdata, envp) == FAILURE)
+	if (init_envp_array(appdata, appdata->env) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }

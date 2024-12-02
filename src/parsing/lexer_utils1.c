@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/25 17:21:39 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:58:09 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 			else if (current->type == HEREDOC)
 			{
 				cmd->input_redir_type[input_i] = HEREDOC;
+				cmd->infile_name[input_i] = ft_strdup("here_doc.txt");
 				cmd->delim[heredoc_i] = ft_strdup(current->next->value);
 				cmd->delim[heredoc_i + 1] = NULL;
 				input_i++;

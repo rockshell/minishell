@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/28 18:16:24 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:08:58 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	close_exec_data_fd(t_list *list)
 	}
 }
 
-//TODO unlink heredok ok?
 void	free_exec_data(t_list *list)
 {
 	if (!list->exec_data)
@@ -91,6 +90,8 @@ void	free_lists(t_list *list)
 			close(list->cmd[i].infile_fd);
 		if (list->cmd[i].outfile_fd != -1)
 			close(list->cmd[i].outfile_fd);
+		if (access("here_doc.txt", F_OK) != -1)
+			unlink("here_doc.txt");
 	}
 	if (list->cmd)
 		free(list->cmd);

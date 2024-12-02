@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/30 16:57:31 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/02 19:27:10 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ long long	ft_atoll(char *str);
 //enviromentals
 int			create_env_node(t_env **env, char *current_env);
 int			initialize_env_var(t_appdata *appdata, char **envp);
-int			init_envp_array(t_appdata *appdata, char **envp);
+int			init_envp_array(t_appdata *appdata, t_env *env);
 int			update_envp_array(t_appdata *appdata, t_env *env);
 
 //environmentals utils

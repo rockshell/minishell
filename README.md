@@ -2,8 +2,6 @@
 To-do list.
 Vita:
 - file_manager1.c;
-- free_utils1.c;
-- SHLVL
 - cd ~/
 
 Arch:
