@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 17:59:26 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/03 20:26:36 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 
 int	is_operator(char *input)
 {
+	printf("Checking type of %s\n", input);
 	if (*input == '|')
 	{
 		if (*input + 1 && *input + 1 == '|')
@@ -67,7 +68,10 @@ int	is_operator(char *input)
 			return (STDOUT);
 	}
 	else if (*input == '&' && *input + 1 && *input + 1 == '&')
+	{
+		printf("=================\nkek\n================");
 		return (LOGICAL_AND);
+	}
 	return (WORD);
 }
 

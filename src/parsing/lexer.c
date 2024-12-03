@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:55:16 by akulikov          #+#    #+#             */
-/*   Updated: 2024/12/02 19:55:39 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:21:23 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,13 @@ int	make_lists(t_appdata *appdata)
 	while (++i < appdata->lists_num)
 	{
 		while (is_list_end(current) == FALSE)
+		{
+			printf("Current token's value: %s\n", current->value);
+			printf("Current token's type: %i\n", current->type);
 			current = current->next;
+		}
 		end_pos = current->pos;
+		printf("Final token in the list value: %s\n", current->value);
 		if (make_a_list(appdata, &appdata->lists[i], start_pos, end_pos) == 1)
 			return (FAILURE);
 		start_pos = end_pos + 1;
