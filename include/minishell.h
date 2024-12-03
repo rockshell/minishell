@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/02 19:56:11 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/03 19:43:08 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,14 +165,14 @@ void		free_and_renew_env_value(t_env *env, char *key, char *new_value);
 void		print_env(t_env *env, char *key);
 
 //execution
-void		start_execution(t_appdata *appdata);
-void		init_exec_data(t_list *list);
 int			execute_single(t_appdata *appdata, t_list *list);
 int			open_files(char *filename, int redir_type, int is_input);
 int			rwr_heredoc(t_cmd *cmd, char *delim);
 int			wait_for_children(t_list *list);
 int			create_processes(t_appdata *appdata, t_list *list);
 int			prepare_pipes(t_list *list);
+void		start_execution(t_appdata *appdata);
+void		init_exec_data(t_list *list);
 
 //execution utils
 char		*get_next_line(int fd);
@@ -201,6 +201,7 @@ void		free_char_array(char **envp);
 void		free_exec_data(t_list *list);
 void		free_lists(t_list *list);
 void		free_memory(t_appdata *appdata);
+void		free_sh1t(t_appdata *appdata);
 void		exec_error(char *argument);
 void		new_cycle_preparation(t_appdata *appdata);
 
@@ -209,17 +210,20 @@ char		*handle_num_quotes(char *input);
 int			init_the_list(t_list *list, int start, int end);
 int			expand_argument(t_cmd *cmd, t_env *env);
 int			expand_exec(t_appdata *appdata, t_env *env);
-// char		*handle_redirection_tokens(char *input);
-// char		*handle_pipe_tokens(char *input);
-int			ft_isspace(char c);
 int			count_tokens(char *input);
+int			ft_isspace(char c);
+int			init_cmd(t_cmd *cmd, t_token *first,
+				t_token *last, int is_pipe_before);
 int			run_parsing(char *input, t_appdata *appdata);
-int			init_cmd(t_cmd *cmd, t_token *first, t_token *last, int is_pipe_before);
+int			set_the_command_itself(t_cmd *cmd, t_token *first);
 size_t		handle_len_quotes(char *input, size_t i);
 size_t		handle_len_redirs(char *input, size_t i);
 size_t		handle_len_pipes(char *input, size_t i);
 size_t		len_of_input_string(char *input);
 void		init_token(int i, t_token *current);
+void		set_argc(t_cmd *cmd, t_token *first);
+void		count_amount_of_redirections(t_cmd *cmd, t_token *current);
+void		init_redirections_in_cmd(t_cmd *cmd);
 
 //parser - utils
 int			clean_the_quotes(t_token *token);
@@ -237,6 +241,7 @@ int			syntax_check(t_token *token);
 void		no_quote_copy(t_token *token, char *str);
 void		set_pipes_in_cmd(t_cmd *cmd, int pipe_flag, t_token *last);
 void		set_redirections_in_cmd(t_cmd *cmd, t_token *current);
+void		print_syntax_error_message(t_token *token);
 
 //expand - utils
 char		*expand_env_var(char *key, t_env *env, t_env *exit_status);

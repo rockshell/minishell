@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 19:27:19 by akulikov          #+#    #+#             */
-/*   Updated: 2024/12/02 19:28:40 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:06:02 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,11 @@ size_t	len_of_input_string(char *input)
 		}
 	}
 	return (i);
+}
+
+void	print_syntax_error_message(t_token *token)
+{
+	ft_putstr_fd(SYNTAX_ERROR, 2);
+	ft_putstr_fd(token->value, 2);
+	ft_putstr_fd("'\n", 2);
 }

@@ -6,7 +6,7 @@
 /*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 19:53:59 by akulikov          #+#    #+#             */
-/*   Updated: 2024/12/02 19:55:44 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:09:08 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,50 @@ int	expand_exec(t_appdata *appdata, t_env *env)
 		}
 		i++;
 	}
+	return (SUCCESS);
+}
+
+void	set_argc(t_cmd *cmd, t_token *first)
+{
+	t_token	*current;
+
+	current = first;
+	while (is_cmd_end(current) == FALSE)
+	{
+		if (current->type == WORD && current->is_parsed == 0)
+			cmd->argc++;
+		if (current->next)
+			current = current->next;
+		else
+			break ;
+	}
+}
+
+int	set_the_command_itself(t_cmd *cmd, t_token *first)
+{
+	int		i;
+	t_token	*current;
+
+	set_argc(cmd, first);
+	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
+	if (!cmd->argv)
+		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+	current = first;
+	i = 0;
+	while (is_cmd_end(current) == FALSE)
+	{
+		if (current->type == WORD && current->is_parsed == 0)
+		{
+			cmd->argv[i] = ft_strdup(current->value);
+			if (!cmd->argv[i])
+				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
+			current->is_parsed = 1;
+			i++;
+		}
+		if (!current->next)
+			break ;
+		current = current->next;
+	}
+	cmd->argv[i] = NULL;
 	return (SUCCESS);
 }

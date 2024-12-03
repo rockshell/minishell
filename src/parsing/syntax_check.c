@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 16:44:13 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/14 19:02:38 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 16:04:57 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_syntax_error_message(t_token *token)
-{
-	ft_putstr_fd(SYNTAX_ERROR, 2);
-	ft_putstr_fd(token->value, 2);
-	ft_putstr_fd("'\n", 2);
-}
 
 int	pipe_syntax_check(t_token *token)
 {
