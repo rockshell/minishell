@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/02 19:01:13 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 19:11:15 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static int	execute_a_list(t_appdata *appdata, t_list *list)
 
 	i = -1;
 	while (++i < list->size)
-		list->cmd[i].is_builtin = check_if_builtin(list->cmd[i]);
+	{
+		if (list->cmd[i].argc > 0)
+			list->cmd[i].is_builtin = check_if_builtin(list->cmd[i]);
+	}
 	if (file_manager(list) == FAILURE)
 		return (FAILURE);
 	if (list->size > 1)

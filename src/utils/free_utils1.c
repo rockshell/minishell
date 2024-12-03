@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/02 19:08:58 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 19:11:51 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	free_cmd_argv(t_cmd *cmd)
 				free(cmd->argv[j]);
 		}
 		free(cmd->argv);
+		cmd->argv = NULL;
 	}
 }
 
