@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vitakinsfator <vitakinsfator@student.42    +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/30 14:18:09 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/07 00:23:08 by vitakinsfat      ###   ########.fr       */
+/*   Updated: 2024/12/03 19:39:52 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,35 @@ char	*get_value(char *current_env)
 	return (NULL);
 }
 
+t_env	*fill_the_node(char *current_env)
+{
+	t_env	*node;
+
+	node = malloc(sizeof(t_env));
+	if (!node)
+	{
+		ft_putstr_fd(ALLOC_ERROR, 2);
+		return (NULL);
+	}
+	node->key = get_key(current_env);
+	if (!node->key)
+	{
+		free(node);
+		return (NULL);
+	}
+	if (ft_strchr(current_env, '=') != NULL)
+	{
+		node->value = get_value(current_env);
+		if (!node->value)
+		{
+			free(node->key);
+			free(node);
+			return (NULL);
+		}
+	}
+	return (node);
+}
+
 int	create_env_node(t_env **env, char *current_env)
 {
 	t_env	*node;
@@ -53,19 +82,9 @@ int	create_env_node(t_env **env, char *current_env)
 
 	if (!env || !current_env)
 		return (FAILURE);
-	node = malloc(sizeof(t_env));
+	node = fill_the_node(current_env);
 	if (!node)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-	node->key = get_key(current_env);
-	if (!node->key)
-		return (free(node), FAILURE);
-	node->value = NULL;
-	if (ft_strchr(current_env, '=') != NULL)
-	{
-		node->value = get_value(current_env);
-		if (!node->value)
-			return (free(node->key), free(node), FAILURE);
-	}
+		return (FAILURE);
 	node->next = NULL;
 	if (!*env)
 	{
