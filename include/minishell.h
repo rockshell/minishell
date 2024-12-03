@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/02 19:27:10 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:10:34 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define CD_TOO_MANY_ARG_ERROR "minishell: cd: too many arguments\n"
 # define EXIT_TOO_MANY_ARG_ERROR "minishell: exit: too many arguments\n"
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token `"
+# define HD_CTRLD "minishell: here-document delimited by end-of-file (wanted `"
 
 # define WORD 0
 # define ARGUMENT 1

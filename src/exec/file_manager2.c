@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:15 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/03 17:13:08 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:44:22 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ int	open_files(char *filename, int redir_type, int is_input)
 void interrupt_heredoc_signal(int signum)
 {
 	g_sig_received = signum;
-	write(1, "\n", 1);
-    close(0);
+	ioctl(0, TIOCSTI, "\n");
 }
 
 int	rwr_heredoc(t_cmd *cmd, char *delim)
@@ -49,9 +48,18 @@ int	rwr_heredoc(t_cmd *cmd, char *delim)
 			free(line);
 			close(cmd->infile_fd);
 			unlink("here_doc.txt");
+			g_sig_received = 0;
 			return (FAILURE);
 		}
-		if (!line || ft_strcmp(line, delim) == 0)
+		if (line == NULL)
+		{
+			ft_putstr_fd(HD_CTRLD, 2);
+			ft_putstr_fd(delim, 2);
+			ft_putstr_fd("')\n", 2);
+			free(line);
+			break ;
+		}
+		if (ft_strcmp(line, delim) == 0)
 			break ;
 		write(cmd->infile_fd, line, ft_strlen(line));
 		write(cmd->infile_fd, "\n", 1);
