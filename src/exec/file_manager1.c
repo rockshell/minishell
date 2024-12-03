@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:46 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/02 21:27:46 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:08:56 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,38 @@ static int	manage_infiles(t_cmd *cmd)
 	return (SUCCESS);
 }
 
-int is_folder_permission_ok(t_cmd *cmd, int i)
+int is_folder_permission_ok(t_cmd *cmd, int i, char *folder_name)
+{
+	struct stat path_stat;
+	
+	stat(folder_name, &path_stat);
+	if (!S_ISDIR(path_stat.st_mode) && access(folder_name, F_OK) == 0)
+	{
+		free(folder_name);
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->outfile_name[i], 2);
+		ft_putstr_fd(": Not a directory\n", 2);
+		return (FAILURE);
+	}
+	if (ft_strlen(folder_name) == 1 && folder_name[0] == '/')
+		return (free(folder_name), SUCCESS);
+	if (access(folder_name, F_OK) == -1)
+	{
+		print_file_error(cmd->outfile_name[i]);
+		return (free(folder_name), FAILURE); 
+	}
+	if (access(folder_name, W_OK) == -1)
+	{
+		print_file_error(cmd->outfile_name[i]);
+		return (free(folder_name), FAILURE); 
+	}
+	free(folder_name);
+	return (SUCCESS);
+}
+
+int check_folder_permission(t_cmd *cmd, int i)
 {
 	char *folder_name;
-	struct stat path_stat;
 
 	if (ft_strrchr(cmd->outfile_name[i], '/') == NULL)
 	{
@@ -68,19 +96,11 @@ int is_folder_permission_ok(t_cmd *cmd, int i)
 			return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
 		*ft_strrchr(folder_name, '/') = '\0';
 	}
-	stat(folder_name, &path_stat);
-	if (!S_ISDIR(path_stat.st_mode))
-		return (free(folder_name), print_file_error(cmd->outfile_name[i]), 1);
-	if (access(folder_name, F_OK | W_OK) == -1)
-	{
-		print_file_error(cmd->outfile_name[i]);
-		return (free(folder_name), FAILURE); 
-	}
-	free(folder_name);
+	if (is_folder_permission_ok(cmd, i, folder_name) == FAILURE)
+		return (FAILURE);
 	return (SUCCESS);
 }
 
-//TODO folder permission check
 static int	manage_outfiles(t_cmd *cmd)
 {
 	int	i;
@@ -88,7 +108,7 @@ static int	manage_outfiles(t_cmd *cmd)
 	i = -1;
 	while (++i < cmd->num_of_outfiles)
 	{
-		if (is_folder_permission_ok(cmd, i) == FAILURE)
+		if (check_folder_permission(cmd, i) == FAILURE)
 			return (FAILURE);
 		cmd->outfile_fd = open_files(cmd->outfile_name[i],
 				cmd->output_redir_type[i], 0);
