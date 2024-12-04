@@ -67,20 +67,20 @@ void	free_env(t_env *env)
 	env = NULL;
 }
 
-void	free_char_array(char **envp)
+void	free_char_array(char **array)
 {
 	int	i;
 
 	i = 0;
-	if (!envp)
+	if (!array)
 		return ;
-	while (envp[i])
+	while (array[i])
 	{
-		free(envp[i]);
+		free(array[i]);
 		i++;
 	}
-	free(envp);
-	envp = NULL;
+	free(array);
+	array = NULL;
 }
 
 void	free_sh1t(t_appdata *appdata)

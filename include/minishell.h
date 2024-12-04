@@ -40,6 +40,7 @@
 # define CD_TOO_MANY_ARG_ERROR "minishell: cd: too many arguments\n"
 # define EXIT_TOO_MANY_ARG_ERROR "minishell: exit: too many arguments\n"
 # define SYNTAX_ERROR "minishell: syntax error near unexpected token `"
+# define HD_CTRLD "minishell: here-document delimited by end-of-file (wanted `"
 
 # define WORD 0
 # define ARGUMENT 1
@@ -154,7 +155,7 @@ long long	ft_atoll(char *str);
 //enviromentals
 int			create_env_node(t_env **env, char *current_env);
 int			initialize_env_var(t_appdata *appdata, char **envp);
-int			init_envp_array(t_appdata *appdata, char **envp);
+int			init_envp_array(t_appdata *appdata, t_env *env);
 int			update_envp_array(t_appdata *appdata, t_env *env);
 
 //environmentals utils

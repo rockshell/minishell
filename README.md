@@ -1,10 +1,6 @@
 # minishell
 To-do list.
 Vita:
-- file_manager1.c;
-- free_utils1.c;
-- SHLVL
-- cd ~/
 
 Arch:
 - norm (for now skip init.c, ft_cd.c, file_manager1.c, free_utils1.c)

@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 17:31:13 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/28 17:48:41 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:26:01 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,27 +76,15 @@ int	update_envp_array(t_appdata *appdata, t_env *env)
 	return (SUCCESS);
 }
 
-int	init_envp_array(t_appdata *appdata, char **envp)
+int	init_envp_array(t_appdata *appdata, t_env *env)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	while (envp[i])
-		i++;
-	appdata->envp = malloc(sizeof(char *) * (i + 1));
+	len = get_len_of_env(env);
+	appdata->envp = malloc(sizeof(char *) * (len + 1));
 	if (!appdata->envp)
 		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-	i = 0;
-	while (envp[i])
-	{
-		appdata->envp[i] = ft_strdup(envp[i]);
-		if (!appdata->envp[i])
-		{
-			error_free(appdata, i);
-			return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-		}
-		i++;
-	}
-	appdata->envp[i] = NULL;
+	if (renew_envp_array(appdata, appdata->env) == FAILURE)
+		return (FAILURE);
 	return (SUCCESS);
 }

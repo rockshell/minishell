@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 16:14:11 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 16:58:37 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:33:36 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static int	get_type_of_relative_path(t_cmd *cmd)
 	else if (ft_strncmp(cmd->argv[1], "--", len) == 0)
 		return (3);
 	else if (ft_strncmp(cmd->argv[1], "~", len) == 0)
+		return (4);
+	else if (ft_strncmp(cmd->argv[1], "~/", len) == 0)
 		return (4);
 	else if (ft_strncmp(cmd->argv[1], "../", 3) == 0)
 		return (5);

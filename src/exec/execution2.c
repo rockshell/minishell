@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:10 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/26 17:01:37 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 19:10:39 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ int	execute_single(t_appdata *appdata, t_list *list)
 	pid_t	pid;
 	int		status;
 
+	if (list->cmd->argc == 0)
+		return (SUCCESS);
 	if (list->cmd[0].is_builtin == FALSE)
 	{
 		pid = fork();

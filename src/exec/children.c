@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/28 17:40:33 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:00:00 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd)
 	int		status;
 
 	status = 0;
+	if (cmd->argc == 0)
+		exit (0);
 	if (io_redirection(cmd) == FAILURE)
 		exit (1);
 	if (cmd->num_of_outfiles == 0)
@@ -73,6 +75,8 @@ void	last_child(t_appdata *appdata,
 	int		status;
 
 	status = 0;
+	if (cmd->argc == 0)
+		exit (0);
 	if (io_redirection(cmd) == FAILURE)
 		exit (1);
 	if (cmd->num_of_infiles == 0)
@@ -99,6 +103,8 @@ void	mid_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i)
 	int		status;
 
 	status = 0;
+	if (cmd->argc == 0)
+		exit (0);
 	if (cmd->num_of_infiles == 0)
 	{
 		if (dup2(exec_data->fd[i - 1][0], 0) == -1)
@@ -126,6 +132,8 @@ void	only_child(t_appdata *appdata, t_cmd *cmd)
 {
 	char	*path;
 
+	if (cmd->argc == 0)
+		exit (0);
 	if (cmd->num_of_infiles != 0)
 	{
 		if (dup2(cmd->infile_fd, 0) == -1)

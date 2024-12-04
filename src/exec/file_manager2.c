@@ -6,7 +6,7 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:15 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/11/26 16:47:34 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:44:22 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,38 @@ int	open_files(char *filename, int redir_type, int is_input)
 	return (res);
 }
 
+void interrupt_heredoc_signal(int signum)
+{
+	g_sig_received = signum;
+	ioctl(0, TIOCSTI, "\n");
+}
+
 int	rwr_heredoc(t_cmd *cmd, char *delim)
 {
 	char	*line;
-
+	
 	while (1)
 	{
 		ft_putstr_fd("> ", 1);
+		signal(SIGINT, interrupt_heredoc_signal);
 		line = get_next_line(0);
-		if (!line || ft_strcmp(line, delim) == 0)
+		if (g_sig_received)
+		{
+			free(line);
+			close(cmd->infile_fd);
+			unlink("here_doc.txt");
+			g_sig_received = 0;
+			return (FAILURE);
+		}
+		if (line == NULL)
+		{
+			ft_putstr_fd(HD_CTRLD, 2);
+			ft_putstr_fd(delim, 2);
+			ft_putstr_fd("')\n", 2);
+			free(line);
+			break ;
+		}
+		if (ft_strcmp(line, delim) == 0)
 			break ;
 		write(cmd->infile_fd, line, ft_strlen(line));
 		write(cmd->infile_fd, "\n", 1);

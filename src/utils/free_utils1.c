@@ -59,6 +59,7 @@ void	free_cmd_argv(t_cmd *cmd)
 				free(cmd->argv[j]);
 		}
 		free(cmd->argv);
+		cmd->argv = NULL;
 	}
 }
 
@@ -80,6 +81,8 @@ void	free_list_internals(t_list *list, int i)
 		close(list->cmd[i].infile_fd);
 	if (list->cmd[i].outfile_fd != -1)
 		close(list->cmd[i].outfile_fd);
+  if (access("here_doc.txt", F_OK) != -1)
+			unlink("here_doc.txt");
 }
 
 void	free_lists(t_list *list)

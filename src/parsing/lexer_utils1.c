@@ -35,6 +35,7 @@ void	set_std_redir(t_cmd *cmd, t_token *current, int *in_i, int *out_i)
 void	set_heredoc_redir(t_cmd *cmd, t_token *current, int *in_i, int *here_i)
 {
 	cmd->input_redir_type[*in_i] = HEREDOC;
+  cmd->infile_name[input_i] = ft_strdup("here_doc.txt");
 	cmd->delim[*here_i] = ft_strdup(current->next->value);
 	cmd->delim[*here_i + 1] = NULL;
 	(*in_i)++;
