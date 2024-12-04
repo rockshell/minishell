@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:39 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/03 17:20:21 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/04 21:20:23 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	free_list_internals(t_list *list, int i)
 		close(list->cmd[i].infile_fd);
 	if (list->cmd[i].outfile_fd != -1)
 		close(list->cmd[i].outfile_fd);
-  if (access("here_doc.txt", F_OK) != -1)
-			unlink("here_doc.txt");
+	if (access("here_doc.txt", F_OK) != -1)
+		unlink("here_doc.txt");
 }
 
 void	free_lists(t_list *list)

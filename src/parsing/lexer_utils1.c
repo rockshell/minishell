@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/03 17:08:53 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/04 21:19:57 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	set_std_redir(t_cmd *cmd, t_token *current, int *in_i, int *out_i)
 void	set_heredoc_redir(t_cmd *cmd, t_token *current, int *in_i, int *here_i)
 {
 	cmd->input_redir_type[*in_i] = HEREDOC;
-  cmd->infile_name[input_i] = ft_strdup("here_doc.txt");
+	cmd->infile_name[*in_i] = ft_strdup("here_doc.txt");
 	cmd->delim[*here_i] = ft_strdup(current->next->value);
 	cmd->delim[*here_i + 1] = NULL;
 	(*in_i)++;
