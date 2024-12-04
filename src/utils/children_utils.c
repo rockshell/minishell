@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   children_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:48:47 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 17:04:16 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/03 17:31:10 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **find_paths(char **envp)
+char	**find_paths(char **envp)
 {
-	int	i;
-	char *path;
-	char **paths;
+	int		i;
+	char	*path;
+	char	**paths;
 
 	i = 0;
 	while (envp[i])
@@ -36,12 +36,22 @@ char **find_paths(char **envp)
 	return (NULL);
 }
 
+char	*create_path_string(t_cmd *cmd, char *path)
+{
+	char	*cmd_with_slash;
+	char	*current_path;
+
+	cmd_with_slash = ft_strjoin("/", cmd->argv[0]);
+	current_path = ft_strjoin(path, cmd_with_slash);
+	free(cmd_with_slash);
+	return (current_path);
+}
+
 char	*make_path(t_cmd *cmd, char **envp)
 {
 	int		i;
 	char	**paths;
 	char	*current_path;
-	char	*cmd_with_slash;
 
 	if (cmd->argv[0][0] == '/')
 	{
@@ -54,9 +64,7 @@ char	*make_path(t_cmd *cmd, char **envp)
 		return (NULL);
 	while (paths[i])
 	{
-		cmd_with_slash = ft_strjoin("/", cmd->argv[0]);
-		current_path = ft_strjoin(paths[i], cmd_with_slash);
-		free(cmd_with_slash);
+		current_path = create_path_string(cmd, paths[i]);
 		if (access(current_path, F_OK) == 0)
 			return (free_char_array(paths), current_path);
 		free(current_path);
@@ -99,11 +107,4 @@ void	close_fds(t_cmd *cmd, t_exec_data *exec_data, int current_pipe)
 		close(cmd->infile_fd);
 	if (current_pipe != (num_of_cmd - 1) && cmd->outfile_fd != -1)
 		close(cmd->outfile_fd);
-}
-
-void	print_child_error_message(char *cmd_name)
-{
-	ft_putstr_fd(cmd_name, 2);
-	ft_putstr_fd(": command not found\n", 2);
-	exit(127);
 }

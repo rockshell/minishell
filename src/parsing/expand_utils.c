@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_utils1.c                                    :+:      :+:    :+:   */
+/*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:58:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 16:55:42 by arch             ###   ########.fr       */
+/*   Updated: 2024/11/30 22:05:51 by arch             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*expand_strjoin(char *s1, char *s2)
 	return (res);
 }
 
-int	is_valid_symbol_for_env_var_name(int c)
+int	is_env_symbol(int c)
 {
 	if (ft_isalnum(c))
 		return (TRUE);
@@ -76,7 +76,7 @@ int	is_valid_symbol_for_env_var_name(int c)
 	return (FALSE);
 }
 
-int	is_valid_env_var_first_symbol(int c)
+int	ef(int c)
 {
 	if (ft_isalpha(c))
 		return (TRUE);

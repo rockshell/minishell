@@ -1,73 +1,88 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 22:36:37 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 16:59:13 by arch             ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   expand.c										   :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: arch <arch@student.42.fr>				  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2024/10/29 22:36:37 by vitakinsfat	   #+#	#+#			 */
+/*   Updated: 2024/11/30 21:55:03 by arch			 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	expand_token(t_token *current, t_env *env, t_env *exit_status)
+int	handle_quotes_flag(char c, int flag)
+{
+	if (c == '\'')
+		flag = !flag;
+	return (flag);
+}
+
+char	*get_env_var(char *str, int *i_ptr, t_env *env, t_env *exit_status)
+{
+	int		start;
+	char	*key;
+	char	*temp;
+
+	start = *i_ptr;
+	(*i_ptr)++;
+	while (str[*i_ptr] && is_env_symbol(str[*i_ptr]))
+	{
+		if (str[*i_ptr] == '?')
+		{
+			(*i_ptr)++;
+			break ;
+		}
+		(*i_ptr)++;
+	}
+	key = ft_substr(str, start, *i_ptr - start);
+	temp = expand_env_var(key, env, exit_status);
+	free(key);
+	return (temp);
+}
+
+void	expand_token_value(t_token *current, char *new_value)
+{
+	if (current->value)
+		free(current->value);
+	current->value = ft_strdup(new_value);
+	if (new_value)
+		free(new_value);
+}
+
+int	expand_token(t_token *c, t_env *env, t_env *exit_status)
 {
 	int		i;
-	int		j;
-	int		quotes_flag;
+	int		f;
 	char	*new_value;
 	char	*temp;
-	char	*key;
 
 	i = 0;
-	j = 0;
-	quotes_flag = 0;
-	temp = NULL;
+	f = 0;
 	new_value = NULL;
-	key = NULL;
-	while (current->value[i])
+	while (c->value[i])
 	{
-		if (current->value[i] == '\'')
-			quotes_flag = !quotes_flag;
-		if (current->value[i] == '$' && current->value[i + 1] && 
-			is_valid_env_var_first_symbol(current->value[i + 1]) && !quotes_flag)
+		f = handle_quotes_flag(c->value[i], f);
+		if (c->value[i] == '$' && c->value[i + 1] && ef(c->value[i + 1]) && !f)
 		{
-			j = i;
-			i++;
-			while (current->value[i] && 
-				is_valid_symbol_for_env_var_name(current->value[i]))
-			{
-				if (current->value[i] == '?')
-				{
-					i++;
-					break;
-				}
-				i++;
-			}
-			key = ft_substr(current->value, j, i - j);
-			temp = expand_env_var(key, env, exit_status);
+			temp = get_env_var(c->value, &i, env, exit_status);
 			new_value = expand_strjoin(new_value, temp);
-			free(key);
 			free(temp);
-			j = i;
 		}
 		else
 		{
-			new_value = append_char(new_value, current->value[i]);
+			new_value = append_char(new_value, c->value[i]);
 			i++;
 		}
 	}
-	free(current->value);
-	current->value = ft_strdup(new_value);
-	free(new_value);
+	expand_token_value(c, new_value);
 	return (SUCCESS);
 }
 
 int	new_expand_tokens(t_token *first_token, t_env *env, t_env *exit_status)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = first_token;
 	while (current)
@@ -76,5 +91,5 @@ int	new_expand_tokens(t_token *first_token, t_env *env, t_env *exit_status)
 			expand_token(current, env, exit_status);
 		current = current->next;
 	}
-	return(SUCCESS);
+	return (SUCCESS);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/03 19:12:12 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 19:43:27 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ char	*get_the_input(t_appdata *appdata)
 		write(STDOUT_FILENO, "exit\n", 5);
 		input = ft_get_env(appdata->exit_status, "?");
 		exit_code = ft_atoi(input);
-		free_env(appdata->env);
-		free_env(appdata->exit_status);
-		free_char_array(appdata->envp);
-		free_memory(appdata);
+		free_sh1t(appdata);
 		free(input);
 		exit(exit_code);
 	}

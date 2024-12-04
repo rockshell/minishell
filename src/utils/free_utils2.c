@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 15:59:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/03 18:04:13 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 19:42:44 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_tokens(t_appdata *appdata)
+{
+	int	i;
+
+	i = -1;
+	while (++i < appdata->tokens_num)
+	{
+		if (appdata->tokens[i].value)
+		{
+			free(appdata->tokens[i].value);
+			appdata->tokens[i].value = NULL;
+		}
+	}
+	free(appdata->tokens);
+	appdata->tokens = NULL;
+	appdata->first_token = NULL;
+}
 
 void	free_memory(t_appdata *appdata)
 {
@@ -27,20 +45,7 @@ void	free_memory(t_appdata *appdata)
 		appdata->lists_num = 0;
 	}
 	if (appdata->tokens && appdata->tokens_num > 0)
-	{
-		i = -1;
-		while (++i < appdata->tokens_num)
-		{
-			if (appdata->tokens[i].value)
-			{
-				free(appdata->tokens[i].value);
-				appdata->tokens[i].value = NULL;
-			}
-		}
-		free(appdata->tokens);
-		appdata->tokens = NULL;
-		appdata->first_token = NULL;
-	}
+		free_tokens(appdata);
 }
 
 void	free_env(t_env *env)
@@ -76,4 +81,12 @@ void	free_char_array(char **array)
 	}
 	free(array);
 	array = NULL;
+}
+
+void	free_sh1t(t_appdata *appdata)
+{
+	free_env(appdata->env);
+	free_env(appdata->exit_status);
+	free_char_array(appdata->envp);
+	free_memory(appdata);
 }

@@ -3,111 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 20:05:54 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/02 18:58:09 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/03 17:08:53 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	set_argc(t_cmd *cmd, t_token *first)
-{
-	t_token	*current;
-
-	current = first;
-	while (is_cmd_end(current) == FALSE)
-	{
-		if (current->type == WORD && current->is_parsed == 0)
-			cmd->argc++;
-		if (current->next)
-			current = current->next;
-		else
-			break ;
-	}
-}
-
-int	set_the_command_itself(t_cmd *cmd, t_token *first)
-{
-	int		i;
-	t_token	*current;
-
-	set_argc(cmd, first);
-	cmd->argv = malloc(sizeof(char *) * (cmd->argc + 1));
-	if (!cmd->argv)
-		return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-	current = first;
-	i = 0;
-	while (is_cmd_end(current) == FALSE)
-	{
-		if (current->type == WORD && current->is_parsed == 0)
-		{
-			cmd->argv[i] = ft_strdup(current->value);
-			if (!cmd->argv[i])
-				return (ft_putstr_fd(ALLOC_ERROR, 2), FAILURE);
-			current->is_parsed = 1;
-			i++;
-		}
-		if (current->next)
-			current = current->next;
-		else
-			break ;
-	}
-	cmd->argv[i] = NULL;
-	return (SUCCESS);
-}
-
-void	set_std_redirection(t_cmd *cmd, t_token *current, int *input_i, int *output_i)
+void	set_std_redir(t_cmd *cmd, t_token *current, int *in_i, int *out_i)
 {
 	if (current->type == STDIN)
 	{
-		if (*input_i >= cmd->num_of_infiles)
+		if (*in_i >= cmd->num_of_infiles)
 			return ;
-		cmd->input_redir_type[*input_i] = STDIN;
-		cmd->infile_name[*input_i] = ft_strdup(current->next->value);
-		cmd->infile_name[*input_i + 1] = NULL;
-		(*input_i)++;
+		cmd->input_redir_type[*in_i] = STDIN;
+		cmd->infile_name[*in_i] = ft_strdup(current->next->value);
+		cmd->infile_name[*in_i + 1] = NULL;
+		(*in_i)++;
 	}
 	else if (current->type == STDOUT)
 	{
-		cmd->output_redir_type[*output_i] = STDOUT;
-		cmd->outfile_name[*output_i] = ft_strdup(current->next->value);
-		cmd->outfile_name[*output_i + 1] = NULL;
-		(*output_i)++;
+		cmd->output_redir_type[*out_i] = STDOUT;
+		cmd->outfile_name[*out_i] = ft_strdup(current->next->value);
+		cmd->outfile_name[*out_i + 1] = NULL;
+		(*out_i)++;
 	}
 }
 
-void	count_amount_of_redirections(t_cmd *cmd, t_token *current)
+void	set_heredoc_redir(t_cmd *cmd, t_token *current, int *in_i, int *here_i)
 {
-	while (is_cmd_end(current) == FALSE && current->next != NULL)
-	{
-		if (current->type == STDIN || current->type == HEREDOC)
-		{
-			if (current->type == HEREDOC)
-				cmd->num_of_delims++;
-			cmd->num_of_infiles++;
-		}
-		if (current->type == STDOUT || current->type == APPEND)
-			cmd->num_of_outfiles++;
-		current = current->next;
-	}
+	cmd->input_redir_type[*in_i] = HEREDOC;
+  cmd->infile_name[input_i] = ft_strdup("here_doc.txt");
+	cmd->delim[*here_i] = ft_strdup(current->next->value);
+	cmd->delim[*here_i + 1] = NULL;
+	(*in_i)++;
+	(*here_i)++;
 }
 
-void	init_redirections_in_cmd(t_cmd *cmd)
+void	set_append_redir(t_cmd *cmd, t_token *current, int *output_i)
 {
-	if (cmd->num_of_infiles > 0)
-	{
-		cmd->input_redir_type = malloc(sizeof(int) * cmd->num_of_infiles);
-		cmd->infile_name = malloc(sizeof(char *) * (cmd->num_of_infiles + 1));
-	}
-	if (cmd->num_of_outfiles > 0)
-	{
-		cmd->output_redir_type = malloc(sizeof(int) * cmd->num_of_outfiles);
-		cmd->outfile_name = malloc(sizeof(char *) * (cmd->num_of_outfiles + 1));
-	}
-	if (cmd->num_of_delims > 0)
-		cmd->delim = malloc(sizeof(char *) * (cmd->num_of_delims + 1));
+	cmd->output_redir_type[*output_i] = APPEND;
+	cmd->outfile_name[*output_i] = ft_strdup(current->next->value);
+	(*output_i)++;
 }
 
 void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
@@ -126,22 +65,11 @@ void	set_redirections_in_cmd(t_cmd *cmd, t_token *current)
 		if (current->type >= STDIN && current->type <= APPEND)
 		{
 			if (current->type == STDIN || current->type == STDOUT)
-				set_std_redirection(cmd, current, &input_i, &output_i);
+				set_std_redir(cmd, current, &input_i, &output_i);
 			else if (current->type == HEREDOC)
-			{
-				cmd->input_redir_type[input_i] = HEREDOC;
-				cmd->infile_name[input_i] = ft_strdup("here_doc.txt");
-				cmd->delim[heredoc_i] = ft_strdup(current->next->value);
-				cmd->delim[heredoc_i + 1] = NULL;
-				input_i++;
-				heredoc_i++;
-			}
+				set_heredoc_redir(cmd, current, &input_i, &heredoc_i);
 			else if (current->type == APPEND)
-			{
-				cmd->output_redir_type[output_i] = APPEND;
-				cmd->outfile_name[output_i] = ft_strdup(current->next->value);
-				output_i++;
-			}
+				set_append_redir(cmd, current, &output_i);
 			current->is_parsed = 1;
 			current->next->is_parsed = 1;
 		}
