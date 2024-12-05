@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 18:38:36 by akulikov          #+#    #+#             */
-/*   Updated: 2024/11/30 17:12:24 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/05 17:37:46 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,10 @@ void	func_int(int signum)
 {
 	(void)signum;
 	write(1, "\n", 1);
+}
+
+void	interrupt_heredoc_signal(int signum)
+{
+	g_sig_received = signum;
+	ioctl(0, TIOCSTI, "\n");
 }

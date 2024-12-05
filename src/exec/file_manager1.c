@@ -6,54 +6,16 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:46 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/03 17:08:56 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:04:52 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	stdin_processing(t_cmd *cmd, int i)
+int	is_folder_permission_ok(t_cmd *cmd, int i, char *folder_name)
 {
-	if (access(cmd->infile_name[i], F_OK) == -1)
-		return (print_file_error(cmd->infile_name[i]), FAILURE);
-	cmd->infile_fd = open_files(cmd->infile_name[i],
-			cmd->input_redir_type[i], 1);
-	if (access(cmd->infile_name[i], R_OK) == -1)
-		return (print_file_error(cmd->infile_name[i]), FAILURE);
-	return (SUCCESS);
-}
+	struct stat	path_stat;
 
-static int	manage_infiles(t_cmd *cmd)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	j = 0;
-	while (++i < cmd->num_of_infiles)
-	{
-		if (cmd->input_redir_type[i] == STDIN)
-		{
-			if (stdin_processing(cmd, i) == FAILURE)
-				return (FAILURE);
-		}
-		if (cmd->input_redir_type[i] == HEREDOC)
-		{
-			cmd->infile_fd = open_files("here_doc.txt", HEREDOC, 1);
-			if (rwr_heredoc(cmd, cmd->delim[j]) == FAILURE)
-				return (FAILURE);
-			j++;
-		}
-		if (i < cmd->num_of_infiles - 1)
-			close(cmd->infile_fd);
-	}
-	return (SUCCESS);
-}
-
-int is_folder_permission_ok(t_cmd *cmd, int i, char *folder_name)
-{
-	struct stat path_stat;
-	
 	stat(folder_name, &path_stat);
 	if (!S_ISDIR(path_stat.st_mode) && access(folder_name, F_OK) == 0)
 	{
@@ -68,20 +30,20 @@ int is_folder_permission_ok(t_cmd *cmd, int i, char *folder_name)
 	if (access(folder_name, F_OK) == -1)
 	{
 		print_file_error(cmd->outfile_name[i]);
-		return (free(folder_name), FAILURE); 
+		return (free(folder_name), FAILURE);
 	}
 	if (access(folder_name, W_OK) == -1)
 	{
 		print_file_error(cmd->outfile_name[i]);
-		return (free(folder_name), FAILURE); 
+		return (free(folder_name), FAILURE);
 	}
 	free(folder_name);
 	return (SUCCESS);
 }
 
-int check_folder_permission(t_cmd *cmd, int i)
+int	check_folder_permission(t_cmd *cmd, int i)
 {
-	char *folder_name;
+	char	*folder_name;
 
 	if (ft_strrchr(cmd->outfile_name[i], '/') == NULL)
 	{
@@ -125,7 +87,11 @@ static int	run_manage_files(t_cmd *cmd)
 	if (cmd->num_of_infiles != 0)
 	{
 		if (manage_infiles(cmd) == FAILURE)
+		{
+			if (g_sig_received)
+				g_sig_received = 0;
 			return (FAILURE);
+		}
 	}
 	if (cmd->num_of_outfiles != 0)
 	{

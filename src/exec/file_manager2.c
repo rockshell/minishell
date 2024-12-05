@@ -6,11 +6,17 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 18:51:15 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/03 20:44:22 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:03:03 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_file_error(char *argument)
+{
+	ft_putstr_fd("minishell: ", 2);
+	perror(argument);
+}
 
 int	open_files(char *filename, int redir_type, int is_input)
 {
@@ -28,56 +34,40 @@ int	open_files(char *filename, int redir_type, int is_input)
 	return (res);
 }
 
-void interrupt_heredoc_signal(int signum)
+static int	stdin_processing(t_cmd *cmd, int i)
 {
-	g_sig_received = signum;
-	ioctl(0, TIOCSTI, "\n");
-}
-
-int	rwr_heredoc(t_cmd *cmd, char *delim)
-{
-	char	*line;
-	
-	while (1)
-	{
-		ft_putstr_fd("> ", 1);
-		signal(SIGINT, interrupt_heredoc_signal);
-		line = get_next_line(0);
-		if (g_sig_received)
-		{
-			free(line);
-			close(cmd->infile_fd);
-			unlink("here_doc.txt");
-			g_sig_received = 0;
-			return (FAILURE);
-		}
-		if (line == NULL)
-		{
-			ft_putstr_fd(HD_CTRLD, 2);
-			ft_putstr_fd(delim, 2);
-			ft_putstr_fd("')\n", 2);
-			free(line);
-			break ;
-		}
-		if (ft_strcmp(line, delim) == 0)
-			break ;
-		write(cmd->infile_fd, line, ft_strlen(line));
-		write(cmd->infile_fd, "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(cmd->infile_fd);
-	cmd->infile_fd = open("here_doc.txt", O_RDONLY, 0664);
-	if (cmd->infile_fd == -1)
-	{
-		unlink("here_doc.txt");
-		return (FAILURE);
-	}
+	if (access(cmd->infile_name[i], F_OK) == -1)
+		return (print_file_error(cmd->infile_name[i]), FAILURE);
+	cmd->infile_fd = open_files(cmd->infile_name[i],
+			cmd->input_redir_type[i], 1);
+	if (access(cmd->infile_name[i], R_OK) == -1)
+		return (print_file_error(cmd->infile_name[i]), FAILURE);
 	return (SUCCESS);
 }
 
-void	print_file_error(char *argument)
+int	manage_infiles(t_cmd *cmd)
 {
-	ft_putstr_fd("minishell: ", 2);
-	perror(argument);
+	int	i;
+	int	j;
+
+	i = -1;
+	j = 0;
+	while (++i < cmd->num_of_infiles)
+	{
+		if (cmd->input_redir_type[i] == STDIN)
+		{
+			if (stdin_processing(cmd, i) == FAILURE)
+				return (FAILURE);
+		}
+		if (cmd->input_redir_type[i] == HEREDOC)
+		{
+			cmd->infile_fd = open_files("here_doc.txt", HEREDOC, 1);
+			if (rwr_heredoc(cmd, cmd->delim[j]) == FAILURE)
+				return (FAILURE);
+			j++;
+		}
+		if (i < cmd->num_of_infiles - 1)
+			close(cmd->infile_fd);
+	}
+	return (SUCCESS);
 }

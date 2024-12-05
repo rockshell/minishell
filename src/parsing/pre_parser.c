@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arch <arch@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 14:33:43 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/11/30 17:59:26 by arch             ###   ########.fr       */
+/*   Updated: 2024/12/05 19:03:39 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,26 @@ int	is_operator(char *input)
 {
 	if (*input == '|')
 	{
-		if (*input + 1 && *input + 1 == '|')
+		if (*(input + 1) && *(input + 1) == '|')
 			return (LOGICAL_OR);
 		else
 			return (PIPE);
 	}
 	else if (*input == '<')
 	{
-		if (*input + 1 && *input + 1 == '<')
+		if (*(input + 1) && *(input + 1) == '<')
 			return (HEREDOC);
 		else
 			return (STDIN);
 	}
 	else if (*input == '>')
 	{
-		if (*input + 1 && *input + 1 == '>')
+		if (*(input + 1) && *(input + 1) == '>')
 			return (APPEND);
 		else
 			return (STDOUT);
 	}
-	else if (*input == '&' && *input + 1 && *input + 1 == '&')
+	else if (*input == '&' && *(input + 1) && *(input + 1) == '&')
 		return (LOGICAL_AND);
 	return (WORD);
 }

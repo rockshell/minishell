@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+         #
+#    By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/29 15:31:13 by akulikov          #+#    #+#              #
-#    Updated: 2024/12/03 17:31:26 by akulikov         ###   ########.fr        #
+#    Updated: 2024/12/05 18:16:10 by vkinsfat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ exec/execution2.c \
 exec/execution3.c \
 exec/file_manager1.c \
 exec/file_manager2.c \
+exec/file_manager3.c \
 parsing/expand_utils.c \
 parsing/expand.c \
 parsing/lexer_utils1.c \

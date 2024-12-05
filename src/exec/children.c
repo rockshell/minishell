@@ -6,39 +6,11 @@
 /*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:01:16 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/03 18:00:00 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:13:41 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	exec_error(char *argument)
-{
-	int			exit_code;
-	struct stat	path_stat;
-
-	exit_code = 1;
-	stat(argument, &path_stat);
-	if (S_ISDIR(path_stat.st_mode))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(argument, 2);
-		ft_putstr_fd(": Is a directory\n", 2);
-		exit_code = COMMAND_NOT_EXECUTABLE;
-	}
-	else
-	{
-		if (errno == EACCES)
-			exit_code = COMMAND_NOT_EXECUTABLE;
-		else if (errno == ENOENT)
-			exit_code = COMMAND_NOT_FOUND;
-		else if (errno == ENOMEM)
-			exit_code = FAILURE;
-		ft_putstr_fd("minishell: ", 2);
-		perror(argument);
-	}
-	exit(exit_code);
-}
 
 void	first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd)
 {
@@ -105,16 +77,7 @@ void	mid_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd, int i)
 	status = 0;
 	if (cmd->argc == 0)
 		exit (0);
-	if (cmd->num_of_infiles == 0)
-	{
-		if (dup2(exec_data->fd[i - 1][0], 0) == -1)
-			exit(1);
-	}
-	if (cmd->num_of_outfiles == 0)
-	{
-		if (dup2(exec_data->fd[i][1], 1) == -1)
-			exit(1);
-	}
+	pipe_redirection(exec_data, cmd, i);
 	close_fds(cmd, exec_data, i);
 	if (cmd->is_builtin == TRUE)
 	{
