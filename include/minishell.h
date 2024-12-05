@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:15:13 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/03 19:43:08 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:16:40 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,8 @@ size_t		gnl_strlen(const char *str);
 void		close_pipes_in_parent(t_list *list);
 void		close_fds(t_cmd *cmd, t_exec_data *exec_data, int current_pipe);
 void		print_child_error_message(char *cmd_name);
+int			manage_infiles(t_cmd *cmd);
+void		pipe_redirection(t_exec_data *exec_data, t_cmd *cmd, int i);
 
 //children
 void		first_child(t_appdata *appdata, t_exec_data *exec_data, t_cmd *cmd);
@@ -264,5 +266,6 @@ int			initialization(t_appdata *appdata, char **envp);
 //signals
 void		sigint_handler(int signum);
 void		func_int(int signum);
+void		interrupt_heredoc_signal(int signum);
 
 #endif

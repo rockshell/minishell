@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:17:26 by vkinsfat          #+#    #+#             */
-/*   Updated: 2024/12/03 19:43:27 by akulikov         ###   ########.fr       */
+/*   Updated: 2024/12/05 21:30:58 by vkinsfat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (appdata.exit_code);
 }
-// print_tokens(&appdata);
+		// print_tokens(&appdata);
