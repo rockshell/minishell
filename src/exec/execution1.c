@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vkinsfat <vkinsfat@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akulikov <akulikov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 16:41:32 by vitakinsfat       #+#    #+#             */
-/*   Updated: 2024/12/03 19:11:15 by vkinsfat         ###   ########.fr       */
+/*   Updated: 2024/12/05 22:02:42 by akulikov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,14 @@ static int	execute_a_list(t_appdata *appdata, t_list *list)
 			list->cmd[i].is_builtin = check_if_builtin(list->cmd[i]);
 	}
 	if (file_manager(list) == FAILURE)
+	{
+		if (g_sig_received)
+		{
+			g_sig_received = 0;
+			list->exec_data->status = 130;
+		}
 		return (FAILURE);
+	}
 	if (list->size > 1)
 	{
 		if (execute_multiple(appdata, list) == FAILURE)
